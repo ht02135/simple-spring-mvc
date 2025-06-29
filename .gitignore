@@ -1,0 +1,21 @@
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+bin/
+build/
+coverage/
+
+classes/
+test-classes/
+target/
+
+*.class
+*.jar
+*.war
+*.log

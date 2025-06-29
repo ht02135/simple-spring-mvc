@@ -1,0 +1,13 @@
+steps
+1>install tomcat11 to C:\apps\tomcat11\
+2>turn on admin
+  C:\apps\tomcat11\apache-tomcat-11.0.4\conf\tomcat-users.xml
+  <user username="admin" password="admin" roles="manager-gui"/>
+3>start tomcat in C:\apps\tomcat11\apache-tomcat-11.0.4\bin
+4>login http://localhost:8080/manager/html
+5>create and drop war to 2>start tomcat in C:\apps\tomcat11\apache-tomcat-11.0.4\bin
+  tomcat will unpack war into folder
+6>you can hit your portal via link in http://localhost:8080/manager/html if deployee success....
+
+//////////////
+
