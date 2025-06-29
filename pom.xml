@@ -21,16 +21,19 @@
 	<!-- Add Spring Web and MVC dependencies -->
 	<dependencies>
 
+		<!-- 
+		Spring 5 actually requires Servlet 3.1 (and Tomcat 8.5.x).
+		-->
 		<!-- Jun 07, 2017 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.3.9.RELEASE</version>
+			<version>5.1.6.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.3.9.RELEASE</version>
+			<version>5.1.6.RELEASE</version>
 		</dependency>
 
 		<!-- Servlet -->
@@ -95,6 +98,10 @@
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.13.0</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>

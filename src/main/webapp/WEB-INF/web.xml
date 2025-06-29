@@ -14,12 +14,13 @@
 	2>build war and dump into tomcat webapp folder
 	3>then tomcat will unpack to webapp\WEB-INF\classes folder
 	-->
+	<!--
     <context-param>
         <param-name>log4jConfiguration</param-name>
-        <param-value>log4j2.xml</param-value>
+        <param-value>/WEB-INF/classes/log4j2.xml</param-value>
     </context-param>
+    -->
     <!-- comment out code cuz it crash web deploy in tomcat -->
-    <!--
 	<listener>
 		<listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
 	</listener>
@@ -36,7 +37,6 @@
 		<dispatcher>ERROR</dispatcher>
 		<dispatcher>ASYNC</dispatcher>
 	</filter-mapping>
-    -->
     
 	<!-- 
 	do we need setup ContextLoaderListener
@@ -61,16 +61,21 @@
 	2>build war and dump into tomcat webapp folder
 	3>then tomcat will unpack to webapp\WEB-INF\classes folder
 	-->
+	<!--
+	error goes away once i do spring5, tomcat8.5
+	ContextLoaderListener has its own context which is shared by all servlets and filters. 
+	By default it will search /WEB-INF/applicationContext.xml
+	-->
+	<!-- comment out, let it use default [/WEB-INF/applicationContext.xml] -->
+	<!--
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>application-context.xml</param-value>
+		<param-value>/WEB-INF/classes/application-context.xml</param-value>
 	</context-param>
-	<!-- comment out code cuz it crash web deploy in tomcat -->
-		<!--
+	-->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	-->
 
 	<!-- 
 	1>The /* on a servlet overrides all other servlets,
@@ -105,10 +110,13 @@
 		<servlet-class>
 			org.springframework.web.servlet.DispatcherServlet
 		</servlet-class>
+		<!-- comment out, let it use default [/WEB-INF/mvc-servlet.xml] -->
+		<!--
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>dispatcher-servlet.xml</param-value>
+			<param-value>/WEB-INF/classes/dispatcher-servlet.xml</param-value>
 		</init-param>
+		-->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>

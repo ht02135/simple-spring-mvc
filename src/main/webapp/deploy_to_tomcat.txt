@@ -11,3 +11,16 @@ steps
 
 //////////////
 
+note:
+Spring 5 actually requires Servlet 3.1 (and Tomcat 8.5.x).
+1>org.springframework 5.1.6.RELEASE
+2>tomcat 8.5.85
+3>use default [/WEB-INF/applicationContext.xml] for ContextLoaderListener
+4>use default [/WEB-INF/mvc-servlet.xml] for DispatcherServlet
+5>use default WEB-INF\classes\log4j2.xml (put in main\resources\log4j2.xml) for log4j
+
+modern software modern technology = easy break glass = anytime crash no reason
+translate to DONT venture into change default and pray it works...
+
+
+

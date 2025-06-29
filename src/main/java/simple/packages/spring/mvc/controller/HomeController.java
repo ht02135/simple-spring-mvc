@@ -2,6 +2,7 @@ package simple.packages.spring.mvc.controller;
 
 import java.util.Map;
 
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,6 @@ public class HomeController {
 	@RequestMapping(value = "/mvc/", method = RequestMethod.GET)
 	public String displayHome(Map<String, Object> model) {
 		InternalLogger.info("/ called displayHome()"); 
-		return "redirect:index";	// return 'home' tile definition
+		return "index";	// return 'home' tile definition
 	}
 }

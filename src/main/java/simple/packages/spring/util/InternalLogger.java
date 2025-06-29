@@ -3,9 +3,12 @@ package simple.packages.spring.util;
 //comment out log4j2 related code cuz it crash web deploy in tomcat
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InternalLogger {
-	
+
 	private static final Logger logger = LogManager.getLogger(InternalLogger.class);
 	
 	public static void info(String s) {
@@ -20,5 +23,9 @@ public class InternalLogger {
 	*/
 	public static void main(String[] args) {
 		logger.info("logger.main test");
+	}
+	
+	public InternalLogger() {
+		super();
 	}
 }

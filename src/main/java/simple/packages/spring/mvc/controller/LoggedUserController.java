@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +43,7 @@ public class LoggedUserController {
         	ActiveUserServiceImpl.getInstance().getUserNames());
         InternalLogger.info("/loggedUsers ActiveUserServiceImpl.getInstance().getUserNames()="+
         	ActiveUserServiceImpl.getInstance().getUserNames());
-        return "redirect:users"; // this returns the view users.html reference ${user}
+        return "users"; // this returns the view users.html reference ${user}
     }
     
     /*
@@ -61,7 +62,7 @@ public class LoggedUserController {
         	ActiveUserServiceImpl.getInstance().getUserNames());
         InternalLogger.info("/loggedUsers2 ActiveUserServiceImpl.getInstance().getUserNames()="+
         	ActiveUserServiceImpl.getInstance().getUserNames());
-        return "redirect:users"; // this returns the view users.html reference ${user}
+        return "users"; // this returns the view users.html reference ${user}
 	}
 	
 	@RequestMapping(value={"/mvc/check", "/check"}, method=RequestMethod.GET)
@@ -77,6 +78,6 @@ public class LoggedUserController {
         model.addAttribute("users", 
         		userNames);
         InternalLogger.info("/check userNames="+userNames);
-        return "redirect:users"; // "Path with "WEB-INF" or "META-INF": [WEB-INF/jsp/users.jsp]"
+        return "users"; // "Path with "WEB-INF" or "META-INF": [WEB-INF/jsp/users.jsp]"
 	}
 }

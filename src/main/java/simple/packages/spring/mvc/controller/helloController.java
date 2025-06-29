@@ -1,5 +1,6 @@
 package simple.packages.spring.mvc.controller;
 
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class HelloController {
     @ResponseBody
     public String sayHello()
     {
-        return "redirect:index"; // redirect to view in jsp AKA WEB-INF/jsp/index.jsp
+        return "index"; // redirect to view in jsp AKA WEB-INF/jsp/index.jsp
     }
     
     @RequestMapping(value={"/mvc/greeting", "/greeting"}, method = RequestMethod.GET)
@@ -42,7 +43,7 @@ public class HelloController {
 		the same request to the target URL; the URL won’t change in the browser.
         */
         model.addAttribute("message", "Hello, World!");
-        return "redirect:greeting"; // "Path with "WEB-INF" or "META-INF": [WEB-INF/jsp/greeting.jsp]"
+        return "greeting"; // "Path with "WEB-INF" or "META-INF": [WEB-INF/jsp/greeting.jsp]"
     }
     
 	/*

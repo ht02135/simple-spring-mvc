@@ -13,7 +13,7 @@
 						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="simple.packages.spring" />
+	<context:component-scan base-package="simple.packages.spring.mvc.controller" />
 
 	<mvc:annotation-driven />
 
@@ -22,5 +22,15 @@
     <import resource="other-configs.xml"/>
     <import resource="some-other-config.xml"/>
     -->
+
+	<!-- 
+	Resolves views selected for rendering by @Controllers to .jsp resources 
+	in the /WEB-INF/views directory 
+	-->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
 
 </beans>
