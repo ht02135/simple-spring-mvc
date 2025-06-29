@@ -63,4 +63,12 @@ public class HelloController {
 	spring.mvc.servlet.path=/training
 	//////////////////////
 	*/
+
+    @RequestMapping(value={"/mvc/redirectGreeting", "/redirectGreeting"}, method = RequestMethod.GET)
+    public String redirectGreeting(ModelMap model) {
+    	InternalLogger.info("/redirectGreeting called redirectGreeting()"); 
+        model.addAttribute("message", "redirect Hello, World!");
+        return "redirect:greeting";
+    }
+
 }
