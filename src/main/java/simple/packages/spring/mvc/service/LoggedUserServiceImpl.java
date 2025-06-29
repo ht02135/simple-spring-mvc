@@ -35,7 +35,7 @@ public class LoggedUserServiceImpl implements LoggedUserService {
 			HttpServletResponse response)
 			throws IOException, ServletException {
 
-		Logger.info("call LoggedUserServiceImpl.onLogoutSuccess()");
+		InternalLogger.info("call LoggedUserServiceImpl.onLogoutSuccess()");
 
 		HttpSession session = (HttpSession) request.getSession();
         if (session != null){
@@ -53,7 +53,7 @@ public class LoggedUserServiceImpl implements LoggedUserService {
 			HttpServletResponse response)
 			throws IOException, ServletException {
 
-		Logger.info("call LoggedUserServiceImpl.onAuthenticationSuccess()");
+		InternalLogger.info("call LoggedUserServiceImpl.onAuthenticationSuccess()");
 		HttpSession session = (HttpSession) request.getSession(false);
         if (session != null) {
         	String username = request.getUserPrincipal().getName();

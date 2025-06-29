@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>org.hung.app</groupId>
 	<artifactId>simple-spring-mvc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -20,6 +20,8 @@
 
 	<!-- Add Spring Web and MVC dependencies -->
 	<dependencies>
+
+		<!-- Jun 07, 2017 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -30,24 +32,49 @@
 			<artifactId>spring-web</artifactId>
 			<version>4.3.9.RELEASE</version>
 		</dependency>
+
 		<!-- Servlet -->
+		<!-- Jul 17, 2006 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Jul 17, 2006 -->
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
 			<version>2.1</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Jun 23, 2011 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+
+		<!-- Dec 12, 2019 -->
+		<!-- comment out log4j2 related code cuz it crash web deploy in tomcat -->
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-web -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-web</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

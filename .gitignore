@@ -10,9 +10,6 @@
 bin/
 build/
 coverage/
-
-classes/
-test-classes/
 target/
 
 *.class

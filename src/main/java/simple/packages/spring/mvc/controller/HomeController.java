@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import simple.packages.spring.util.Logger;
+import simple.packages.spring.util.InternalLogger;
 
 @Controller
 public class HomeController {
@@ -17,7 +17,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/mvc/", method = RequestMethod.GET)
 	public String displayHome(Map<String, Object> model) {
-		Logger.info("/ called displayHome()"); 
+		InternalLogger.info("/ called displayHome()"); 
 		return "redirect:index";	// return 'home' tile definition
 	}
 }

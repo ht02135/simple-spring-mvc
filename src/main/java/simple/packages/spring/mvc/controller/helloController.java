@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import simple.packages.spring.util.Logger;
+import simple.packages.spring.util.InternalLogger;
 
 @Controller
 public class HelloController {
@@ -31,7 +31,7 @@ public class HelloController {
     
     @RequestMapping(value={"/mvc/greeting", "/greeting"}, method = RequestMethod.GET)
     public String getGreeting(ModelMap model) {
-    	Logger.info("/greeting called getGreeting()"); 
+    	InternalLogger.info("/greeting called getGreeting()"); 
     	//http://localhost:8080/greeting
         /*
         URL redirection = URL forwarding

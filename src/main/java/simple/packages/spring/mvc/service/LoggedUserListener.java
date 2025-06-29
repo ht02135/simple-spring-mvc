@@ -23,7 +23,7 @@ public class LoggedUserListener implements HttpSessionBindingListener, Serializa
     //HttpSessionBindingEvent(HttpSession session, String name) constructor
     @Override
     public void valueBound(HttpSessionBindingEvent event) {
-    	Logger.info("call LoggedUserListener.valueBound()");
+    	InternalLogger.info("call LoggedUserListener.valueBound()");
         LoggedUserListener user = (LoggedUserListener) event.getValue();
         if (!ActiveUserServiceImpl.getInstance().contains(user.getUsername())) {
         	ActiveUserServiceImpl.getInstance().add(user.getUsername());
@@ -33,7 +33,7 @@ public class LoggedUserListener implements HttpSessionBindingListener, Serializa
     //HttpSessionBindingEvent(HttpSession session, String name) constructor
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-    	Logger.info("call LoggedUserListener.valueUnbound()");
+    	InternalLogger.info("call LoggedUserListener.valueUnbound()");
         LoggedUserListener user = (LoggedUserListener) event.getValue();
         if (ActiveUserServiceImpl.getInstance().contains(user.getUsername())) {
         	ActiveUserServiceImpl.getInstance().remove(user.getUsername());

@@ -36,11 +36,11 @@ public class LoggedUserController {
     @RequestMapping(value={"/mvc/loggedUsers", "/loggedUsers"}, method=RequestMethod.GET)
     public String getLoggedUsers(ModelMap model) {
     	//http://localhost:8080/loggedUsers
-    	Logger.info("/loggedUsers called getLoggedUsers()"); 
-    	Logger.info("call LoggedUserController.getLoggedUsers()"); 	
+    	InternalLogger.info("/loggedUsers called getLoggedUsers()"); 
+    	InternalLogger.info("call LoggedUserController.getLoggedUsers()"); 	
         model.addAttribute("users", 
         	ActiveUserServiceImpl.getInstance().getUserNames());
-        Logger.info("/loggedUsers ActiveUserServiceImpl.getInstance().getUserNames()="+
+        InternalLogger.info("/loggedUsers ActiveUserServiceImpl.getInstance().getUserNames()="+
         	ActiveUserServiceImpl.getInstance().getUserNames());
         return "redirect:users"; // this returns the view users.html reference ${user}
     }
@@ -55,11 +55,11 @@ public class LoggedUserController {
 	@RequestMapping(value={"/mvc/loggedUsers2", "/loggedUsers2"}, method=RequestMethod.GET)
 	public String getLoggedUsers2(ModelMap model) {
 		//http://localhost:8080/loggedUsers2
-    	Logger.info("/loggedUsers2 called getLoggedUsers2()"); 
-    	Logger.info("call LoggedUserController.getLoggedUsers2()"); 	
+    	InternalLogger.info("/loggedUsers2 called getLoggedUsers2()"); 
+    	InternalLogger.info("call LoggedUserController.getLoggedUsers2()"); 	
         model.addAttribute("users", 
         	ActiveUserServiceImpl.getInstance().getUserNames());
-        Logger.info("/loggedUsers2 ActiveUserServiceImpl.getInstance().getUserNames()="+
+        InternalLogger.info("/loggedUsers2 ActiveUserServiceImpl.getInstance().getUserNames()="+
         	ActiveUserServiceImpl.getInstance().getUserNames());
         return "redirect:users"; // this returns the view users.html reference ${user}
 	}
@@ -67,8 +67,8 @@ public class LoggedUserController {
 	@RequestMapping(value={"/mvc/check", "/check"}, method=RequestMethod.GET)
 	public String getLoggedUsers3(ModelMap model) {
 		//http://localhost:8080/check
-    	Logger.info("/check called getLoggedUsers3()"); 
-    	Logger.info("call LoggedUserController.check()"); 
+    	InternalLogger.info("/check called getLoggedUsers3()"); 
+    	InternalLogger.info("call LoggedUserController.check()"); 
     	
     	List<String> userNames;
     	userNames = new ArrayList<String>();
@@ -76,7 +76,7 @@ public class LoggedUserController {
         
         model.addAttribute("users", 
         		userNames);
-        Logger.info("/check userNames="+userNames);
+        InternalLogger.info("/check userNames="+userNames);
         return "redirect:users"; // "Path with "WEB-INF" or "META-INF": [WEB-INF/jsp/users.jsp]"
 	}
 }

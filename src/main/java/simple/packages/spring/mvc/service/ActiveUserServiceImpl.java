@@ -20,32 +20,32 @@ public class ActiveUserServiceImpl implements ActiveUserService {
     
     public ActiveUserServiceImpl() {
     	super();
-    	Logger.info("call ActiveUserServiceImpl()");
+    	InternalLogger.info("call ActiveUserServiceImpl()");
         userNames = new ArrayList<String>();
         userNames.add("root"); // so at least i have a user
     }
     
 	@Override
 	public synchronized void add(String userName) {
-		Logger.info("call ActiveUserServiceImpl.add()");
+		InternalLogger.info("call ActiveUserServiceImpl.add()");
 		if (!userNames.contains(userName))
 			userNames.add(userName);
 	}
 
 	@Override
 	public synchronized boolean remove(String userName) {
-		Logger.info("call ActiveUserServiceImpl.remove()");
+		InternalLogger.info("call ActiveUserServiceImpl.remove()");
 		return userNames.remove(userName);
 	}
 
 	@Override
 	public synchronized boolean contains(String userName) {
-		Logger.info("call ActiveUserServiceImpl.contains()");
+		InternalLogger.info("call ActiveUserServiceImpl.contains()");
 		return userNames.contains(userName);
 	}
 	
 	public synchronized List<String> getUserNames() {
-		Logger.info("call ActiveUserServiceImpl.getUserNames()");
+		InternalLogger.info("call ActiveUserServiceImpl.getUserNames()");
 		return userNames;
 	}
 
