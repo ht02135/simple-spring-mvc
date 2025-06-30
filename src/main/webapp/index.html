@@ -14,16 +14,81 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE HTML><html lang="en"><head>
-<meta charset="UTF-8">
-<title>Apache Tomcat Examples</title>
-</head>
-<body>
+<!DOCTYPE HTML>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Apache Tomcat Examples</title>
+	</head>
+	<body>
 <p>
 <h3>Apache Tomcat Examples</H3>
 <p></p>
+
 <ul>
 <li>Servlets examples</li>
 <li>JSP Examples</li>
 </ul>
-</body></html>
+
+<table border=1>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>URL</th>
+  </tr>
+  <tr>
+    <td>MVC Home</td>
+    <td>Static</td>
+    <td><a href="http://localhost:8080/mvc/">http://localhost:8080/mvc/</a></td>
+  </tr>
+  
+  <tr>
+    <td>/mvc/</td>
+    <td>HomeController.displayHome</td>
+    <td><a href="http://localhost:8080/mvc/mvc/">http://localhost:8080/mvc/mvc/</a></td>
+  </tr>
+  
+  <tr>
+    <td>/mvc/hello</td>
+    <td>HelloController.sayHello</td>
+    <td><a href="http://localhost:8080/mvc/mvc/hello">http://localhost:8080/mvc/mvc/hello</a></td>
+  </tr>
+  <tr>
+    <td>/mvc/greeting</td>
+    <td>HelloController.getGreeting</td>
+    <td><a href="http://localhost:8080/mvc/mvc/greeting">http://localhost:8080/mvc/mvc/greeting</a></td>
+  </tr>
+  <tr>
+    <td>/mvc/redirectGreeting</td>
+    <td>HelloController.redirectGreeting</td>
+    <td><a href="http://localhost:8080/mvc/mvc/redirectGreeting">http://localhost:8080/mvc/mvc/redirectGreeting</a></td>
+  </tr>
+  
+  <tr>
+    <td>/mvc/loggedUsers</td>
+    <td>LoggedUserController.getLoggedUsers</td>
+    <td><a href="http://localhost:8080/mvc/mvc/loggedUsers">http://localhost:8080/mvc/mvc/loggedUsers</a></td>
+  </tr>
+  <tr>
+    <td>/mvc/loggedUsers2</td>
+    <td>LoggedUserController.getLoggedUsers2</td>
+    <td><a href="http://localhost:8080/mvc/mvc/loggedUsers2">http://localhost:8080/mvc/mvc/loggedUsers2</a></td>
+  </tr>
+  <tr>
+    <td>/mvc/check</td>
+    <td>LoggedUserController.getLoggedUsers3</td>
+    <td><a href="http://localhost:8080/mvc/mvc/check">http://localhost:8080/mvc/mvc/check</a></td>
+  </tr>
+  
+  <tr>
+    <td>/lab1/index.jsp</td>
+    <td>KnockoutJS</td>
+    <td><a href="http://localhost:8080/mvc/lab1/index.jsp">http://localhost:8080/mvc/lab1/index.jsp</a></td>
+  </tr>
+  
+</table>
+
+	</body>
+
+</html>
