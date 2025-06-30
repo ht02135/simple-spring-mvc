@@ -7,7 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NickName implements Serializable {
 
+	@JsonProperty("first_nick_name")
 	public String first;
+	
+	@JsonProperty("last_nick_name")
 	public String last;
 	
 	public NickName() {
@@ -31,6 +34,9 @@ public class NickName implements Serializable {
 	annotation is useless...  
 	5>then you need fallback option annotation on param construct.  this class 
 	dont need it, just show example...
+	////////////////////////
+	odd this didnt work EPIC FAILED???  forced me to do field annotation.,.
+	AVOID construct annotation overrated crap... stick with field annotation....
 	*/
 	@JsonCreator
 	public NickName(

@@ -33,7 +33,7 @@ public class Customer implements Serializable {
 	the default value for its data type (which is 0 for `int`)
 	*/
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private int age;
+    private Long age;
 	
 	/*
 	1>without @JsonUnwrapped
@@ -49,6 +49,7 @@ public class Customer implements Serializable {
 	@JsonUnwrapped
 	private NickName nickName;
 	
+	@JsonProperty
 	private String Hobby;
     
     /*
@@ -73,11 +74,11 @@ public class Customer implements Serializable {
 		this.name = name;
 	}
 
-	public int getAge() {
+	public Long getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(long age) {
 		this.age = age;
 	}
 

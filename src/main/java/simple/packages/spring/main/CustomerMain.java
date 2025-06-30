@@ -37,7 +37,11 @@ public class CustomerMain {
 		// convert the JSON string to a Java object
 		Customer customer2 = mapper.readValue(json, Customer.class);
 		System.out.println("customer2"+customer2);
-
+		
+		//pretty JSON
+		//newer
+		System.out.println("pretty json customer2"+mapper.writerWithDefaultPrettyPrinter().writeValueAsString(customer2));
+		System.out.println("pretty json customer2"+mapper.writer().withDefaultPrettyPrinter().writeValueAsString(customer2));
 	}
 
 }
