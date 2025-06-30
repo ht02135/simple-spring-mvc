@@ -60,6 +60,10 @@ public class Customer implements Serializable {
     */
     @JsonIgnore
     private transient String ignore;
+    
+	public Customer() {
+		super();
+	}
 
 	public String getName() {
 		return name;
@@ -99,6 +103,7 @@ public class Customer implements Serializable {
 	public String toString() {
 		return "Customer [name=" + name + ", age=" + age + ", nickName=" + nickName + ", Hobby=" + Hobby + "]";
 	}
+
 }
 
 /*

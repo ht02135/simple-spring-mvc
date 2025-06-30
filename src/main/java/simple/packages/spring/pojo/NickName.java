@@ -18,7 +18,19 @@ public class NickName implements Serializable {
 	example of using the @JsonCreator annotation to customize the constructor 
 	used during deserialization
 	//////////////////////
-	putting json on constructor vs on fields or sphagetti spread out to methods???
+	1>Recall that ObjectMapper expects getters for serialization—and it wants them 
+	to conform to the JavaBeans get/setFoo() convention. 
+	2>ObjectMapper also expects an accessible default constructor, that is, one 
+	that takes no parameters
+	//////////////////////
+	3>technically if you have default construct and get/set and field annotation
+	you dont need to annotate param constructor...
+	this approach is probably optimal MAYBE?
+	//////////////////////
+	4>but if say you have NO default construct and NO get/set, then only field 
+	annotation is useless...  
+	5>then you need fallback option annotation on param construct.  this class 
+	dont need it, just show example...
 	*/
 	@JsonCreator
 	public NickName(

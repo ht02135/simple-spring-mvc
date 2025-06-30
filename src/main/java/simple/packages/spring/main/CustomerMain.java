@@ -9,6 +9,10 @@ import simple.packages.spring.pojo.NickName;
 public class CustomerMain {
 
 	public static void main(String[] args) throws Exception {
+		
+		/*
+		ObjectMapper expects getter (and setter, for deserialization) methods for all fields.
+		*/
 		ObjectMapper mapper = new ObjectMapper();
 		
 		// create a Java object
