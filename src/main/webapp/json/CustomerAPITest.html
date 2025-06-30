@@ -28,6 +28,7 @@
 		<pre>
 		use postman
 		path = http://localhost:8080/mvc/mvc/customer/add
+		header Content-Type=application/json
 		body >> raw >> json
 		{
 			"age" : 1,
@@ -47,10 +48,11 @@
 	    <td>
 	  	<pre>
 	  	use postman
-		1>pick POST and make sure set data >> JSON
-		2>Path : http://localhost:8080/mvc/mvc/customer/set/4
-		3>body=none
-		4>add param thru param tab
+		pick POST and make sure set data >> JSON
+		Path = http://localhost:8080/mvc/mvc/customer/set/4
+		header Content-Type=application/json
+		body=none
+		add param thru param tab
 		hobby=strange
 	  	</pre>
 	  	</td>

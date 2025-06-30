@@ -76,14 +76,15 @@ public class CustomerController {
 	////////////////
 	use postman
 	path = http://localhost:8080/mvc/mvc/customer/add
+	header Content-Type=application/json
 	body >> raw >> json
 	{
-  		"age" : 1,
-  		"Hobby" : "weird_hobby",
-  		"full_name" : "John",
-  		"first_nick_name" : "Jo",
-  		"last_nick_name" : "Jo",
-  		"weird_hobby" : "weird_hobby"
+		"age" : 1,
+		"Hobby" : "weird_hobby",
+		"full_name" : "John",
+		"first_nick_name" : "Jo",
+		"last_nick_name" : "Jo",
+		"weird_hobby" : "weird_hobby"
 	}
 	*/
 	@RequestMapping(method = RequestMethod.PUT, value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -103,11 +104,14 @@ public class CustomerController {
     following ? and listed in key-value pairs, separated by & as follows: ?id=1&type=new
     
     translate english
-    1>pick POST and make sure set data >> JSON
-    2>Path : http://localhost:8080/mvc/mvc/customer/set/4
-    3>body=none
-    4>add param thru param tab
-      hobby=strange
+	use postman
+	pick POST and make sure set data >> JSON
+	Path = http://localhost:8080/mvc/mvc/customer/set/4
+	header Content-Type=application/json
+	body=none
+	add param thru param tab
+	hobby=strange
+	additional param just keep adding?
     as i add them, url changed 
     http://localhost:8080/mvc/mvc/customer/set/4?hobby=strange
     ////////////////////
