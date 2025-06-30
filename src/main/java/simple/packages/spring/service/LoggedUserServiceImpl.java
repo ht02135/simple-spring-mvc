@@ -1,4 +1,4 @@
-package simple.packages.spring.mvc.service;
+package simple.packages.spring.service;
 
 import java.io.IOException;
 import java.util.ArrayList;

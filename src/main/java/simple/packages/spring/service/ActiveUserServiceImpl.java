@@ -1,4 +1,4 @@
-package simple.packages.spring.mvc.service;
+package simple.packages.spring.service;
 
 import java.util.ArrayList;
 import java.util.List;

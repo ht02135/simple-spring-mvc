@@ -10,8 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import simple.packages.spring.mvc.service.ActiveUserServiceImpl;
-
+import simple.packages.spring.service.ActiveUserServiceImpl;
 import simple.packages.spring.util.*;
 
 @Controller
