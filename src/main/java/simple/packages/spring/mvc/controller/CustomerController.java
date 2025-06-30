@@ -46,8 +46,18 @@ public class CustomerController {
 	private Customer setHobby(long customerId, String Hobby) {
 		InternalLogger.info("/ called CustomerController.setHobbyAndAge()"); 
 		
+		Customer customer = getCustomerFromService(customerId);
+		customer.setHobby(Hobby);
+		
+		return customer;
+	}
+	
+	private Customer setHobby(long customerId, String Hobby, long age) {
+		InternalLogger.info("/ called CustomerController.setHobbyAndAge()"); 
+		
 		Customer customer = getCustomerFromService( customerId);
-		customer.setHobby("Hobby");
+		customer.setHobby(Hobby);
+		customer.setAge(age);
         
         return customer;
 	}
@@ -126,6 +136,39 @@ public class CustomerController {
 		if (hobby != null) InternalLogger.info("hobby="+hobby);
 		
 		Customer customer = setHobby(customerId, hobby);
+	    return ResponseEntity.ok(customer);
+	}
+	
+	/*
+	use postman
+	pick POST and make sure set data >> JSON
+	Path = http://localhost:8080/mvc/mvc/customer/set2/4
+	header Content-Type=application/json
+	body=none
+	add param thru param tab
+	hobby=strange
+	age=10
+	/////////////////////////
+	http://localhost:8080/mvc/mvc/customer/set2/4?hobby=strange&age=1
+	*/
+	@RequestMapping(method = RequestMethod.POST, value = "/set2/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Customer> addHobbyAndAge2(
+		@PathVariable("id") long customerId,
+	    @RequestParam("hobby") String hobby,
+	    /*
+	    normally year should be integer right?
+	    but try to pass integer from postman or curl, good luck on that
+	    better take as string and then press it....
+	    */
+	    @RequestParam(required = false, name = "age",  defaultValue = "1") String age
+	    ) 
+	{
+		InternalLogger.info("/ POST called CustomerController.addHobbyAndAge()"); 
+		InternalLogger.info("customerId="+customerId); 
+		if (hobby != null) InternalLogger.info("hobby="+hobby);
+		InternalLogger.info("age="+age);
+		
+		Customer customer = setHobby(customerId, hobby, Long.valueOf(age));
 	    return ResponseEntity.ok(customer);
 	}
 }
