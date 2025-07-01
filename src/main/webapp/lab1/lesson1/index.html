@@ -70,18 +70,18 @@
 	1>The parameter value should be a string that corresponds to the CSS class
 	2>what the? i thought you just need to bind to observable prop in ViewModel??
 	-->
+	<div class="profitPositive">
+		   class="profitPositive"
+	</div>
 	<div data-bind="class: profitStatus">
 	   Profit Information
 	</div>
 	<!--
-	This will apply the CSS class profitPositive when the currentProfit value 
-	is positive; otherwise it will apply the profitWarning CSS class
-	1>You should pass a JavaScript object in which the property names are your 
-	CSS classes and their values evaluate to true or false
-	2>what the? i thought you just need to bind to observable prop in ViewModel??
+	The css binding adds or removes one or more named CSS classes to the associated 
+	DOM element
 	-->
-	<div data-bind="css: profitStatus">
-	   Profit Information2
+	<div data-bind="css: { profitWarning: currentProfit() < 0 }">
+	   adding profitWarning css class if currentProfit() less than zero
 	</div>
 	
 	<!--
