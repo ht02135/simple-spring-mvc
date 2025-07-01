@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+
+	<!-- step1, Installation -->
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+
+<body>
+
+	<!-- 
+step2, create following 
+1>View layer jsp
+2>data-bind attributes are how Knockout lets you declaratively associate 
+viewmodel properties with DOM elements. You just used the text binding 
+to assign text to your DOM elements.
+ -->
+
+	<!--
+https://www.w3schools.com/tags/tag_input.asp
+1>The <input> tag specifies an input field where the user can enter data.
+2>The different input types are as follows:
+<input type="button">
+<input type="checkbox">
+<input type="date">
+<input type="email">
+<input type="file">
+<input type="hidden">
+<input type="image">
+<input type="radio">
+<input type="range">
+<input type="reset">
+<input type="search">
+<input type="submit">
+<input type="tel">
+<input type="text"> (default value)
+3>The value attribute specifies the value of an <input> element.
+For "button", "reset", and "submit" - it defines the text on the button
+For "text", "password", and "hidden" - it defines the initial (default) value of the input field
+For "checkbox", "radio", "image" - it defines the value associated with the input (this is also the value that is sent on submit)
+-->
+	<p>First name: <strong>todo</strong></p>
+	<p>Last name: <strong>todo</strong></p>
+
+	<!--
+You just used the text binding to assign text to your DOM elements.
+-->
+	<p>First name: <strong data-bind="text: firstName"></strong></p>
+	<p>Last name: <strong data-bind="text: lastName"></strong></p>
+
+	<!--
+Let's use the value binding, along with some regular HTML <input> 
+controls, to make the data editable.
+-->
+	<p>First name: <input data-bind="value: firstName" /></p>
+	<p>Last name: <input data-bind="value: lastName" /></p>
+
+	<!-- computed -->
+	<p>Full name: <strong data-bind="text: fullName"></strong></p>
+
+	<!--
+add one final behavior: a button that makes the "last name" value 
+turn upper-case
+-->
+	<button data-bind="click: capitalizeLastName">Go caps</button>
+
+</body>
+
+</html>
