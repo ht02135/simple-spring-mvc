@@ -66,6 +66,12 @@ access an attribute of the current element
 				on your view model.
 				-->
 	            <td><select data-bind="options: $root.availableMeals, value: $data.meal, optionsText: 'mealName'"></select></td>
+				<!--
+				3 data-binding
+				1>options
+				2>value
+				3>optionsText
+				-->
 				<td><select data-bind="options: $root.availableMeals, value: $data.meal, optionsText: 'price'"></select></td>
 	            <td data-bind="text: $data.formattedPrice"></td>
 	            <td><a href="#" data-bind="click: $root.removeSeat">Remove</a></td>
@@ -73,6 +79,11 @@ access an attribute of the current element
 	    </tbody>
 	</table>
 
+	<!--
+	2 data binding
+	1>click
+	2>enable
+	-->
 	<button data-bind="click: $root.addSeat, enable: $root.seats().length < 10">Reserve another seat</button>
 
 	<h3 data-bind="visible: $root.totalSurcharge() > 0">

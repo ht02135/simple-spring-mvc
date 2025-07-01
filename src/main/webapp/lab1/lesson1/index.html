@@ -9,6 +9,22 @@
 	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
 	<script type="text/javascript" src="index.js" defer></script>
 
+	<style>
+	.profitPositive {
+	  background-color: tomato;
+	  color: white;
+	  border: 2px solid black;
+	  margin: 20px;
+	  padding: 20px;
+	}
+	.profitWarning {
+	  background-color: rgb(255, 0, 0);
+	  color: white;
+	  border: 2px solid black;
+	  margin: 20px;
+	  padding: 20px;
+	}
+	</style>
 </head>
 
 <body>
@@ -30,9 +46,52 @@
 
 	<!-- computed -->
 	<p>Full name: <strong data-bind="text: fullName"></strong></p>
+	
+	<div class="heading">Hello, 
+		<input data-bind="textInput: fullName2"/>
+	</div>
 
 	<button data-bind="click: capitalizeLastName">Go caps</button>
 
+	<button data-bind="click: testObservables">call testObservables</button>
+	
+	<div data-bind="visible: becomeVisible">
+	    You will see this message only when "becomeVisible" holds a true value.
+	</div>
+	
+	<div data-bind="hidden: becomeHidden">
+	    You will see this message only when "becomeHidden" holds a true value.
+	</div>
+	
+	<p>currentProfit: <strong data-bind="text: currentProfit"></strong></p>
+	<!--
+	This will apply the CSS class profitPositive when the currentProfit value 
+	is positive; otherwise it will apply the profitWarning CSS class
+	1>The parameter value should be a string that corresponds to the CSS class
+	2>what the? i thought you just need to bind to observable prop in ViewModel??
+	-->
+	<div data-bind="class: profitStatus">
+	   Profit Information
+	</div>
+	<!--
+	This will apply the CSS class profitPositive when the currentProfit value 
+	is positive; otherwise it will apply the profitWarning CSS class
+	1>You should pass a JavaScript object in which the property names are your 
+	CSS classes and their values evaluate to true or false
+	2>what the? i thought you just need to bind to observable prop in ViewModel??
+	-->
+	<div data-bind="css: profitStatus">
+	   Profit Information2
+	</div>
+	
+	<!--
+	href	URL	Specifies the URL of the page the link goes to
+	title	is tooltip for a link. lol, what a bad attribute naming
+	-->
+	<div></div>
+		<a data-bind="attr: { href: url, title: details }">test attribute data-binding</a>
+	</div>
+	
 </body>
 
 </html>
