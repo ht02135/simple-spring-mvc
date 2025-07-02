@@ -41,11 +41,16 @@ function AppViewModel() {
 	self.getTweets = function() {
 	    var account = self.twitterAccount();
 	    var simulatedResults = [
-	    	{ text: account + ' What a nice day.' },
+			/*
+			These bindings differ in how they deal with a value of null or undefined:
+			1>in case of with binding, it will not show null
+			2>in case of using binding, it pop Uncaught ReferenceError in console.
+			translate why would anyone use using bindin? pretty EPIC FAIL binding...
+			*/
+	    	{ text: null },
 	        { text: account + ' Building some cool apps.' },
 	        { text: account + ' Just saw a famous celebrity eating lard. Yum.' }
 	    ];
-	 
 	    self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
 	};
 	

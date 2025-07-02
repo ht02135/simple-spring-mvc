@@ -74,6 +74,12 @@
 	<!--
 	The with and using bindings create a new binding context, so that descendant 
 	elements are bound in the context of a specified object. 
+	/////////////////////
+	These bindings differ in how they deal with a value of null or undefined:
+	1>For the with binding, descendant elements will not be bound at all, but 
+	will instead be removed from the document.
+	2>For the using binding, it is generally incorrect to supply a null or 
+	undefined value since it will try to use that value as the context for descendant elements.
 	-->
 	<p data-bind="using: $root.cityCoords">
 		City: <span data-bind="text: city"> </span>,
@@ -101,8 +107,6 @@
 		</tbody>
 	<table>
 	<button data-bind="click: $root.clearResults">Clear tweets</button>
-	    
-	</div>
 	
 </body>
 
