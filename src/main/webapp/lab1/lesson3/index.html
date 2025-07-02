@@ -58,7 +58,7 @@
 			</tr>
 		</tbody>
 	<table>
-	<button data-bind="click: addPerson">Add</button>
+	<button data-bind="click: $root.addPerson">Add</button>
 	<br>
 	<br>
 
@@ -66,10 +66,43 @@
 	checked binding
 	if binding
 	 -->
-	<label><input type="checkbox" data-bind="checked: display" />Display message</label>
-	<div data-bind="if: display">Here is a message. Astonishing.</div>
+	<label><input type="checkbox" data-bind="checked: $root.display" />Display message</label>
+	<div data-bind="if: $root.display">Here is a message. Astonishing.</div>
 	<br>
 	<br>
+	
+	<!--
+	The with and using bindings create a new binding context, so that descendant 
+	elements are bound in the context of a specified object. 
+	-->
+	<p data-bind="using: $root.cityCoords">
+		City: <span data-bind="text: city"> </span>,
+	    Latitude: <span data-bind="text: latitude"> </span>,
+	    Longitude: <span data-bind="text: longitude"> </span>
+	</p>
+	<br>
+	<br>
+
+	<form data-bind="submit: $root.getTweets">
+	    <p>Twitter account: </p>
+	    <input data-bind="value: $root.twitterAccount" />
+	    <button type="submit">Get tweets</button>
+	</form>	
+	<table data-bind="with: $root.resultData">
+		<thead>
+			<tr>
+				<th>Recent tweets fetched at <span data-bind="text: retrievalDate"></span></th>
+			</tr>
+		</thead>
+		<tbody data-bind="foreach: topTweets">
+			<tr>
+				<td><span data-bind="text: text"></span></td>
+			</tr>
+		</tbody>
+	<table>
+	<button data-bind="click: $root.clearResults">Clear tweets</button>
+	    
+	</div>
 	
 </body>
 

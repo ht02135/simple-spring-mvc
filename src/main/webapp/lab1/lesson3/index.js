@@ -11,6 +11,13 @@ function AppViewModel() {
 	]);
 	
 	self.display = ko.observable(false);	//checkbox checked binding
+	
+	self.cityCoords = ko.observable(
+		{ city: 'London', latitude:  51.5001524, longitude: -0.1262362 }
+	);
+	
+	self.twitterAccount = ko.observable('@example');	//input value binding
+	self.resultData = ko.observable(); // No initial value
 
 	//-----------------------------------------------------------------
 	// Operations
@@ -29,7 +36,22 @@ function AppViewModel() {
 			console.log("remove person().name="+person.name);
 			self.people.remove(person);
 		}
-	}
+	};
+	
+	self.getTweets = function() {
+	    var account = self.twitterAccount();
+	    var simulatedResults = [
+	    	{ text: account + ' What a nice day.' },
+	        { text: account + ' Building some cool apps.' },
+	        { text: account + ' Just saw a famous celebrity eating lard. Yum.' }
+	    ];
+	 
+	    self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
+	};
+	
+	self.clearResults = function() {
+		self.resultData(undefined);
+	};
 }
 
 ko.applyBindings(new AppViewModel());
