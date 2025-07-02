@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+
+	<style>
+	table, th, td {
+	  border: 1px solid black;
+	  border-collapse: collapse;
+	}
+	</style>
+</head>
+
+<body>
+
+	<h4>People</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Position</th>
+				<th>Name</th>
+				<th>City</th>
+				<th>Remove</th>
+				<th>Remove</th>
+			</tr>
+		</thead>
+		<!--
+		foreach binding
+		1>Main parameter=Pass the array that you wish to iterate over
+		2>pass a JavaScript object literal with a property called data which is the 
+		array you wish to iterate over
+		3>Referring to each array entry using $data
+		4>it’s possible to use $index to refer to the zero-based index of the current array item.
+		-->
+		<tbody data-bind="foreach: $root.people">
+			<tr>
+				<!--
+				text binding to $index
+				-->
+				<td><span data-bind="text: $index"></span></td>
+				<td><span data-bind="text: $data.name"></span></td>
+				<td>
+					<div data-bind="if: $data.city">
+						<span data-bind="text: $data.city"></span>
+					</div>
+					<div data-bind="ifnot: $data.city">
+						<span>N/A</span>
+					</div>
+				</td>
+				<td><a href="#" data-bind="click: $parent.removePerson">Remove By Parent</a></td>
+				<td><a href="#" data-bind="click: $root.removePerson">Remove By Root</a></td>
+			</tr>
+		</tbody>
+	<table>
+	<button data-bind="click: addPerson">Add</button>
+	<br>
+	<br>
+
+	<!-- 
+	checked binding
+	if binding
+	 -->
+	<label><input type="checkbox" data-bind="checked: display" />Display message</label>
+	<div data-bind="if: display">Here is a message. Astonishing.</div>
+	<br>
+	<br>
+	
+</body>
+
+</html>
