@@ -22,6 +22,28 @@ function AppViewModel() {
 	self.numberOfClicks = ko.observable(0);	//click binding
 	
 	self.detailsEnabled = ko.observable(false),	//visible binding
+	
+	self.hasCellphone = ko.observable(false);
+	
+	/*
+	this one has value binding, but we not making it observable...
+	that just mean if self.cellphoneNumber got updated, then it will
+	not propagate to front
+	*/
+	self.cellphoneNumber = "111-1111";
+	
+	self.userName = ko.observable(""),        	// Initially blank
+	self.userPassword = ko.observable("") 		// Initially blank
+	self.loginInfo = ko.computed(function() { 
+		console.log("called loginInfo");
+		return self.userName() + " " + self.userPassword();
+	}, self);
+	
+	self.isSelected = ko.observable(false);		//hasFocus binding
+	
+	self.agreeFlag =  ko.observable(false);
+	
+	self.spamFlavor = ko.observable("almond");
 
 	//-----------------------------------------------------------------
 	// Operations
@@ -86,6 +108,18 @@ function AppViewModel() {
 		console.log("event.type="+event.type);
 	};
 	
+	self.setIsSelected = function() { 
+		self.isSelected(true);
+	};
+	
+	self.finish = function() { 
+		console.log("call finish");
+	};
+	
+	self.selectFlavor = function(flavor) { 
+		console.log("call selectFlavor flavor="+flavor);
+		console.log("call selectFlavor self.spamFlavor()="+self.spamFlavor());
+	}
 }
 
 ko.applyBindings(new AppViewModel());
