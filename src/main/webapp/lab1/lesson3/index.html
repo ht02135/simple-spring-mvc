@@ -9,12 +9,7 @@
 	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
 	<script type="text/javascript" src="index.js" defer></script>
 
-	<style>
-	table, th, td {
-	  border: 1px solid black;
-	  border-collapse: collapse;
-	}
-	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/styles.css" /> 
 </head>
 
 <body>
@@ -107,6 +102,29 @@
 		</tbody>
 	<table>
 	<button data-bind="click: $root.clearResults">Clear tweets</button>
+	<br>
+	<br>
+	
+	<!-- click binding -->
+	<div>
+	    <p>You've clicked <span data-bind="text: $root.numberOfClicks"></span> times</p>
+	    <button data-bind="click: $root.incrementClickCounter">Click me</button>
+	</div>
+	<br>
+	<br>
+	
+	<!-- The "event" binding -->
+	<div>
+		<!-- 2 event bindiing -->
+	    <div data-bind="event: { mouseover: $root.enableDetails, mouseout: $root.disableDetails }">
+	        <p>Mouse over me</p>
+	    </div>
+	    <div data-bind="visible: $root.detailsEnabled">
+	        <p>Details</p>
+	    </div>
+	</div>
+	<br>
+		<br>
 	
 </body>
 

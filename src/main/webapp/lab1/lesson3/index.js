@@ -18,6 +18,10 @@ function AppViewModel() {
 	
 	self.twitterAccount = ko.observable('@example');	//input value binding
 	self.resultData = ko.observable(); // No initial value
+	
+	self.numberOfClicks = ko.observable(0);	//click binding
+	
+	self.detailsEnabled = ko.observable(false),	//visible binding
 
 	//-----------------------------------------------------------------
 	// Operations
@@ -54,9 +58,34 @@ function AppViewModel() {
 	    self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
 	};
 	
-	self.clearResults = function() {
+	self.clearResults = function() {			//button click binding
 		self.resultData(undefined);
 	};
+	
+	self.incrementClickCounter = function() {	//button binding
+		var previousCount = self.numberOfClicks();
+	    self.numberOfClicks(previousCount + 1);
+	};
+	
+	/*
+	could leave param empty
+	but by default, event binding, kn pass data and event obj...
+	from debugger, data seems to be $root
+	*/
+	self.enableDetails = function(data, event) {			//event binding
+	    self.detailsEnabled(true);
+		console.log("call enableDetails");
+		console.log("data="+data);
+		console.log("event.type="+event.type);
+	};
+		   
+	self.disableDetails = function(data, event) {			//event binding
+		self.detailsEnabled(false);
+		console.log("call disableDetails");
+		console.log("data="+data);
+		console.log("event.type="+event.type);
+	};
+	
 }
 
 ko.applyBindings(new AppViewModel());
