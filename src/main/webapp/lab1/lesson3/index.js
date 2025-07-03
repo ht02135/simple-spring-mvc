@@ -2,6 +2,7 @@
 function AppViewModel() {
 	//-----------------------------------------------------------------
 	// Declaration
+	
 	var self = this;	//this is ViewModel
 
 	self.people = ko.observableArray([ 			//foreach binding

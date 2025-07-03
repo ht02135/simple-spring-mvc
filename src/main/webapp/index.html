@@ -86,6 +86,21 @@
     <td>KnockoutJS</td>
     <td><a href="http://localhost:8080/mvc/lab1/index.html">http://localhost:8080/mvc/lab1/index.html</a></td>
   </tr>
+  
+  <!--
+	| Current document | Relative URL | Resolved URL |
+	| ---------------- | ------------ | ------------ |
+	| http://example.com/mywebsite/index.html     | images/picture.png    | http://example.com/mywebsite/images/picture.png |
+	| http://example.com/mywebsite/index.html     | /images/picture.png   | http://example.com/images/picture.png |
+	| http://example.com/mywebsite/index.html     | ./images/picture.png  | http://example.com/mywebsite/images/picture.png |
+	| http://example.com/mywebsite/index.html     | ../images/picture.png | http://example.com/images/picture.png |
+  -->
+  <tr>
+    <td>relative ./lab1/index.html</td>
+    <td>KnockoutJS</td>
+    <td><a href="./lab1/index.html">./lab1/index.html</a></td>
+  </tr>
+  
   <tr>
     <td>/json/CustomerAPITest.jsp</td>
     <td>JSON Test</td>

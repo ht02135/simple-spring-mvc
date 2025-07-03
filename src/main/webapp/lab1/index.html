@@ -52,6 +52,27 @@
     <td>lab1/lesson2</td>
     <td><a href="http://localhost:8080/mvc/lab1/lesson2/index.html">http://localhost:8080/mvc//lab1/lesson2/index.html</a></td>
   </tr>
+  <tr>
+    <td>lab1/lesson3</td>
+    <td><a href="http://localhost:8080/mvc/lab1/lesson3/index.html">http://localhost:8080/mvc//lab1/lesson3/index.html</a></td>
+  </tr>
+  <tr>
+    <td>lab1/options</td>
+    <td><a href="http://localhost:8080/mvc/lab1/options/index.html">http://localhost:8080/mvc//lab1/options/index.html</a></td>
+  </tr>
+  
+  <!--
+  | Current document | Relative URL | Resolved URL |
+  | ---------------- | ------------ | ------------ |
+  | http://example.com/mywebsite/index.html     | images/picture.png    | http://example.com/mywebsite/images/picture.png |
+  | http://example.com/mywebsite/index.html     | /images/picture.png   | http://example.com/images/picture.png |
+  | http://example.com/mywebsite/index.html     | ./images/picture.png  | http://example.com/mywebsite/images/picture.png |
+  | http://example.com/mywebsite/index.html     | ../images/picture.png | http://example.com/images/picture.png |
+  -->
+  <tr>
+    <td>relative ../lab1/options/index.html</td>
+    <td><a href="../lab1/options/index.html">../lab1/options/index.html</a></td>
+  </tr>
   
 </table>
 
