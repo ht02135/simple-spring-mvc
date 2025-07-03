@@ -27,6 +27,9 @@ loadTemplates().done(function () {
 
 		//--------------------------------------
 		// Declaration
+		
+		self.buyer = { name: 'Franklin', credits: 250 };
+		self.seller = { name: 'Mario', credits: 5800 };
 			
 		self.people = ko.observableArray([ 			//foreach binding
 			{ name: 'Bert', city: null },

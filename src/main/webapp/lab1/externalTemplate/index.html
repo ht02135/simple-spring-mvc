@@ -20,6 +20,11 @@
 				data-template-src="../../templates/exampleTemplate.html" defer>
 		</script>
 		
+		<script type="text/html" 
+			    id="personTemplate" 
+				data-template-src="../../templates/personTemplate.html" defer>
+		</script>
+		
 		<!-- loading index.js -->
 		<script type="text/javascript" src="index.js" defer></script>
 	</head>
@@ -58,10 +63,17 @@
 	<br>
 		
 	<!--
-	external template 
+	external template 'exampleTemplate'
 	-->	
     <div data-bind="template: { name: 'exampleTemplate' }"></div>
 	<br>	
+	
+	<!--
+	external template 'personTemplate'
+	-->	
+	<div data-bind="template: { name: 'personTemplate', data: buyer }"></div>
+	<div data-bind="template: { name: 'personTemplate', data: seller }"></div>
+	<br>
 	
   </body>
 </html>
