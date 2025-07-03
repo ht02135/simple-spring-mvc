@@ -4,11 +4,17 @@
 function loadTemplates() {
     var templateLoads = [];
 
+	/*
+	.each( function )
+	1>iterate thru matching element
+	2>grab 'data-template-src' value and add to templateLoads
+	*/
     $('[data-template-src]').each(function () {
         var templateElement = $(this);
         var templateUrl = templateElement.attr('data-template-src');
 
-        // Load the template into the element and push the promise to do that into the templateLoads array
+        // Load the template into the element and push the promise to do that into 
+		// the templateLoads array
         templateLoads.push(
             $.get(templateUrl)
             .done(function (data) {
@@ -17,6 +23,11 @@ function loadTemplates() {
         );
     });
 
+	/*
+	$.when.apply($, [def1, def2])
+	1>is the same as: $.when(def1, def2)
+	2>$.when takes any number of parameters and resolves when all of these have resolved.
+	*/
     return $.when.apply($, templateLoads);
 }
 
