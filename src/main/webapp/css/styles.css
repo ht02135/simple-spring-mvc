@@ -2,3 +2,17 @@ table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+fieldset {
+    text-align: center;
+    background-color: #dcdcdc;
+    margin-top: 20px;
+    border: 1pt dashed #696969;
+    width: 300px;
+    border-radius: 10px;
+}
+
