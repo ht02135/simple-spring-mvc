@@ -5,17 +5,10 @@
     <title>Knockout.js jQuery External Templates *With Options* Example</title>
     <script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
     <script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
-	<!-- 
-	not doing template, so comment out...
-	1>loading template involving ajax call which run into "Cross-Origin Request Blocked error
-	2>to go around that, need to deploy WAR to tomcat which is huzzle
-	3>or just dont load template unless is needed in the page
-	//////////////////
     <script type="text/javascript" src="../../libs/knockout-latest.debug.js" defer></script>
     <script type="text/javascript" src="../../libs/koExternalTemplateEngine_all.js" defer></script>
-	-->
-	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
-    <script type="text/javascript" src="index.js" defer></script>
+	<script type="text/javascript" src="../../libs/knockout.mapping.js" defer></script>
+	<script type="text/javascript" src="index.js" defer></script>
 </head>
 <body>
 
@@ -27,6 +20,11 @@
 	<p><label>Top Level Full NAme : </label></p>
 	<input data-bind="value: $root.customerFullName" />
 	<button data-bind="click: $root.getCustomer">Get Customer</button>
+	<br>
+	
+	<p><label>Test Mapping : </label></p>
+	<input data-bind="value: $root.customerFullName" />
+	<button data-bind="click: $root.testMapping">Test Mapping</button>
 	<br>
 	
 	<form data-bind="submit: $root.postCustomer">

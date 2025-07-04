@@ -1,12 +1,5 @@
 $(function() {
-	/*
-	not doing template, so comment out...
-	1>loading template involving ajax call which run into "Cross-Origin Request Blocked error
-	2>to go around that, need to deploy WAR to tomcat which is huzzle
-	3>or just dont load template unless is needed in the page
-	//////////////////
     infuser.defaults.templateUrl = "../../templates";
-	*/
 	
 	/*
 	TransactionResponse =
@@ -89,6 +82,7 @@ $(function() {
 		},
 		
 		sanityCheckJSON: function() {
+			console.log("called sanityCheckJSON");
 			/*
 			The JSON object, available in all modern browsers, has two useful methods 
 			to deal with JSON-formatted content: parse and stringify.
@@ -108,6 +102,19 @@ $(function() {
 			console.log("sanityCheckJSON before JSON.parse customerJSONStr="+customerJSONStr);
 			var customerObj = JSON.parse(customerJSONStr);
 			console.log("sanityCheckJSON after JSON.parse customerObj="+customerObj);
+		},
+		
+		testMapping: function() {
+			console.log("called testMapping");
+			var requestJSON = '{"customer":{"age":11,"Hobby":"weird_hobby","full_name":"John2","first_nick_name":"Jo","last_nick_name":"Jo","weird_hobby":"weird_hobby"},"item":"fake item"}';
+			var requestObj = JSON.parse(requestJSON);
+			var customerObj = requestObj.customer;
+			
+			/*
+			Specifying the update target
+			ko.mapping.fromJS(data, {}, someObject); // overwrites properties on someObject
+			*/
+			ko.mapping.fromJS(customerObj, {}, this.customer);
 		},
 			
 		getCustomerFromServer: function() {
@@ -176,9 +183,25 @@ $(function() {
 			});
 		},
 		
+		handleCustomerSuccess2: function(result) {
+			console.log("handleCustomerSuccess2");
+			console.log("handleCustomerSuccess result="+result);
+			
+			var customerObj = result.customer;
+			
+			this.customerFullName(customerObj.full_name);
+			
+			/*
+			Specifying the update target
+			ko.mapping.fromJS(data, {}, someObject); // overwrites properties on someObject
+			*/
+			ko.mapping.fromJS(customerObj, {}, this.customer);
+		},
+		
 		handleCustomerSuccess: function(result) {
 			console.log("handleCustomerSuccess");
 			console.log("handleCustomerSuccess result="+result);
+			
 			var responseJSON = result;
 			console.log("handleCustomerSuccess responseJSON="+responseJSON);
 
@@ -212,8 +235,6 @@ $(function() {
 			this.customer().first_nick_name(parsedCustomerObj.first_nick_name);
 			this.customer().last_nick_name(parsedCustomerObj.last_nick_name);
 			this.customer().weird_hobby(parsedCustomerObj.weird_hobby);
-
-			//---------------------
 		}
 			
     };
@@ -222,7 +243,8 @@ $(function() {
 	var externalHandleCustomerSuccess = function (result) {
 		//result in GET/POST is TransactionResponse
 		console.log("externalHandleCustomerSuccess");
-		viewModel.handleCustomerSuccess(result);
+		//viewModel.handleCustomerSuccess(result);
+		viewModel.handleCustomerSuccess2(result);	//call again...
 	};
 
     ko.applyBindings(viewModel);
