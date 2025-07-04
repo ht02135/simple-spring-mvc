@@ -18,16 +18,34 @@
     <script type="text/javascript" src="index.js" defer></script>
 </head>
 <body>
+
+	<p><label>Top Level Full NAme : </label></p>
+	<input data-bind="value: $root.customerFullName" />
+	<button data-bind="click: $root.capitalizeLastName">Go caps</button>
+	<br>
 	
-	<form data-bind="submit: $root.getCustomer">
-	    <p><label>$root.customer().full_name : </label></p>
-		<input data-bind="value: $root.customer().full_name" />
-		<p><label>$root.customerFullName : </label></p>
-		<input data-bind="value: $root.customerFullName" />
-	    <button type="submit">Get Customer</button>
+	<p><label>Top Level Full NAme : </label></p>
+	<input data-bind="value: $root.customerFullName" />
+	<button data-bind="click: $root.getCustomer">Get Customer</button>
+	<br>
+	
+	<form data-bind="submit: $root.postCustomer">
+	    <p><label>Age : </label></p>
+		<input data-bind="value: $root.customer().age" />
+		<p><label>Full Name : </label></p>
+		<input data-bind="value: $root.customer().Hobby" />
+		<p><label>First Nick Name : </label></p>
+		<input data-bind="value: $root.customer().first_nick_name" />
+		<p><label>Last Nuck Name : </label></p>
+		<input data-bind="value: $root.customer().last_nick_name" />
+		<p><label>Hobby : </label></p>
+		<input data-bind="value: $root.customer().Hobby" />
+		<p><label>Weird Hobby : </label></p>
+		<input data-bind="value: $root.customer().weird_hobby" />
+		
+	    <button type="submit">Post Customer</button>
 	</form>	
-	
-	<button data-bind="click: capitalizeLastName">Go caps</button>
+	<br>
 	
 </body>
 </html>

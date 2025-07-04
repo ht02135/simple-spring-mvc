@@ -77,6 +77,12 @@ $(function() {
 			this.getCustomerFromServer();
 		},
 		
+		postCustomer: function() {
+			console.log("called getCustomer");
+			this.sanityCheckJSON();
+			this.postCustomerToServer();
+		},
+		
 		capitalizeLastName: function() {			//click data-binding
 			var currentVal = this.customerFullName();        	// Read the current value
 			this.customerFullName(currentVal.toUpperCase()); 	// Write back a modified value
@@ -134,6 +140,42 @@ $(function() {
 			});
 		},
 		
+		postCustomerToServer: function() {
+			console.log("called postCustomerToServer");
+			
+			var requestJSON = '{"customer":{"age":11,"Hobby":"weird_hobby","full_name":"John2","first_nick_name":"Jo","last_nick_name":"Jo","weird_hobby":"weird_hobby"},"item":"fake item"}';
+			console.log("postCustomerToServer before JSON.parse requestJSON="+requestJSON);
+			var requestObj = JSON.parse(requestJSON);
+			console.log("postCustomerToServer after JSON.parse requestObj="+requestObj);
+			var requestJSONStr = JSON.stringify(requestObj);
+			console.log("postCustomerToServer after JSON.stringify requestJSONStr="+requestJSONStr);
+						
+			$.ajax({
+				type: "PUT",
+				crossDomain: "true",
+				contentType: "application/json",
+				dataType: "json", //The type of data that you're expecting back from the server.
+				processData: false,
+			    url:"http://localhost:8080/mvc/mvc/customer-order/set",
+				data: requestJSONStr,
+				cache: false,
+			    //success: handleCustomerSuccess,
+			}).success(function(result, status, xhr) {
+				//success : Function( Anything data, String textStatus, jqXHR jqXHR )
+				console.log("postCustomerToServer success");
+				console.log("postCustomerToServer result="+result);
+				/*
+				TypeError: _this.handler.handle is not a function error
+				*/
+				externalHandleCustomerSuccess(result);
+			}).error(function (result, status, xhr) {
+				console.log("postCustomerToServer error");
+				console.log("postCustomerToServer result="+result);
+				console.log("postCustomerToServer status="+status);
+				console.log("postCustomerToServer xhr="+xhr);
+			});
+		},
+		
 		handleCustomerSuccess: function(result) {
 			console.log("handleCustomerSuccess");
 			console.log("handleCustomerSuccess result="+result);
@@ -178,6 +220,7 @@ $(function() {
 	
 	//callback function
 	var externalHandleCustomerSuccess = function (result) {
+		//result in GET/POST is TransactionResponse
 		console.log("externalHandleCustomerSuccess");
 		viewModel.handleCustomerSuccess(result);
 	};
