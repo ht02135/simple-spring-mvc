@@ -148,4 +148,138 @@ ko.applyBindings(new AppViewModel());
 
 /////////////////////////////
 
+Your view models are JavaScript objects
+
+ou could just serialize them as JSON using any standard JSON serializer, such as JSON.stringify
+
+------------
+
+ko.toJS — this clones your view model’s object graph, substituting for each observable the 
+current value of that observable, so you get a plain copy that contains only your data 
+and no Knockout-related artifacts
+
+huh, doesnt that mean you lose ko functionality?
+
+--------------
+
+ko.toJSON — this produces a JSON string representing your view model’s data. Internally, 
+it simply calls ko.toJS on your view model, and then uses the browser’s native JSON 
+serializer on the result
+
+//////////////////////////////
+
+you viewmodel might contain observable and function and blaba
+you might want to run toJSON so easy to send json to server
+
+var jsonData = ko.toJSON(viewModel);
+
+Or, if you just want the plain JavaScript object graph before serialization, use ko.toJS as follows:
+
+var plainJs = ko.toJS(viewModel);
+
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+Updating View Model Data using JSON
+If you’ve loaded some data from the server and want to use it to update your view model, the most straightforward way is to do it yourself. For example,
+
+// Load and parse the JSON
+var someJSON = /* Omitted: fetch it from the server however you want */;
+var parsed = JSON.parse(someJSON);
+ 
+// Update view model properties
+viewModel.firstName(parsed.firstName);
+viewModel.pets(parsed.pets);
+
+//////////////////////////////
+/////////////////////////////
+
+https://knockoutjs.com/documentation/plugins-mapping.html
+
+var viewModel = {
+    serverTime: ko.observable(),
+    numUsers: ko.observable()
+}
+
+var data = getDataUsingAjax();          // Gets the data from the server
+The server might return JSON data similar to the following:
+
+{
+    serverTime: '2010-01-07',
+    numUsers: 3
+}
+
+every time you receive new data from the server, you can update all the properties on viewModel in one step by calling the ko.mapping.fromJS function again:
+
+// Every time data is received from the server:
+ko.mapping.fromJS(data, viewModel);
+
+Working with JSON strings
+If your Ajax call returns a JSON string (and does not deserialize it into a JavaScript object), then you can use the function ko.mapping.fromJSON to create and update your view model instead. To unmap, you can use ko.mapping.toJSON.
+
+//////////////////////////////
+/////////////////////////////
+
+https://www.syncfusion.com/forums/129943/knockoutjs-succintly-mapping-data-to-viewmodels-page-58-59
+
+<script type='text/javascript'>
+	$.getJSON("/get-user-data", function(data) {
+		var viewModel = ko.mapping.fromJS(data);
+		ko.applyBindings(viewModel);
+	});
+</script>
+
+viewModel.loadUserData = function () { 
+       $.getJSON("/get-user-data", function (data) { 
+           // update the data in existing ViewModel. 
+           ko.mapping.fromJS(data, viewModel); 
+       }); 
+  } 
+  
+/////////////////////////
+/////////////////////////
+
+saveUserData method: 
+ 
+  viewModel.saveUserData = function() { 
+      // Convert the viewModel into JSON. 
+      var data_to_send = {userData: ko.toJSON(viewModel)}; 
+      // Send that JSON data to server. 
+      $.post("/save-user-data", data_to_send, function(data) { 
+           alert("Your data has been posted to the server!"); 
+      }); 
+      
+////////////////////////////
+/////////////////////////////
+
+
+    <div class='sample'> 
+        <p>Load: <input type="button" value="Load User Data" data-bind="click: loadUserData" /></p> 
+        <p>Name: <input data-bind='value: firstName' /></p> 
+        <p>Save: <input type="button" value="Save User Data" data-bind="click: saveUserData" /></p> 
+    </div> 
+    <script> 
+        $(document).ready(function () { 
+            var viewModel = {}; 
+            viewModel.firstName = ko.observable('Knockout JS'); 
+            viewModel.loadUserData = function () { 
+                $.getJSON("/data.json", function (data) { 
+                    // update the data in existing ViewModel. 
+                    ko.mapping.fromJS(data, viewModel); 
+                    viewModel.firstName(data.name); 
+                }); 
+            }; 
+            viewModel.saveUserData = function () { 
+                // Convert the viewModel into JSON. 
+                var data_to_send = { userData: ko.toJSON(viewModel) }; 
+                // Send that JSON data to server. 
+                $.post("/save-user-data", data_to_send, function (data) { 
+                    alert("Your data has been posted to the server!"); 
+                }).fail(function () { 
+                    alert("Ensure the Url before save the data"); 
+                }); 
+            }; 
+            ko.applyBindings(viewModel); 
+        }); 
+    </script> 
+    
  
