@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -71,13 +72,21 @@ public class TransactionController {
 		return transactionResponse;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/customer/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/customer/{id}")
 	public ResponseEntity<TransactionResponse> getCustomer(@PathVariable("id") long customerId) {
 		InternalLogger.info("TransactionController.getCustomer()");
 		InternalLogger.info("customerId=" + customerId);
 		TransactionResponse transactionResponse = getInnerCustomer(customerId);
 
 		if (transactionResponse != null) {
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				System.out.println("getCustomer transactionResponse="+mapper.writeValueAsString(transactionResponse));
+				System.out.println("getCustomer transactionResponse="+mapper.writerWithDefaultPrettyPrinter().writeValueAsString(transactionResponse));
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return ResponseEntity.ok(transactionResponse);
 		}
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);

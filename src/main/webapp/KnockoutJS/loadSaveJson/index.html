@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Knockout.js jQuery External Templates *With Options* Example</title>
+    <script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
+    <script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
+	<!-- 
+	not doing template, so comment out...
+	1>loading template involving ajax call which run into "Cross-Origin Request Blocked error
+	2>to go around that, need to deploy WAR to tomcat which is huzzle
+	3>or just dont load template unless is needed in the page
+	//////////////////
+    <script type="text/javascript" src="../../libs/knockout-latest.debug.js" defer></script>
+    <script type="text/javascript" src="../../libs/koExternalTemplateEngine_all.js" defer></script>
+	-->
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+    <script type="text/javascript" src="index.js" defer></script>
+</head>
+<body>
+	
+	<form data-bind="submit: $root.getCustomer">
+	    <p><label>$root.customer().full_name : </label></p>
+		<input data-bind="value: $root.customer().full_name" />
+		<p><label>$root.customerFullName : </label></p>
+		<input data-bind="value: $root.customerFullName" />
+	    <button type="submit">Get Customer</button>
+	</form>	
+	
+	<button data-bind="click: capitalizeLastName">Go caps</button>
+	
+</body>
+</html>
