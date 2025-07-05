@@ -29,6 +29,10 @@ public class TransactionMain {
 		System.out.println("getInnerCustomer customerResponse="+mapper.writeValueAsString(customerResponse));
 		System.out.println("getInnerCustomer customerResponse="+mapper.writerWithDefaultPrettyPrinter().writeValueAsString(customerResponse));
 		
+		TransactionResponse customersResponse = controller.getInnerCustomers();	
+		System.out.println("getInnerCustomers customersResponse="+mapper.writeValueAsString(customersResponse));
+		System.out.println("getInnerCustomers customersResponse="+mapper.writerWithDefaultPrettyPrinter().writeValueAsString(customersResponse));
+		
 		/*
 		/customer-order/customer/5
 		path = http://localhost:8080/mvc/mvc/customer-order/item/5

@@ -48,6 +48,27 @@ public class TransactionController {
 		
 		return response;
 	}
+	
+	public TransactionResponse getInnerCustomers() {
+		Customer customer = new Customer();
+		customer.setName("John");
+		customer.setAge(1);
+		customer.setHobby("weird_hobby");
+
+		NickName nickName = new NickName();
+
+		nickName.setFirst("Jo");
+		nickName.setLast("Jo");
+		customer.setNickName(nickName);
+		System.out.println("customer" + customer);
+		
+		TransactionResponse response = new TransactionResponse();
+		response.getCustomers().add(customer);
+		response.getCustomers().add(customer);
+		response.getCustomers().add(customer);
+		
+		return response;
+	}
 
 	public TransactionResponse getInnerItem(long itemId) {
 		TransactionResponse response = new TransactionResponse();
@@ -70,6 +91,25 @@ public class TransactionController {
 		}
 		
 		return transactionResponse;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value = "/customers")
+	public ResponseEntity<TransactionResponse> getCustomers() {
+		InternalLogger.info("TransactionController.getCustomers()");
+		TransactionResponse transactionResponse = getInnerCustomers();
+		
+		if (transactionResponse != null) {
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				System.out.println("getCustomer transactionResponse="+mapper.writeValueAsString(transactionResponse));
+				System.out.println("getCustomer transactionResponse="+mapper.writerWithDefaultPrettyPrinter().writeValueAsString(transactionResponse));
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return ResponseEntity.ok(transactionResponse);
+		}
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 
     @RequestMapping(method = RequestMethod.GET, value = "/customer/{id}")

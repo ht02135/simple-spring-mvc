@@ -1,6 +1,8 @@
 package simple.packages.spring.mvc.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,6 +16,9 @@ public class TransactionResponse implements Serializable {
 
 	@JsonProperty
 	private Customer customer = null;
+	
+	@JsonProperty
+	private List<Customer> customers = new ArrayList<Customer>();
 	
 	@JsonProperty
 	private String item = null;
@@ -30,6 +35,14 @@ public class TransactionResponse implements Serializable {
 		this.customer = customer;
 	}
 
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
+
 	public String getItem() {
 		return item;
 	}
@@ -40,9 +53,7 @@ public class TransactionResponse implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TransactionResponse [customer=" + customer + ", item=" + item + "]";
+		return "TransactionResponse [customer=" + customer + ", customers=" + customers + ", item=" + item + "]";
 	}
-
-
-
+	
 }
