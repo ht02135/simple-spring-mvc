@@ -31,7 +31,7 @@
 	    <p><label>Age : </label></p>
 		<input data-bind="value: $root.customer().age" />
 		<p><label>Full Name : </label></p>
-		<input data-bind="value: $root.customer().Hobby" />
+		<input data-bind="value: $root.customer().full_name" />
 		<p><label>First Nick Name : </label></p>
 		<input data-bind="value: $root.customer().first_nick_name" />
 		<p><label>Last Nuck Name : </label></p>
@@ -43,6 +43,44 @@
 		
 	    <button type="submit">Post Customer</button>
 	</form>	
+	<br>
+	
+	<table>
+	    <thead><tr>
+	        <th>Age</th>
+			<th>Full Name</th>
+			<th>Hobby</th>
+	    </tr></thead>
+	    <tbody data-bind="foreach: $root.customers"> <!-- foreach binding -->
+	        <tr>
+	            <td><input data-bind="value: age" /></td>
+				<td><input data-bind="value: full_name" /></td>
+				<td><input data-bind="value: Hobby" /></td>
+	        </tr>    
+	    </tbody>
+	</table>
+	<br>
+
+	<table>
+	    <thead><tr>
+	        <th>Name</th>
+			<th>Type</th>
+	    </tr></thead>
+	    <tbody data-bind="foreach: $root.anotherObservableArray"> <!-- foreach binding -->
+	        <tr>
+				<!--
+				1>The "value" binding
+				The value binding links the associated DOM element’s value
+				2>The "text" binding
+				The text binding causes the associated DOM element to display 
+				the text value of your parameter.
+				Typically this is useful with elements like <span> or <em>
+				-->
+	            <td><input data-bind="value: name" /></td>
+				<td><input data-bind="value: type" /></td>
+	        </tr>    
+	    </tbody>
+	</table>
 	<br>
 	
 </body>
