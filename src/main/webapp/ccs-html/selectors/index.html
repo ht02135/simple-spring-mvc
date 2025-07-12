@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>The jQuery Example</title>
+</head>
+
+<body>
+
+	<style type="text/css">
+		p.first {
+			color: blue
+		}
+
+		p.second {
+			color: green
+		}
+	</style>
+	<p class="first">Hello World</p>
+	<p class="second">Hello World</p>
+
+	<style type="text/css">
+		p.third {
+			color: rgb(255, 0, 0)
+		}
+
+		p.fourth {
+			color: rgb(128, 0, 255)
+		}
+	</style>
+	<p class="third">Hello World</p>
+	<p class="fourth">Hello World</p>
+
+	<!-- ///////////////////////////////////// -->
+	<!-- element selector -->
+	<style type="text/css">
+		h1 {
+			text-decoration-line: underline;
+		}
+	</style>
+	<h1>Universal selector (*)</h1>
+
+	<!-- ///////////////////////////////////// -->
+	<!-- Class Selector -->
+	<style type="text/css">
+		.class-div {
+			border: 5px inset gold;
+			width: 300px;
+			text-align: center;
+		}
+
+		.class-p {
+			color: green;
+			font-size: 25px;
+		}
+	</style>
+	<div class="class-div">
+		<h1 class="class-h1">class selector</h1>
+		<p class="class-p">class .style-p applied</p>
+		<p>No class applied on this p element</p>
+	</div>
+
+	<!-- ///////////////////////////////////// -->
+	<!--  ID Selector -->
+	<style type="text/css">
+		#id-div {
+			border: 5px inset purple;
+			width: 300px;
+			text-align: center;
+			background-color: lightgoldenrodyellow;
+		}
+
+		#id-p {
+			color: green;
+			font-size: 25px;
+		}
+	</style>
+	<div id="id-div">
+		<h1 id="id-h1">ID selector</h1>
+		<p id="id-p">id #style-p applied</p>
+		<p>No id applied on this p element</p>
+	</div>
+
+	<!-- ///////////////////////////////////// -->
+	<!-- Attribute Selector -->
+	<style>
+		a[target] {
+			background-color: #04af2f;
+			color: white;
+			font-size: 2em;
+		}
+	</style>
+	<p>Styling applied to anchor element with target attribute:</p>
+	<a href="#">Tutorialspoint</a>
+	<br>
+	<a href="#" target="_blank">google</a>
+	<br>
+	<a href="#" target="_self">wikipedia</a>
+	<br>
+
+	<!-- ///////////////////////////////////// -->
+	<!-- Group Selector -->
+	<style>
+		h1,
+		h2 {
+			font-weight: lighter;
+			padding: 4px;
+		}
+
+		/*
+	apply to p, element with .highlight or #hightlightSpan
+	*/
+		p,
+		.highlight,
+		#hightlightSpan {
+			font-weight: bolder;
+			padding: 10px;
+		}
+	</style>
+	<h1>CSS Selectors</h1>
+	<h2>Group Selectors</h2>
+	<p>This is a paragraph.</p>
+	<div class="highlight">
+		This is div
+	</div>
+	<br>
+	<span id="hightlightSpan">
+		This is span
+	</span>
+	<br>
+
+	<!-- ///////////////////////////////////// -->
+	<!-- 
+	Pseudo-class Selector
+	CSS pseudo-class selector styles a specific state of an element, such as :hover
+	-->
+	<style>
+		a :hover {
+			background-color: peachpuff;
+			color: green;
+			font-size: 2em;
+		}
+	</style>
+	<h2>Pseudo-class selector</h2>
+	<p>Styling applied to anchor element with a pseudo-class:</p>
+	<a href="#">Tutorialspoint</a>
+	<br>
+
+	<!-- ///////////////////////////////////// -->
+	<!-- 
+	Child Selector - direct child of a particular element
+	Descendant Selector
+	 -->
+	<style>
+		div p {
+			border: 1px solid black;
+		}
+
+		div>p {
+			color: blue;
+		}
+	</style>
+	<div>
+		<p>
+			This paragraph is inside a div
+			and will be blue.
+		</p>
+		<section>
+			<p>
+				This paragraph is inside a
+				section which is inside a
+				div and will also be blue.
+			</p>
+		</section>
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html id="htmlDoc">
+	<head>
+		<title>Basic Example</title>
+
+		<link rel="stylesheet" type="text/css" href="../../css/styles.css" />
+				
+		<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+		<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+		<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+		<script type="text/javascript" src="../../libs/koExternalTemplateEngine_all.js" defer></script>
+		
+		<!-- loading external template -->
+		<!--
+		<script type="text/html" id="exampleTemplate" data-template-src="exampleTemplate.html" defer></script>
+		-->
+		<script type="text/html" 
+			    id="exampleTemplate" 
+				data-template-src="../../templates/exampleTemplate.html" defer>
+		</script>
+		
+		<script type="text/html" 
+			    id="personTemplate" 
+				data-template-src="../../templates/personTemplate.html" defer>
+		</script>
+		
+		<!-- loading index.js -->
+		<script type="text/javascript" src="index.js" defer></script>
+	</head>
+  <body>
+
+	<h4>People</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Position</th>
+				<th>Name</th>
+				<th>City</th>
+				<th>Remove</th>
+				<th>Remove</th>
+			</tr>
+		</thead>
+		<tbody data-bind="foreach: $root.people">
+			<tr>
+				<td><span data-bind="text: $index"></span></td>
+				<td><span data-bind="text: $data.name"></span></td>
+				<td>
+					<div data-bind="if: $data.city">
+						<span data-bind="text: $data.city"></span>
+					</div>
+					<div data-bind="ifnot: $data.city">
+						<span>N/A</span>
+					</div>
+				</td>
+				<td><a href="#" data-bind="click: $parent.removePerson">Remove By Parent</a></td>
+				<td><a href="#" data-bind="click: $root.removePerson">Remove By Root</a></td>
+			</tr>
+		</tbody>
+	<table>
+	<button data-bind="click: $root.addPerson">Add</button>
+	<br>
+	<br>
+		
+	<!--
+	external template 'exampleTemplate'
+	-->	
+    <div data-bind="template: { name: 'exampleTemplate' }"></div>
+	<br>	
+	
+	<!--
+	external template 'personTemplate'
+	-->	
+	<div data-bind="template: { name: 'personTemplate', data: buyer }"></div>
+	<div data-bind="template: { name: 'personTemplate', data: seller }"></div>
+	<br>
+	
+  </body>
+</html>

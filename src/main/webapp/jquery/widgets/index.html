@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+	
+<head>
+	
+<title>The jQuery Example</title>
+
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui-1.14.1/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="../../css/sakura/sakura.css" />
+
+<script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-ui.min.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
+<script type="text/javascript" src="../../libs/json2.js" defer></script>
+<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+
+<body>
+	
+	<p>accordion</p>
+	<div id = "accordion">
+		<h3>Android</h3>
+   		<div>
+      		<p>Android is an open source</p>
+   		</div>
+   		<h3>CSS</h3>
+   		<div>
+      		<p>CSS is the acronym for "Cascading Style Sheet".</p>
+   		</div>
+	</div>
+	<br>
+	
+	<p>button</p>
+	<button>A button element</button>
+	<input type = "submit" value = "A submit button">
+	<a href = "#">An anchor</a>
+	<br>
+	
+	<p>datepicker</p>
+	<p>Date: <input type = "text" id = "datepicker"></p>
+	<input type = "submit" id="datepicker_btn" value = "Submit a date">
+	<br>
+	
+	<p>dialog</p>
+	<div>Display dialog <span id="dialogTarget">here</span> when finished.</div>
+	<div id="dialog" title="Basic dialog">
+		<p>This is an animated dialog</p>
+		<input id="dialogInput" type="text" />
+		<button id="saver">Save me!</button>
+	</div>
+	<button id="opener">Open Dialog</button>
+	<br>
+	
+	<p>progressbar</p>
+	<div id = "progressbar"></div>
+	<button id="incrementBtn">Open Dialog</button>
+	<br>
+	
+	<p>selectmenu</p>
+	<label for = "speed">Select a speed</label>
+	<select name = "speed" id = "speed">
+		<option>Slower</option>
+	    <option>Slow</option>
+	    <option selected = "selected">Medium</option>
+	    <option>Fast</option>
+	    <option>Faster</option>
+	</select>
+	<br>
+
+	<p>tabs</p>
+	<div id = "tabs">
+		<ul>
+			<li><a href = "#tabs-1">Android</a></li>
+			<li><a href = "#tabs-2">CSS</a></li>
+		</ul>
+		<div id = "tabs-1">
+			<p>Android is an open source</p>
+		</div>
+		<div id = "tabs-2">
+			<p>CSS is the acronym for "Cascading Style Sheet".</p>
+		</div>
+	</div>
+	<br>
+	
+	<!-- seems to display title attribute as tooltip -->
+	<p>Tooltip</p>
+	<p><a href = "#" title = "Tutorials point india Pvt ltd">
+		Tutorials point</a> Free tutorials and reference manuals with
+		examples for Concordion, 5G, JBPM5, SAP, Agile, SVG, Web Icons, KDB+,
+		Web Analytics, Google Maps, Joomla, Self
+	</p>		
+	<p><a href = "https://www.tutorialspoint.com/jquery/index.htm"
+		title = "J Query tutorials"> J Query</a> is a fast and 
+		concise JavaScript library created by John Resig in 2006. 
+		jQuery simplifies HTML document traversing, event handling,  
+		animating, and Ajax interactions for Rapid Web Development.
+	</p>	
+	<p><label for = "age">your tutorials details</label>
+		<input id = "age" title = "Please enter your tutorial name. 
+		We will search in our data base">
+	</p>
+	<br>
+		
+<br>
+<br>
+
+</body>
+</html>

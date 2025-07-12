@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+	
+<head>
+	
+<title>The jQuery Example</title>
+
+<link rel="stylesheet" type="text/css" href="../../css/styles.css" /> 
+
+<!--
+C:\worksplace\sts\simple-spring-mvc\src\main\webapp\css\BaseCSS\base.css
+-->
+<link rel="stylesheet" type="text/css" href="../../css/BaseCSS/base.css" /> 
+
+<script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
+<script type="text/javascript" src="../../libs/json2.js" defer></script>
+<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+
+<body>
+	<h1>jQuery Basic Syntax</h1>
+	<p>This is p tag</p>
+	<p id="foo">This is foo p tag</p>
+	<div>
+		<span class="bar">This is bar span tag</span>
+	</div>
+	<br>
+   
+	<button id="myButton">Click me</button>
+	
+	<!--
+	jQuery is being heavily used in manipulating various attributes associated with HTML elements.
+	className,tagName,id,href,title,rel,src,style
+	-->
+	<p><a id="home" href="index.htm" title="Tutorials Point">Home</a></p>
+	<button id="homeButton">Get Attribute</button>
+	<br>
+	
+	<p>Click on the button to load /jquery/result.html file −</p>	
+	<div id = "stage" style = "background-color:cc0;">
+		STAGE
+	</div>
+	<br>
+	
+	<div id = "stage2" style = "background-color:cc0;">
+		STAGE2
+	</div>
+	<br>
+	
+	<input type = "input" id = "name" size = "40" /><br />	
+	<div id = "stage3" style = "background-color:cc0;">
+		STAGE3
+	</div>
+	<!--
+	interesting 2 way to represnet ame 'Load Data' button
+	<button id="myButton">Click me</button>
+	-->
+	<input type = "button" id = "driver" value = "Load Data into stage1/2/3" />
+	<br>
+	
+	<p id = "tobeupdated">Click on any of the two buttons to see the result</p>
+	<button id="textButton">Set Text</button>
+	<button id="htmlButton">Set HTML</button>
+	
+	<p id = "replaceP">Click on any of the two buttons to see the result</p>
+	<button id="replaceButton">Replace Text</button>
+	
+</body>
+</html>

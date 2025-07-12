@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Knockout.js jQuery External Templates *With Options* Example</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../css/styles.css" /> 
+		
+    <script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
+    <script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
+	<script type="text/javascript" src="../../libs/json2.js" defer></script>
+    <script type="text/javascript" src="../../libs/knockout-latest.debug.js" defer></script>
+    <script type="text/javascript" src="../../libs/koExternalTemplateEngine_all.js" defer></script>
+	<script type="text/javascript" src="../../libs/knockout.mapping.js" defer></script>
+	<script type="text/javascript" src="index.js" defer></script>
+</head>
+<body>
+
+	<p><label>Top Level Full NAme : </label></p>
+	<input data-bind="value: $root.customerFullName" />
+	<button data-bind="click: $root.capitalizeLastName">Go caps</button>
+	<br>
+	
+	<p><label>Top Level Full NAme : </label></p>
+	<input data-bind="value: $root.customerFullName" />
+	<button data-bind="click: $root.getCustomer">Get Customer</button>
+	<br>
+	
+	<p><label>Test Mapping : </label></p>
+	<input data-bind="value: $root.customerFullName" />
+	<button data-bind="click: $root.testMapping">Test Mapping</button>
+	<br>
+	
+	<form data-bind="submit: $root.postCustomer">
+	    <p><label>Age : </label></p>
+		<input data-bind="value: $root.customer().age" />
+		<p><label>Full Name : </label></p>
+		<input data-bind="value: $root.customer().full_name" />
+		<p><label>First Nick Name : </label></p>
+		<input data-bind="value: $root.customer().first_nick_name" />
+		<p><label>Last Nuck Name : </label></p>
+		<input data-bind="value: $root.customer().last_nick_name" />
+		<p><label>Hobby : </label></p>
+		<input data-bind="value: $root.customer().Hobby" />
+		<p><label>Weird Hobby : </label></p>
+		<input data-bind="value: $root.customer().weird_hobby" />
+		
+	    <button type="submit">Post Customer</button>
+	</form>	
+	<br>
+	
+	<table>
+	    <thead><tr>
+	        <th>Age</th>
+			<th>Full Name</th>
+			<th>Hobby</th>
+	    </tr></thead>
+	    <tbody data-bind="foreach: $root.customers"> <!-- foreach binding -->
+	        <tr>
+	            <td><input data-bind="value: age" /></td>
+				<td><input data-bind="value: full_name" /></td>
+				<td><input data-bind="value: Hobby" /></td>
+	        </tr>    
+	    </tbody>
+	</table>
+	<button data-bind="click: $root.getCustomers">Get Customers</button>
+	<br>
+
+	<table>
+	    <thead><tr>
+	        <th>Name</th>
+			<th>Type</th>
+	    </tr></thead>
+	    <tbody data-bind="foreach: $root.anotherObservableArray"> <!-- foreach binding -->
+	        <tr>
+				<!--
+				1>The "value" binding
+				The value binding links the associated DOM element’s value
+				2>The "text" binding
+				The text binding causes the associated DOM element to display 
+				the text value of your parameter.
+				Typically this is useful with elements like <span> or <em>
+				-->
+	            <td><input data-bind="value: name" /></td>
+				<td><input data-bind="value: type" /></td>
+	        </tr>    
+	    </tbody>
+	</table>
+	<br>
+	
+</body>
+</html>

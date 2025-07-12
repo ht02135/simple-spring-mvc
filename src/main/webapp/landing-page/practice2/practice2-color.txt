@@ -1,0 +1,30 @@
+color theme Black purple blue green White
+
+#000000 color description : Black.
+#999999 color description : Dark gray.
+
+#151948 color description : Very dark blue.
+#5e629c color description : Mostly desaturated dark blue.
+#3c9cfd color description : Bright blue.
+
+#3ecf8e color description : Moderate cyan - lime green.
+
+#ff704f color description : Light red.
+
+#e2e2e2 color description : Very light gray.
+#ffffff color description : White.
+
+/////////////////
+
+:root {
+    --black-color: #000000;
+    --dark-gray-color: #999999;
+    --very-dark-blue-color: #151948;
+    --mostly-desaturated-dark-blue-color: #5e629c;
+    --bright-blue-color: #3c9cfd;
+    --lime-green-color: #3ecf8e;
+    --light-red-color: #ff704f;
+    --very-light-gray-color: #e2e2e2;
+    --white-color: #ffffff
+}
+

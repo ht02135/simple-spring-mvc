@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+	version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+	<display-name>Archetype Created Web Application</display-name>
+
+	<!-- 
+	i could be wrong, but you suppose to 
+	1>put into main/java/resources
+	2>build war and dump into tomcat webapp folder
+	3>then tomcat will unpack to webapp\WEB-INF\classes folder
+	-->
+	<!--
+    <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>/WEB-INF/classes/log4j2.xml</param-value>
+    </context-param>
+    -->
+    <!-- comment out code cuz it crash web deploy in tomcat -->
+	<listener>
+		<listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>log4jServletFilter</filter-name>
+		<filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>log4jServletFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+		<dispatcher>ASYNC</dispatcher>
+	</filter-mapping>
+    
+	<!-- 
+	do we need setup ContextLoaderListener
+	1>not for now
+	2>Whereas DispatcherServlet is expected to load beans containing web components
+	such as 
+	controllers, view resolvers, and handler mappings, 
+	EX uses dispatcher-servlet.xml
+	3>ContextLoaderListener is expected to load the other beans in your
+	application. 
+	These beans are typically the middle-tier and data-tier components that drive
+	the 
+	back end of the application.
+	EX uses application_context.xml
+	-->
+
+	<!-- might need to turn on later -->
+	<!-- comment cuz it crash web deploy in tomcat -->
+	<!-- 
+	i could be wrong, but you suppose to 
+	1>put into main/java/resources
+	2>build war and dump into tomcat webapp folder
+	3>then tomcat will unpack to webapp\WEB-INF\classes folder
+	-->
+	<!--
+	error goes away once i do spring5, tomcat8.5
+	ContextLoaderListener has its own context which is shared by all servlets and filters. 
+	By default it will search /WEB-INF/applicationContext.xml
+	-->
+	<!-- comment out, let it use default [/WEB-INF/applicationContext.xml] -->
+	<!--
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/application-context.xml</param-value>
+	</context-param>
+	-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 
+	1>The /* on a servlet overrides all other servlets,
+	2>/ doesn't override any other servlet. It only replaces the 
+	servletcontainer's built in default servlet for all requests which 
+	doesn't match any other registered servlet. This is normally only 
+	invoked on static resources (CSS/JS/image/etc) and directory listings.
+	3>In case you actually intend to have a front controller servlet, 
+	then you'd best map it on a more specific URL pattern like *.html, 
+	*.do, /pages/*, /app/*, etc
+	////////////////////
+	The DispatcherServlet is responsible for:
+	1>Receiving HTTP requests from the client.
+	2>Mapping requests to the appropriate handler (controller).
+	3>Invoking the handler to process the request.
+	4>Rendering the view based on the model data returned by the handler.
+	-->
+
+	<!-- 
+	i could be wrong but
+	1>container has its servlet to serve static thing jsp html??
+	2>i just to setup one DispatcherServlet for following
+	-->
+	<!-- 
+	i could be wrong, but you suppose to 
+	1>put into main/java/resources
+	2>build war and dump into tomcat webapp folder
+	3>then tomcat will unpack to webapp\WEB-INF\classes folder
+	-->
+	<servlet>
+		<servlet-name>mvc</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<!-- comment out, let it use default [/WEB-INF/mvc-servlet.xml] -->
+		<!--
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/classes/dispatcher-servlet.xml</param-value>
+		</init-param>
+		-->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mvc</servlet-name>
+		<url-pattern>/mvc/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

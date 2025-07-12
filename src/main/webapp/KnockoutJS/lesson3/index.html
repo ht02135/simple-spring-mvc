@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+
+	<link rel="stylesheet" type="text/css" href="../../css/styles.css" /> 
+</head>
+
+<body>
+
+	<h4>People</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Position</th>
+				<th>Name</th>
+				<th>City</th>
+				<th>Remove</th>
+				<th>Remove</th>
+			</tr>
+		</thead>
+		<!--
+		foreach binding
+		1>Main parameter=Pass the array that you wish to iterate over
+		2>pass a JavaScript object literal with a property called data which is the 
+		array you wish to iterate over
+		3>Referring to each array entry using $data
+		4>it’s possible to use $index to refer to the zero-based index of the current array item.
+		-->
+		<tbody data-bind="foreach: $root.people">
+			<tr>
+				<!--
+				text binding to $index
+				-->
+				<td><span data-bind="text: $index"></span></td>
+				<td><span data-bind="text: $data.name"></span></td>
+				<td>
+					<div data-bind="if: $data.city">
+						<span data-bind="text: $data.city"></span>
+					</div>
+					<div data-bind="ifnot: $data.city">
+						<span>N/A</span>
+					</div>
+				</td>
+				<td><a href="#" data-bind="click: $parent.removePerson">Remove By Parent</a></td>
+				<td><a href="#" data-bind="click: $root.removePerson">Remove By Root</a></td>
+			</tr>
+		</tbody>
+	<table>
+	<button data-bind="click: $root.addPerson">Add</button>
+	<br>
+	<br>
+
+	<!-- 
+	checked binding
+	if binding
+	 -->
+	<label><input type="checkbox" data-bind="checked: $root.display" />Display message</label>
+	<div data-bind="if: $root.display">Here is a message. Astonishing.</div>
+	<br>
+	<br>
+	
+	<!--
+	The with and using bindings create a new binding context, so that descendant 
+	elements are bound in the context of a specified object. 
+	/////////////////////
+	These bindings differ in how they deal with a value of null or undefined:
+	1>For the with binding, descendant elements will not be bound at all, but 
+	will instead be removed from the document.
+	2>For the using binding, it is generally incorrect to supply a null or 
+	undefined value since it will try to use that value as the context for descendant elements.
+	-->
+	<p data-bind="using: $root.cityCoords">
+		City: <span data-bind="text: city"> </span>,
+	    Latitude: <span data-bind="text: latitude"> </span>,
+	    Longitude: <span data-bind="text: longitude"> </span>
+	</p>
+	<br>
+	<br>
+
+	<form data-bind="submit: $root.getTweets">
+	    <p>Twitter account: </p>
+	    <input data-bind="value: $root.twitterAccount" />
+	    <button type="submit">Get tweets</button>
+	</form>	
+	<table data-bind="with: $root.resultData">
+		<thead>
+			<tr>
+				<th>Recent tweets fetched at <span data-bind="text: retrievalDate"></span></th>
+			</tr>
+		</thead>
+		<tbody data-bind="foreach: topTweets">
+			<tr>
+				<td><span data-bind="text: text"></span></td>
+			</tr>
+		</tbody>
+	<table>
+	<button data-bind="click: $root.clearResults">Clear tweets</button>
+	<br>
+	<br>
+	
+	<!-- click binding -->
+	<div>
+	    <p>You've clicked <span data-bind="text: $root.numberOfClicks"></span> times</p>
+	    <button data-bind="click: $root.incrementClickCounter">Click me</button>
+	</div>
+	<br>
+	<br>
+	
+	<!-- The "event" binding -->
+	<div>
+		<!-- 2 event bindiing -->
+	    <div data-bind="event: { mouseover: $root.enableDetails, mouseout: $root.disableDetails }">
+	        <p>Mouse over me</p>
+	    </div>
+	    <div data-bind="visible: $root.detailsEnabled">
+	        <p>Details</p>
+	    </div>
+	</div>
+	<br>
+	<br>
+	
+	<!-- The "enable" and "disable" bindings -->
+	<p><input type='checkbox' data-bind="checked: $root.hasCellphone" />I have a cellphone</p>
+	<p>Your cellphone number: <input type='value' 
+		data-bind="value: $root.cellphoneNumber, enable: $root.hasCellphone" />
+	</p>
+	<br>
+	<br>
+	
+	<!-- 
+	The textInput binding links a text box (<input>) or text area (<textarea>) 
+	with a viewmodel property
+	///////////////////
+	textInput vs Value binding
+	Immediate updates − By default, the value binding only updates the model 
+	when the user moves the focus out of the textbox. The textInput binding 
+	updates the model instantly after each keystroke or on other text entry 
+	mechanism.
+	-->
+	<p>Login name: <input data-bind="textInput: $root.userName" /></p>
+	<p>Password: <input type="password" data-bind="textInput: $root.userPassword" /></p>
+	<!--
+	1>if use text binding, then it wont be updated
+	2>when i changed to value binding, then it displayed 
+	-->
+	<p>Password: <input data-bind="value: $root.loginInfo" /></p>
+	<br>
+	<br>
+	
+	<!--
+	The "hasFocus" binding
+	The hasFocus binding links a DOM element’s focus state with a viewmodel property
+	-->
+	<input data-bind="hasFocus: isSelected, textInput: $root.userName" />
+	<button data-bind="click: setIsSelected">Focus programmatically</button>
+	<br>
+	<br>
+	
+	<p><input type = "checkbox" 
+		data-bind = "checked: $root.agreeFlag" />I agree to all terms and conditions applied.</p> 
+	<button data-bind = "enable: $root.agreeFlag, click: $root.finish">Finish</button>
+	<br>
+	<br>
+	
+	<!--
+	example radio
+	<input type="radio" 
+	       id="Microsoft" 
+	       name="brand" 
+	       value="Microsoft" checked>
+	<label for="Microsoft">Microsoft</label>
+	-->
+	<div>
+	    Preferred flavor of spam:
+	    <div><input type="radio" name="flavorGroup" value="cherry" 
+			data-bind="checked: $root.spamFlavor, click: $root.selectFlavor('cherry')" /> Cherry</div>
+	    <div><input type="radio" name="flavorGroup" value="almond" 
+			data-bind="checked: $root.spamFlavor, click: $root.selectFlavor('almond')" /> Almond</div>
+	    <div><input type="radio" name="flavorGroup" value="msg" 
+			data-bind="checked: $root.spamFlavor, click: $root.selectFlavor('msg')" /> Monosodium Glutamate</div>
+	</div>
+	
+</body>
+
+</html>

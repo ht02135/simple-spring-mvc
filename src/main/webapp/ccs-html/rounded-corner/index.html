@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>The jQuery Example</title>
+</head>
+
+<body>
+
+	<!-- review https://www.tutorialspoint.com/css/css_rounded_corner.htm -->
+	<style>
+		.rounded-box {
+			width: 200px;
+			height: 100px;
+			background-color: pink;
+			/* this is height of line */
+			;
+			line-height: 100px;
+			border-radius: 20px;
+		}
+
+		.border-box {
+			width: 200px;
+			height: 100px;
+			border-radius: 2em;
+			border: 3px solid green;
+			line-height: 100px;
+			margin-bottom: 20px;
+		}
+
+		.img-border-radius {
+			/*
+			https://www.tutorialspoint.com/css/images/tree.jpg
+			*/
+			background-image: url(../images/tree.jpg);
+			background-size: 100% 100%;
+			border-radius: 20%;
+			width: 200px;
+			height: 150px;
+		}
+
+		.rounded-box.tl {
+			border-radius: 30px 0 0 0;
+		}
+
+		.rounded-box.tr {
+			border-radius: 0 2em 0 0;
+		}
+
+		.rounded-box.bl {
+			border-radius: 0 0 0 15%;
+		}
+
+		.rounded-box.br {
+			border-radius: 0 0 30px 0;
+		}
+
+		.rounded-box.tl-br {
+			border-radius: 2em 0 2em 0;
+		}
+
+		.rounded-box.tr-bl {
+			border-radius: 0 15% 0 15%;
+		}
+	</style>
+	<div class="rounded-box">
+		This is a rounded corner box.
+	</div>
+	<br>
+	<div class="border-box">
+		This is a rounded corner box.
+	</div>
+	<br>
+	<div class="img-border-radius">
+		This is a rounded corner image.
+	</div>
+	<br>
+
+	<!--
+	class="one paragraph" <-- 2 class
+	1>you have two classes, "paragraph" and "one"
+	2>.paragraph.one { color: red; } <--i think this is the AND
+	-->
+	<div class="rounded-box tl">
+		top-left rounded corner.
+	</div>
+	<br>
+	<div class="rounded-box tr">
+		top-right rounded corner.
+	</div>
+	<br>
+	<div class="rounded-box bl">
+		bottom-left rounded corner.
+	</div>
+	<br>
+	<div class="rounded-box br">
+		bottom-right rounded corner.
+	</div>
+	<br>
+	<div class="rounded-box tl-br">
+		top-left and bottom-right rounded corners.
+	</div>
+	<br>
+	<div class="rounded-box tr-bl">
+		top-right and bottom-left rounded corners.
+	</div>
+	<br>
+
+</body>
+
+</html>

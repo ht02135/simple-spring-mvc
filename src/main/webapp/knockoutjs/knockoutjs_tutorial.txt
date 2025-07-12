@@ -1,0 +1,389 @@
+
+https://bsscommerce.com/services/what-is-knockout-js/
+
+Knockout JS is a JavaScript library
+
+Model: contains all data of the application
+View: represents the user interface (UI)
+View Model: is the intermediate layer between Model and View. (AKA CONTROLLER)
+(AKA MEDIATOR pattern)
+
+steps
+1>download https://knockoutjs.com/downloads/knockout-3.5.0.js
+2>declare the JS file in HTM.
+<script type='text/javascript' src='knockout-3.5.1.js'></script>
+3>Example
+
+// View layer (html)
+// data-binding declares the properties of ViewModel
+His name is <span data-bind="text: personName"></span>
+He is <span data-bind="text: personAge"></span> years old
+
+// CPNTROLLER. Initialize ViewModel
+var myViewModel = {
+    personName: 'Bob',
+    personAge: 35
+};
+
+// MODEL. Activate knockout to map ViewModel to View
+ko.applyBindings(myViewModel);
+
+//////////////////////
+
+Steps to Create a View Model with Knockout JS
+1>#1. Declaration
+this.property = ko.observable('value');
+
+The “personName” and “personAge” still have the default values, now we will apply 
+Observable to these 2 properties:
+
+var myViewModel = {
+    personName: ko.observable('Bob'), // declaration
+    personAge: ko.observable(35)      // declaration
+};
+
+2>#2. Read and write the value of Observable
+
+Read: call an Observable without the same parameter:
+myViewModel.personName();
+
+Write: call the Observable with the parameter is the value you want to set:
+myViewModel.personName('Bob');
+
+3>#3. Subscribe
+
+It is used when you want to treat an Observable when its data changes, for example:
+
+myViewModel.personName.subscribe(function(newValue) {
+    alert("The person's new name is " + newValue);
+});
+
+To get a new value of Observable:
+myViewModel.personName.subscribe(callback(newValue),this,event=”change”)
+
+To get the old value, the event will be replaced with “beforeChange”:
+myViewModel.personName.subscribe(function(oldValue) {
+    alert("The person's previous name is " + oldValue);
+}, null, "beforeChange");
+
+4>Notice changes of Observable
+Changes of Observable are always noticed even when the data is changed to be the same 
+as the current data.
+
+myViewModel.personName.extend({ notify: 'always' });
+
+//////////////////////
+
+Working with Observable Arrays
+
+Declaration: 
+this.arrayName = ko.observableArray();    // It's an empty array
+Initialization: 
+this.arrayName = ko.observableArray(['scott','jack']);
+Read a child element of an Observable array:
+alert('The second element is ' + arrayName()[1]);
+Output: ‘jack’
+
+///////////////////////
+
+Computed Observables
+The Computed Observable is a function consisting of one or more Observables. It is 
+similar to a group of many Observables, which can handle the logic in its function. 
+It automatically updates the value when an Observable inside it changes.
+
+function AppViewModel() {
+    this.firstName = ko.observable('Bob');
+    this.lastName = ko.observable('Smith');
+this.fullName = ko.computed(function() {
+        return this.firstName() + " " + this.lastName();
+    }, this);
+}
+
+Add Observerbal into HTML:
+
+<input type=”text” data-bind=”value: firstName”>
+<input type=”text” data-bind=”value: lastName”>
+The name is <span data-bind="text: fullName"></span>
+
+////////////////
+
+Bindings
+The ‘data-bind’ syntax makes the connection between the UI and ViewModel by marking 
+the position of the Observable on the HTML tag.
+
+>#1. Binding syntax data
+One Binding syntax contains two components: binding name, and value. For example:
+<span data-bind="text: whatDay"></span>
+Bindings are separated by commas.
+<input data-bind="value: someValue, valueUpdate: 'afterkeydown'"/>
+
+Binding value can be a certain value, an Observable, or an expression.
+The item is <span data-bind="text: price() > 50 ? `expensive` : `cheap`"></span>.
+
+/////////////////
+
+2>#2. Controlling text and appearance bindings
+The “text” binding
+
+The “text” binding
+To use a text binding:
+Today is : <span data-bind = "text: whatDay"></span>
+
+In case of multiple Observable, use commas to separate for each binding as follows:
+Your name: <input data-bind = "value: yourName, valueUpdate: 'afterkeydown'" />
+The value of the input above will be updated every time the user changes it.
+
+The “html” binding
+<div data-bind="html: details"></div>
+
+The “class” bindings
+<div data-bind="class: profitStatus">
+
+The “css” bindings
+Css binding allows parsing JS objects, so it is possible to apply many classes at the same time.
+<div data-bind="css: { profitWarning: currentProfit() < 0, majorHighlight: isSevere }">
+
+The “style” binding
+It allows parsing one object with multiple css styles.
+<div data-bind="style: { color: currentProfit() < 0 ? 'red' : 'black' }"></div>
+
+The “attr” binding
+<a data-bind="attr: { href: url, title: details }"> Report </a>
+
+<div data-bind="attr: { 'data-name': someValue }">...</div>
+<div data-bind="style: { 'font-weight': someValue }"></div>
+<div data-bind="style: { fontWeight: someValue }"></div>
+
+///////////////////////////
+
+3>#3. Interactive Binding
+
+The “click” binding
+<button data-bind="click: handleClick">Click</button>
+
+The “event” binding
+<span data-bind="event: { mouseover: handleMouseover, mouseout: handleMouseout }">Mouse event</span>
+
+The “submit” binding
+<form data-bind="submit: handleSubmit">
+ ... form contents go here …
+<button type="submit">Submit</button> 
+</form>
+
+The “enable” and “disable” binding
+<input type='checkbox' data-bind="enable: isEnable"/> is enable
+
+The “value” bindings
+<input data-bind="value: username" />
+
+The “checked” binding
+<p>Send me spam: <input type="checkbox" data-bind="checked: isChecked" /></p>
+
+///////////////////////
+
+#4. Control Flow Bindings
+
+The “foreach” binding
+Here is an example of working with one Observable array.
+
+<table>
+    <thead>
+        <tr><th>First name</th><th>Last name</th></tr>
+    </thead>
+    <tbody data-bind="foreach: people">
+        <tr>
+            <td data-bind="text: firstName"></td>
+            <td data-bind="text: lastName"></td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    ko.applyBindings({
+        people: [
+            { firstName: 'Bert', lastName: 'Bertington' },
+            { firstName: 'Charles', lastName: 'Charlesforth' },
+            { firstName: 'Denise', lastName: 'Dentiste' }
+        ]
+    });
+</script>
+
+<ul>
+    <li class="header">Header item</li>
+    <!-- ko foreach: myItems -->
+        <li>Item <span data-bind="text: $data"></span></li>
+    <!-- /ko -->
+</ul>
+<script type="text/javascript">
+    ko.applyBindings({
+        myItems: [ 'A', 'B', 'C' ]
+    });
+</script>
+
+The “if” and “ifnot” binding
+Here is an example of processing the condition of Observables in the UI.
+
+<div data-bind="if: isDisplayMessage">Here is a message.</div>
+<div data-bind="ifnot: isHideName">Here is a Name.</div>
+ko.applyBindings({
+    isdisplayMessage: ko.observable(false),
+    isHideName: ko.observable(true)
+});
+The “with” and “using” bindings
+The “with” binding and “using” binding are used to represent an object Observable.
+
+<h1 data-bind="text: city"> </h1>
+<p data-bind="using: coords">
+    Latitude: <span data-bind="text: latitude"> </span>,
+    Longitude: <span data-bind="text: longitude"> </span>
+</p>
+<script type="text/javascript">
+    ko.applyBindings({
+        city: "London",
+        coords: {
+            latitude:  51.5001524,
+            longitude: -0.1262362
+        }
+    });
+</script>
+
+<div data-bind="with: resultData">
+    <h3>Recent tweets fetched at <span data-bind="text: retrievalDate"> </span></h3>
+    <ol data-bind="foreach: topTweets">
+        <li data-bind="text: text"></li>
+    </ol>
+    <button data-bind="click: $parent.clearResults">Clear tweets</button>
+</div>
+<script>
+function AppViewModel() {
+    var self = this;
+    self.twitterName = ko.observable('@example');
+    self.resultData = ko.observable(); // No initial value
+    self.getTweets = function() {
+        var name = self.twitterName(),
+            simulatedResults = [
+                { text: name + ' What a nice day.' },
+                { text: name + ' Building some cool apps.' },
+                { text: name + ' Just saw a famous celebrity eating lard. Yum.' }
+            ];
+        self.resultData({ retrievalDate: new Date(), topTweets: simulatedResults });
+    }
+    self.clearResults = function() {
+        self.resultData(undefined);
+    }
+}
+ko.applyBindings(new AppViewModel());
+</script>
+
+The “let” binding
+It is used to work with multiple arrays in the same binding. For example:
+
+<!--ko let: {inventory: {suppliers: suppliers, bins: bins}, calculatedDisplay: someCalculation}-->
+    <div data-bind="foreach: {data: inventory.suppliers, as: 'supplier'}>
+        <div data-bind="foreach: {data: inventory.bins, as: 'bin'}">
+            <span data-bind="text: calculatedDisplay(supplier, bin)>
+        </div>
+    </div>
+<!--/ko-->
+<script type="text/javascript">
+    ko.applyBindings({
+        suppliers: [...],
+        bins: [...],
+        someCalculation: function (supplier, bin) {
+            /* return some calculated value based on parameters */
+        }
+    });
+</script>
+
+////////////////////
+
+5>#5. Binding context
+This includes special objects of Knockout JS used to
+
+$parent: designates a parent element on par with the original array.
+<h1 data-bind="text: name"></h1>
+<div data-bind="with: manager">
+    <!-- Now we're inside a nested binding context -->
+    <span data-bind="text: name"></span> is the
+    manager of <span data-bind="text: $parent.name"></span>
+</div>
+$parents: refers to all parent Observables.
+$parents[0] // refers to $parents level 1
+$parents[1] // refers to $parents level 2
+$data: refers to the current element in the loop.
+<ul data-bind="foreach: ['cats', 'dogs', 'fish']">
+    <li>The value is <span data-bind="text: $data"></span></li>
+</ul>
+$index: This is an index of the element in the array. It is also an Observable, which is updated when the element changes.
+$parentContext: is similar to Sparent, but it has an additional $index.
+For example:  $parentContext.$index
+
+$rawData: is similar to $ data, but the element referred to is an Observable.
+
+///////////////////
+
+6>#6. Rendering templates
+Rendering templates allows declaring a template and supports reuse. For example:
+
+<h2>Participants</h2> 
+Here are the participants:
+<div data-bind="template: { name: 'person-template', data: buyer }"></div>
+<div data-bind="template: { name: 'person-template', data: seller }"></div> 
+<script type="text/html" id="person-template"> 
+    <h3 data-bind="text: name"></h3> 
+    <p>Credits: <span data-bind="text: credits"></span></p> 
+</script> 
+<script type="text/javascript"> 
+     function MyViewModel() { 
+         this.buyer = { name: 'Franklin', credits: 250 }; 
+         this.seller = { name: 'Mario', credits: 5800 }; 
+     } 
+     ko.applyBindings(new MyViewModel()); 
+</script>
+
+/////////////////////
+
+Components
+Components in Knockout JS, representing a ViewModel, can be combined with a template to create a widget. Using a Component to replace and reuse the same HTML fragments is very useful. See the following example for the usage.
+
+<h4>Component binding without parameters</h4>
+      <div data-bind = 'component: "calculate-sum"'></div>
+      <h4>Component binding passing parameters</h4>
+      <div data-bind = 'component: {
+         name: "calculate-sum",
+         params: { number1: 2, number2: 3 }
+      }'></div>
+      <script>
+         ko.components.register('calculate-sum', {            
+            viewModel: function(params) {
+               this.number1 = ko.observable(params && params.number1);
+               this.number2 = ko.observable(params && params.number2);
+               this.result = ko.computed(function() {
+                  var sum = Number(this.number1()) + Number(this.number2());
+                  if ( isNaN(sum) )
+                  sum = 0;
+                  return sum;
+               },this);
+            },        
+            template: 'Enter Number One: <input data-bind = "value: number1" /> <br> <br>'+
+               ' Enter Number Two: <input data-bind = "value: number2" /> <br> <br>'+
+               ' Sum  = <span data-bind = "text: result" />'
+         });
+         ko.applyBindings();
+      </script>
+Component can be declared in HTML as an HTML tag:
+
+<calculate-sum params=”number1: 2, number2: 3”></calculate-sum>
+In addition, ViewModel or Template can be declared from the file:
+
+ko.components.register('like-or-dislike', {    viewModel: { require: 'files/component-like-widget' },
+    template: { require: 'text!files/component-like-widget.html' }
+});
+
+
+
+
+
+
+
+
+

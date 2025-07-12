@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>The jQuery Example</title>
+</head>
+
+<body>
+	<!--
+		<style>
+			https://www.tutorialspoint.com/css/images/logo.png
+			background-image: url(../images/tree.jpg);
+		</style>
+	-->
+
+	<!--
+	Using background-image property
+	where the first image is stacked on top and the second is behind it
+	The first image's size is 150px, and the second image's size is 300px 
+	-->
+	<style>
+		.multibackgrounds {
+			background-image: url(../images/logo.png), url(../images/see.jpg);
+			background-position: left top, right top;
+			background-repeat: no-repeat, repeat;
+			padding: 70px;
+		}
+
+		.multibackgrounds-size {
+			background-image: url(../images/logo.png), url(../images/see.jpg);
+			background-position: left top, right top;
+			background-repeat: no-repeat, repeat;
+			/*
+			first value is width, 2nd is height
+			*/
+			background-size: 150px, 300px;
+			padding: 70px;
+		}
+	</style>
+	<h3>Without Sizing</h3>
+	<div class="multibackgrounds">
+		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+			industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+			scrambled it to make a type specimen book.</p>
+	</div><br>
+	<h3>With Sizing</h3>
+	<div class="multibackgrounds-size">
+		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+			industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+			scrambled it to make a type specimen book.</p>
+	</div>
+	
+	<!-- background properties -->
+	<style>
+	   .background-img {
+	      background: url(../images/see.jpg) no-repeat center; 
+	      background-size: cover;
+	      height: 300px;
+	      position: relative;
+	   }
+	   .background-text {
+	      text-align: center;
+	      position: absolute;
+	      top: 40%;
+	      left: 50%;
+	      transform: translate(-50%, -50%);
+	      color: red;
+	   }
+	   .background-button {
+	         background-color: yellow;
+	         padding: 10px;
+	   }
+	</style>
+	<div class="background-img">
+	   <div class="background-text">
+	      <h1>See Image</h1>
+	         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+	      <button class="background-button">Click Me</button>
+	   </div>
+	</div>
+	
+	<!-- background-origin Property -->
+	<style>
+	   .origin {
+	      width: 200px;
+	      height: 150px;
+	      border: 7px solid blue;
+	      padding: 30px;
+	      background: url(../images/pink-flower.jpg);
+	      background-repeat: no-repeat;
+	      margin: 10px;
+	   }
+	   .box1 {
+	      background-origin: padding-box;
+	   }
+	   .box2 {
+	      background-origin: border-box;
+	   }
+	   .box3 {
+	      background-origin: content-box;
+	   }
+	</style>
+	<div class="origin box1">
+	   <h3>background-origin: padding-box</h3>
+	   <p>Background image is positioned relative to the padding box.</p>
+	</div>
+	<div class="origin box2">
+	   <h3>background-origin: border-box</h3>
+	   <p>Background image is positioned relative to the border box.</p>
+	</div>
+	<div class="origin box3">
+	   <h3>background-origin: content-box</h3>
+	   <p>Background image is positioned relative to the content box.</p>
+	</div>
+	
+</body>
+
+</html>

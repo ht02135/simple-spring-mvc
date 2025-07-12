@@ -1,0 +1,83 @@
+/* ==========================================================================
+   team section
+   ========================================================================== */
+#team .single-team {
+	border: 1px solid #ddd;
+	position: relative;
+	-moz-transition: all .8s ease;
+	-webkit-transition: all .8s ease;
+	transition: all .8s ease;
+}
+
+#team .single-team img {
+	width: 100%;
+}
+
+#team .single-team .team-social-icons {
+	position: absolute;
+	left: 0;
+	right: 0;
+	text-align: center;
+	top: -20px;
+}
+
+#team .single-team .team-social-icons ul.social-list li {
+	display: inline-block;
+	width: 35px;
+	height: 35px;
+	border: 1px solid #ccc;
+	border-radius: 50%;
+	padding: 5px;
+	line-height: 30px;
+	margin: 4px;
+	background: #fff;
+}
+
+#team .single-team .team-social-icons ul.social-list li:hover {
+	background: #3ecf8e;
+	-moz-transition: all .4s ease;
+	-webkit-transition: all .4s ease;
+	border-color: #3ecf8e;
+	transition: all .4s ease;
+}
+
+#team .single-team .team-social-icons ul.social-list li:hover a {
+	display: block;
+}
+
+#team .single-team .team-social-icons ul.social-list li:hover a i {
+	color: #fff;
+	-moz-transition: all .4s ease;
+	-webkit-transition: all .4s ease;
+	transition: all .4s ease;
+}
+
+#team .single-team .team-social-icons ul.social-list li a i {
+	color: #3ecf8e;
+	font-size: 16px;
+}
+
+#team .single-team:hover {
+	box-shadow: 0px 0px 25px 0px rgba(95, 95, 95, 0.24);
+	-moz-transition: all .8s ease;
+	-webkit-transition: all .8s ease;
+	transition: all .8s ease;
+}
+
+#team .single-team .team-details {
+	padding: 45px 0px 30px 0px;
+	position: relative;
+}
+
+#team .single-team .team-details h5.team-title {
+	font-size: 16px;
+	font-weight: 600;
+	display: block;
+	margin-bottom: 0;
+}
+
+#team .single-team .team-details p {
+	font-size: 12px;
+	color: #5e629c;
+}
+

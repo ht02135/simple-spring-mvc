@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>The jQuery Example</title>
+</head>
+
+<body>
+
+	<!-- review https://www.tutorialspoint.com/css/css_border_images.htm -->
+	<style type="text/css">
+		.imageAsBborder {
+			background-color: #f0f0f0;
+			border: 20px solid transparent;
+			border-image-source: url(../images/border.png);
+			padding: 20px;
+		}
+	</style>
+	<p class="imageAsBborder">
+		This is an example of setting a
+		border image using CSS
+	</p>
+
+	<style type="text/css">
+		.imageAsBborder2 {
+			background-color: #f0f0f0;
+			border: 20px solid transparent;
+			border-image-source: url(../images/scenery2.jpg);
+			/*
+			The border-image-slice property defines how the image is sliced into regions,
+			which are then used to draw the borders.
+			The offset for border-image-slice can be provided in terms of percentage or 
+			length units but percentages are highly recommended.
+			*/
+			border-image-slice: 25%;
+			padding: 15px;
+			width: 50%
+		}
+	</style>
+	<p class="imageAsBborder2">
+		This is an example of setting a
+		border image using CSS
+	</p>
+
+	<style type="text/css">
+		/*
+		The border-image-width property is used to specify the width of the image 
+		to be set as a border.
+		The border-image-outset property is used to specify gap between element and 
+		border-image.
+		*/
+		.imageAsBborder3 {
+			background-color: grey;
+			border: 20px solid transparent;
+			border-image-source: url(../images/border.png);
+			border-image-width: 10px;
+			border-image-slice: 25%;
+			border-image-outset: 0px;
+			padding: 5px;
+			width: 80%;
+			margin: 10px 15px 60px;
+		}
+	</style>
+	<div class="imageAsBborder3">
+		border-image-outset: 0px;
+	</div>
+	<div class="imageAsBborder3" style="border-image-outset: 20px;">
+		border-image-outset: 20px;
+	</div>
+	<div class="imageAsBborder3" style="border-image-outset: 25px;">
+		border-image-outset: 25px;
+	</div>
+
+	<style type="text/css">
+		/*
+		CSS gradients can also be used to set the border of an element. There 
+		are three types of gradients supported: linear, radial and conic.
+		*/
+		.imageAsBborder4 {
+			background-color: #f0f0f0;
+			border: 20px solid transparent;
+			border-image: linear-gradient(45deg, green, yellow) 1;
+			padding: 20px;
+			margin: 20px;
+		}
+	</style>
+	<div>
+	    Border image linear gradient.
+	</div>
+	<div class="imageAsBborder4" style="border-image: radial-gradient(green, yellow) 1;">
+	    Border image radial gradient.
+	</div>
+	
+</body>
+
+</html>

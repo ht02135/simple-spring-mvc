@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+
+<!--
+Binding context
+1>$root (obj passed to applyBindings, proably ViewModel)
+This is the main view model object in the root context, i.e., the topmost parent 
+context. It's usually the object that was passed to ko. applyBindings
+2>$parent
+This is the view model object in the parent context
+3>$index (only available within foreach bindings)
+This is the zero-based index of the current array entry being rendered by a 
+foreach binding. Unlike the other binding context properties, $index is an 
+observable and is updated whenever the index of the item changes
+3>$data
+This is the view model object in the current context. In the root context, 
+$data and $root are equivalent. Inside a nested binding context, this parameter 
+will be set to the current data item (e.g., inside a with: person binding, 
+$data will be set to person)
+4>$element
+This is the element DOM object (for virtual elements, it will be the comment 
+DOM object) of the current binding. This can be useful if a binding needs to 
+access an attribute of the current element
+
+-->
+
+<body>
+
+	<table>
+	    <thead><tr>
+	        <th>Passenger name</th><th>Meal</th><th>Surcharge</th><th></th>
+	    </tr></thead>
+	    <!-- Todo: Generate table body -->
+	    <tbody></tbody>
+	</table>
+	
+	<table>
+	    <thead><tr>
+	        <th>Passenger name</th><th>Meal</th><th>Surcharge</th><th></th>
+	    </tr></thead>
+	    <tbody data-bind="foreach: $root.seats"> <!-- foreach binding -->
+	        <tr>
+	            <td><input data-bind="value: $data.name" /></td>
+				<!--
+				options-binding.htm
+				1>optionsText − This parameter allows you to specify which object property 
+				you want to set as text in the dropdown list
+				/////////////////////////
+				>Knockout’s built-in optionsText and optionsValue bindings help. 
+				1>The optionsText binding is set to the string name of the property to 
+				display in the dropdown list, from the options binding. 
+				2>The optionsValue binding is set to the string name of the property to 
+				bind to for the selected value of the item in the dropdown list.
+				/////////////////////////
+				The value binding links the associated DOM element’s value with a property 
+				on your view model.
+				-->
+	            <td><select data-bind="options: $root.availableMeals, value: $data.meal, optionsText: 'mealName'"></select></td>
+				<!--
+				3 data-binding
+				1>options
+				2>value
+				3>optionsText
+				-->
+				<td><select data-bind="options: $root.availableMeals, value: $data.meal, optionsText: 'price'"></select></td>
+	            <td data-bind="text: $data.formattedPrice"></td>
+	            <td><a href="#" data-bind="click: $root.removeSeat">Remove</a></td>
+	        </tr>    
+	    </tbody>
+	</table>
+
+	<!--
+	2 data binding
+	1>click
+	2>enable
+	-->
+	<button data-bind="click: $root.addSeat, enable: $root.seats().length < 10">Reserve another seat</button>
+
+	<h3 data-bind="visible: $root.totalSurcharge() > 0">
+	    Total surcharge: $<span data-bind="text: $root.totalSurcharge().toFixed(2)"></span>
+	</h3>
+
+</body>
+
+</html>

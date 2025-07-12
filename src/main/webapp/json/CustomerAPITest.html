@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Customer</title>
+</head>
+
+<body>
+	
+	<table border=1>
+	  <tr>
+	    <th>Name</th>
+	    <th>Type</th>
+	    <th>URL</th>
+	  </tr>
+
+	  <tr>
+	    <td>/customer/info/4</td>
+	    <td>CustomerController.getCustomer GET</td>
+	    <td><a href="http://localhost:8080/mvc/mvc/customer/info/4">http://localhost:8080/mvc/mvc/customer/info/4</a></td>
+	  </tr>
+	  
+	  <tr>
+	    <td>/add</td>
+	    <td>CustomerController.addCustomer PUT</td>
+	    <td>
+		<pre>
+		use postman
+		path = http://localhost:8080/mvc/mvc/customer/add
+		header Content-Type=application/json
+		body >> raw >> json
+		{
+			"age" : 1,
+			"Hobby" : "weird_hobby",
+			"full_name" : "John",
+			"first_nick_name" : "Jo",
+			"last_nick_name" : "Jo",
+			"weird_hobby" : "weird_hobby"
+		}
+		</pre>
+		</td>
+	  </tr>
+
+	  <tr>
+	    <td>/set/{id}</td>
+	    <td>CustomerController.addHobbyAndAge POST</td>
+	    <td>
+	  	<pre>
+	  	use postman
+		pick POST and make sure set data >> JSON
+		Path = http://localhost:8080/mvc/mvc/customer/set/4
+		header Content-Type=application/json
+		body=none
+		add param thru param tab
+		hobby=strange
+	  	</pre>
+	  	</td>
+	  </tr>
+	  
+	</table>
+
+</body>
+</html>

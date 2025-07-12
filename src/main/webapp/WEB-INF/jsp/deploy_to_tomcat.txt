@@ -1,0 +1,29 @@
+steps
+1>install tomcat11 to C:\apps\tomcat11\
+2>turn on admin
+  C:\apps\tomcat11\apache-tomcat-11.0.4\conf\tomcat-users.xml
+  <user username="admin" password="admin" roles="manager-gui"/>
+3>start tomcat in C:\apps\tomcat11\apache-tomcat-11.0.4\bin
+4>login http://localhost:8080/manager/html
+5>create and drop war to 2>start tomcat in C:\apps\tomcat11\apache-tomcat-11.0.4\bin
+  tomcat will unpack war into folder
+6>you can hit your portal via link in http://localhost:8080/manager/html if deployee success....
+
+//////////////
+
+note:
+Spring 5 actually requires Servlet 3.1 (and Tomcat 8.5.x).
+1>org.springframework 5.1.6.RELEASE
+2>tomcat 8.5.85
+3>use default [/WEB-INF/applicationContext.xml] for ContextLoaderListener
+4>use default [/WEB-INF/mvc-servlet.xml] for DispatcherServlet
+5>use default WEB-INF\log4j2.xml (put in main\resources\log4j2.xml) for log4j
+6>use index.html in WEB-INF 
+7>static and KnockoutJS script in WEB-INF
+8>MVC view jsp pafe in WEB-INF/jsp
+
+modern software modern technology = easy break glass = anytime crash no reason
+translate to DONT venture into change default and pray it works...
+
+
+

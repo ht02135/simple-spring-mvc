@@ -1,0 +1,432 @@
+
+1>padding vs margin
+https://www.geeksforgeeks.org/css/css-padding-vs-margin/
+
+padding controls the space between an element's content and its border
+margin manages the space outside an element, separating it from other elements
+
+Padding: Adds space inside an element, between its content and border.
+Margin: Adds space outside an element, creating gaps between elements.
+
+/////////////////
+
+https://mailchimp.com/resources/padding-vs-margin/
+2>When to use padding:
+
+a>Change the size of an element. If you want to expand the space around an element, 
+you can add or increase the padding surrounding it. This can be useful when working 
+with interactive items, such as buttons or image-based links.
+
+b>Add space between borders and content. Using padding to add space between content 
+and its corresponding border is one way to ensure the design aligns with other 
+on-page elements. Doing so can help you increase the whitespace of your graphic 
+or website, which is fundamental in web design.
+
+3>When to use margins:
+
+a>Adjust an element's positioning. One of the most common reasons to use margins 
+when designing and developing a site is to change a specific element's position. 
+Using margins can help you move an element based on whether you prefer it to be 
+centered on your page or positioned to the right or left. You can also choose if 
+the element is fixed and will scroll along the page or if it should remain in one 
+place as a user scrolls.
+
+b>Overlap elements. If you want to overlap specific elements with one another, 
+you can do so using margins. Using a negative margin value is one of the quickest 
+ways to allow elements to overlap with one another.
+
+c>Setting distance. Setting the distance between elements is much easier once 
+you're familiar with margins and how they work. Incorporating the right amount 
+of whitespace can mean the difference between building an attractive website 
+thriving with traffic and turning prospective customers away.
+
+/////////////////
+
+3>box-sizing: border-box;
+
+The CSS box-sizing property allows us to include the padding and border in an element's total width and height.
+
+total width of div = 30px and 30px
+<style> 
+.div1 {
+  width: 20px;
+  height: 20px;  
+  border: 10px solid red;
+  padding: 10px 10px 10px 10px
+}
+
+total width of div stay 10px and 20px
+with padding included 10px
+
+this is saying i hell bend want div at this size
+under no any circumstnace you ness with that...
+
+.div2 { 
+  width: 20px;
+  height: 20px;  
+  border: 10px solid red;
+  padding: 10px 10px 10px 10px
+  box-sizing: border-box;
+}
+</style>
+
+<div class="div1">H</div>
+<div class="div2">H</div>
+
+/////////////////
+
+4>align-content, align-items, justify-content, justify-items
+
+a>https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+
+flexbox
+has justify-content
+not have justify-items
+
+.container {
+	display: flex; /* or inline-flex */
+}
+.container {
+	flex-direction: row | row-reverse | column | column-reverse;
+}
+.container {
+	flex-wrap: nowrap | wrap | wrap-reverse;
+}
+.container {
+	justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly | start | end | left | right ... + safe | unsafe;
+}
+
+/////////////////////////////
+
+b>https://css-tricks.com/snippets/css/complete-guide-grid/
+
+
+.container {
+	display: grid | inline-grid;
+}
+
+But you can choose to explicitly name the lines. Note the bracket syntax for the line names:
+
+.container {
+	grid-template-columns: [first] 40px [line2] 50px [line3] auto [col4-start] 50px [five] 40px [end];
+	grid-template-rows: [row1-start] 25% [row1-end] 100px [third-line] auto [last-line];
+}
+
+.container {
+	justify-items: start | end | center | stretch;
+}
+
+.container {
+	justify-content: start | end | center | stretch | space-around | space-between | space-evenly;    
+}
+
+justify-items : Aligns grid items along the inline (row) axis (as opposed to 
+keyword = align along ROW AXIS
+
+align-items: which aligns along the block (column) axis).
+keyword = align along COLUMN axis
+
+///////////////////////////
+
+5>line-height: normal;
+Set the line height for different <div> elements <--stupidest answer i found on google 
+
+div.a {
+	border: 1px solid red;
+	line-height: normal;
+}
+
+div.b {
+	border: 1px solid red;
+	line-height: 400%;
+}
+
+What is the difference between height and line-height? <-- prompted this question
+
+Height is the vertical measurement of the container, for example, height of a div.
+
+Line-height is a CSS property to specify the line height i.e. the distance from the 
+top of the first line of text to the top of the second. It is the space between the 
+lines of two paragraphs.
+
+///////////////////////////
+
+6>what is difference between font-color and color?
+
+i think this is what happend...
+The same way Boston came up with its street plan. They followed the cow paths 
+already there, and built houses where the streets weren't, and after a while 
+it was too much trouble to change.
+
+p {
+	background-color: black;
+	font-color: red;    <-- no such thing
+	text-color: yellow; <-- no such thing
+	color: green;       <-- this is used as text color
+}
+
+///////////////////////////
+
+7>border-radius: 0.5rem;
+The border-radius property defines the radius of the element's corners.
+
+what possible value
+i mostly see in px
+
+#rcorners1 {
+	border-radius: 25px;
+	background: #73AD21;
+	padding: 20px; 
+	width: 150px;
+	height: 150px;  
+}
+
+border-radius: 15px; <-- not liking it...
+border-radius: 25px; <-- looks like ok to start with
+border-radius: 35px; <-- abit too round not my cup of tea
+border-radius: 45px; <-- yike, more rounded
+border-radius: 55px; <-- wow it wants to become circle
+border-radius: 100%; <-- turning to dark side is noe complete
+
+//////////////////
+
+8>outline: 0;
+An outline is a line drawn outside the element's border.
+
+outline
+outline-style
+outline-color
+outline-width
+    
+p {
+	border: 5px solid black;
+    outline: 5px dotted red;
+}
+
+p {
+    border: 5px solid black;
+    outline-width: 5px;
+    outline-style: dotted;
+    outline-color: red
+}
+
+////////////////////////////
+
+9>transition: background-color 0.3s ease, padding 0.3s ease;
+
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+transition: color 0.3s ease;
+transition: border-bottom 0.2s;
+
+transition
+transition-delay
+transition-duration
+transition-property
+transition-timing-function
+
+div {
+	width: 100px;
+	height: 100px;
+	background: red;
+	/*
+	without this, when hoover width turn 300px right away
+	with this, transition slow down...
+	*/
+	transition: width 2s;  <-- complete in 2s
+}
+
+div:hover {
+  width: 300px; <---
+}
+
+------------
+
+my observation, transition is used in combo scneario
+a>transition set for prop of element state time to complete
+b>trigger by element:hover with prop final state
+c>might as well apply to all than specific prop
+	transition: all 0.3s ease; <-- no need to specify ease because is default
+	transition: all 0.25s or 0.3s <-- prefer this one...
+	transition: all 0.2s; <-- hmm, ok may be???
+	transition: all 0.1s; <-- dont do this, cant really tell difference, is stupid
+	transition: background-color 1000ms; <-- stupid thing prefer by ms fetish people, 1000ms=1sec, stick with s
+d>The transition-timing-function property can have the following values:
+
+ease - specifies a transition effect with a slow start, then fast, then end slowly (this is default)
+linear - specifies a transition effect with the same speed from start to end
+ease-in - specifies a transition effect with a slow start
+ease-out - specifies a transition effect with a slow end
+ease-in-out - specifies a transition effect with a slow start and end
+cubic-bezier(n,n,n,n) - lets you define your own values in a cubic-bezier function
+
+.nav-link {
+	text-decoration: none;
+	color: #333;
+	margin: 0 0.5rem;
+	padding: 0 0.6rem;
+	transition: border-bottom 0.2s;
+}
+
+.nav-link:hover {
+	color: #e23d3d;
+	border-bottom: 2px solid #e23d3d;
+}
+//////////////////
+
+10>box-shadow Add shadows
+box-shadow: 0 6px 12px rgba(0,0,0,.175);
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+box-shadow: 0 10px 20px red, 0 6px 6px blue;
+
+box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit;
+
+Add a blur effect to the shadow:
+box-shadow: 10px 10px 8px red;
+h-offset=10px
+v-offset=10px
+blur=8px
+spread=skipped over???
+color=red
+
+Define the spread radius of the shadow:
+box-shadow: 10px 10px 8px 10px #888888;
+add spread = 10px
+
+multiple shadows:
+box-shadow: 5px 5px blue, 10px 10px red, 15px 15px green;
+add blue shadow, then red, then green...
+
+#example2 {
+	border: 1px solid;
+	padding: 10px;
+	box-shadow: 5px 10px red;
+}
+
+//////////////////
+
+11>CSS flex property
+flex: flex-grow flex-shrink flex-basis|auto|initial|inherit;
+
+The flex property is a shorthand property for:
+flex-grow
+flex-shrink
+flex-basis
+
+/* Default flex value */
+flex: 0 1 auto; 
+
+The flex: 1 rule is supposed to compute to this:
+flex-grow: 1
+flex-shrink: 1
+flex-basis: 0
+
+#main {
+  width: 300px;
+  height: 300px;
+  border: 1px solid black;
+  display: flex;
+}
+
+#main div {
+  flex: 0 1 auto;  <-- Green div with more content.
+  flex: 1 1 auto;  <-- red/blue grow abit and then green slight less than above but still with more 
+  flex: 1 1 0;     <-- same as flex: 1;
+  flex: 1;         <-- red/blue/green same size
+}
+
+<div id="main">
+  <div style="background-color:coral;">RED</div>
+  <div style="background-color:lightblue;">BLUE</div>  
+  <div style="background-color:lightgreen;">Green div with more content.</div>
+  
+///////////////////
+
+12>z-index: 99;
+The z-index property specifies the stack order of an element.
+Z-index is a CSS property which controls the positioning of elements on the page. 
+If two overlapping visual elements have different z-indices, the one with a 
+higher number will be displayed above those with lower numbers.
+
+z-index: auto|number|initial|inherit;
+auto	Sets the stack order equal to its parents. This is default	
+number	Sets the stack order of the element. Negative numbers are allowed	
+initial	Sets this property to its default value. Read about initial	
+inherit	Inherits this property from its parent element. Read about inherit
+
+z-index: -1;  <--box disappeard
+z-index: 0;
+z-index: 100;
+
+#myDIV {
+  width:100%;
+  position:absolute;
+  height:300px;
+  background-color:#FFFFFF;
+}
+#myDIV div{
+  width:100px;
+  height:100px;
+  position:absolute;
+  background-color:yellow;
+  border:1px solid;
+  opacity:0.5;
+}
+#myBox {
+  position:absolute;
+  background-color:red!important;
+  opacity:1!important;
+  z-index: -1;    //myBox disappear
+  z-index: 0;	//at same layer level as index:0
+  z-index: 1;	//at same layer level as index:1
+}
+
+div id="myDIV">
+  <div id="myBox">myBox</div>
+  <div style="top:20px;left:20px;z-index:0;">z-index 0</div>
+  <div style="top:40px;left:40px;z-index:1;">z-index 1</div>
+  <div style="top:60px;left:60px;z-index:2;">z-index 2</div>        
+  <div style="top:80px;left:80px;z-index:3;">z-index 3</div>            
+</div>
+
+probaby good idea to set some ui 100
+z-index: 100;
+1>like header in your landing page
+2>like sticky navbar in your landing page
+
+/////////////////////
+
+Inspect >> Element >> Computed
+for look and feel
+order of initialize
+
+0>
+min-height
+height
+max-width
+width
+
+1>search color
+color
+background-color
+
+2>search font
+font-size1
+font-weight
+
+3>search text
+text-align
+text-decoration
+
+3>border
+border-color
+
+4>search padding = space between content and border
+padding
+
+5>outline
+
+6>search margin = space between element
+margin
+
+
+

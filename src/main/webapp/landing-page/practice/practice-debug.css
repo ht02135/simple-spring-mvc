@@ -1,0 +1,49 @@
+/* ////////////////////////// */
+/* Debug */
+
+header,
+main {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+section {
+	border: 1px solid red;
+	border-collapse: collapse;
+}
+
+div {
+	border: 3px solid green;
+	border-collapse: collapse;
+}
+
+nav {
+	border: 3px solid blue;
+	border-collapse: collapse;
+}
+
+ul,
+li {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table,
+th,
+td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+form,
+input,
+button,
+img,
+a,
+h1,
+h2 {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+/* ////////////////////////// */

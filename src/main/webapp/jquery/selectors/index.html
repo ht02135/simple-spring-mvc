@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+	
+<head>
+	
+<title>The jQuery Example</title>
+
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui-1.14.1/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="../../css/sakura/sakura.css" />
+
+<script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-ui.min.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
+<script type="text/javascript" src="../../libs/json2.js" defer></script>
+<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+	
+<body>
+	<p>#id</p>
+	<div id="id_div">This text will turn yellow.</div>
+	<button id="id_btn">Click to turn text to yellow.</button>
+	<br>
+	<br>
+	
+	<p>.class</p>
+	<p class="class_p">This text will turn yellow.</p>
+	
+	<p>This text won't be highlighted.</p>
+	<p class="one">Paragraph element with (class "one").</p>
+	
+	<p>This text won't be highlighted.</p>
+	<p class="two">Paragraph element with (class "two").</p>
+	
+	<p>This text won't be highlighted.</p>
+	<p class="three">Paragraph element with (class "three").</p>
+	
+	<button class="class_btn">Click to turn text to yellow.</button>
+	<br>
+	<br>
+	
+	<p>element</p>
+	<p>make element p and button text bold</p>
+	<button id="element_btn">make element p and button text bold</button>
+	<br>
+	<br>
+	
+	<p>:first-child</p>
+	<p id="first_child_p">This is the first paragraph.</p>
+	<p id="first_child_p">This is the second paragraph.</p>
+	<p id="first_child_p"></p>This is the third paragraph.</p>
+	<button id="first_child_btn">Click</button>
+	<br>
+	<br>
+	
+	<p>("parent > child")</p>
+	<div>
+		<p>First paragraph (direct child)</p>
+		<span><p>Child paragraph within span (not direct child)</p></span>
+		<p>Second paragraph (direct child)</p>
+	</div>
+	<button id="parent_child_btn">Click</button>
+	<br>
+	<br>
+	
+	<p>("parent descendant")</p>
+	<div>
+		<p>This is a paragraph with a <span>span element</span> inside a div.</p>
+		<div>
+			This is a nested div with another <span>span element</span>.
+		</div>
+	</div>
+	<p>This is a paragraph with a <span>span element</span> outside the div.</p>
+	<button id="parent_descendant_btn">Click</button>
+	<br>
+	<br>
+	
+	<p>$(":eq(index)")</p>
+	<div>
+		<p>Paragraph 1</p>
+		<p>Paragraph 2</p>
+		<p>Paragraph 3</p>
+		<p>Paragraph 4</p>
+	</div>
+	<button id="eq_btn">eq Click</button>
+	<br>
+	<br>
+	
+<br>
+<br>
+
+</body>
+</html>

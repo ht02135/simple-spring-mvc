@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+	
+<head>
+	
+<title>The jQuery Example</title>
+
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui-1.14.1/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="../../css/sakura/sakura.css" />
+<link rel="stylesheet" type="text/css" href="../../css/styles.css" />
+
+<script type="text/javascript" src="../../libs/jquery-1.7.1.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-ui.min.js" defer></script>
+<script type="text/javascript" src="../../libs/jquery-tmpl.js" defer></script>
+<script type="text/javascript" src="../../libs/json2.js" defer></script>
+<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+	
+<body>
+
+	<p>Write something in below input field and press enter...</p>
+	<input id="change_i" type="text" placeholder="Write...">
+	
+	<ul id="members" data-role="listview" data-filter="true">
+	    <!-- ... more list items ... -->
+		<li>
+			<h3>John Resig</h3>
+			<p><strong>jQuery Core Lead</strong></p>
+			<p><strong>xyz</strong></p>
+			<p><strong>xyz</strong></p>
+		</li>
+		<li>
+			<h3>John Resig2</h3>
+			<p><strong>jQuery Core Lead2</strong></p>
+			<p><strong>xyz</strong></p>
+			<p><strong>xyz</strong></p>
+		</li>
+	    <!-- ... more list items ... -->
+	</ul>
+	<ul id="members2" data-role="listview" data-filter="true">
+	    <!-- ... more list items ... -->
+	    <li>
+			<li>
+				<h3>John Resig3</h3>
+				<p><strong>jQuery Core Lead3</strong></p>
+				<p><strong>xyz</strong></p>
+				<p><strong>xyz</strong></p>
+			</li>
+			<li>
+				<h3>John Resig4</h3>
+				<p><strong>jQuery Core Lead4</strong></p>
+				<p><strong>xyz</strong></p>
+				<p><strong>xyz</strong></p>
+			</li>
+	    </li>
+	    <!-- ... more list items ... -->
+	</ul>
+	<button id="select_h3">Click</button>
+	<br>
+	<br>
+	
+	<p>Click the link:</p>
+	<a id="preventDefault_a" href="https://www.google.com">GOOGLE</a>
+	<br>
+	<a href="/" onclick="return false">return false</a>
+	<br>
+	<a href="/" onclick="event.preventDefault()">event.preventDefault()</a>
+	<br>
+	<br>
+	
+	<p>Menu items are implemented as HTML-links, not buttons</p>
+	<ul id="menu" class="menu">
+		<li><a href="/html">HTML</a></li>
+		<li><a href="/javascript">JavaScript</a></li>
+		<li><a  href="/css">CSS</a></li>
+	</ul>
+	<br>
+	<br>
+		
+	<p>Select the text within the below input field.</p>
+	Company Name: <input id="select_change_i" type="text" value="TutorialsPoint">
+	<br>
+	<br>
+		
+	<div class="box-1">
+	    <h1>0</h1>
+	</div>
+	<button id="btn1">
+	    Increase #1
+	</button>
+	<div class="box-2">
+	    <h1>0</h1>
+	</div>
+	<button id="btn2">
+	    Increase #2
+	</button>
+	<br>
+	<br>
+		
+	<div id="parent">
+	  <div id="child">&nbsp;</div>
+	</div>
+	<button class='propagation_btn' id="stopPropagation">Toggle Propogation</button>
+	<button class='propagation_btn' id="stopImmediatePropagation" ">Toggle Immediate Propogation</button>
+	<br>
+	<br>
+	
+<br>
+<br>
+
+</body>
+</html>

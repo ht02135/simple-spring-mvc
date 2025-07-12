@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Fruit Shop Landing Page</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<!--
+	<link rel="stylesheet" href="practice-bootstrap.min.css" />
+	-->
+	<link rel="stylesheet" href="practice.css" />
+	<link rel="stylesheet" href="practice-nav.css" />
+	<link rel="stylesheet" href="practice-debug.css" />
+</head>
+
+<body>
+	<!-- //////////////////////////////////// -->
+	<header>
+		<div class="banner">Get free delivery on orders over $80</div>
+		<div class="header-content">
+			<a href="#home">
+				<img id="header-img" src="./images/logo.png" alt="Company Logo" />
+			</a>
+			<nav id="nav-bar">
+				<ul class="navigation-menu">
+					<li><a class="nav-link" href="#varieties">VARIETIES</a></li>
+					<li><a class="nav-link" href="#products">PRODUCTS</a></li>
+					<li><a class="nav-link" href="#services">Services</a>
+						<ul class="subnav">
+							<li class="card-med" id="serv-groom">
+								<div class="card-image"><img src="./images/service.png"></div>
+								<a class="nav-link" href="#services">
+									<span>Grooming</span>
+									<span>More Info</span>
+								</a>
+							</li>
+							<li class="card-med" id="serv-board">
+								<div class="card-image"><img src="./images/service.png"></div>
+								<a class="nav-link" href="#services">
+									<span>Boarding</span>
+									<span>More Info</span>
+								</a>
+							</li>
+						</ul> <!-- subnav -->
+					</li>
+					<li><a class="nav-link" href="#about">ABOUT</a></li>
+					<li><a class="nav-link" href="#contact">CONTACT</a></li>
+				</ul> <!-- navigation-menu -->
+			</nav>
+		</div> <!-- header-content -->
+	</header>
+	<!-- //////////////////////////////////// -->
+	<main>
+		<!-- /// Section /////////////////// -->
+		<section id="home">
+			<div class="home-content flexible">
+				<div class="eye-grabber-img">
+					<img src="./images/logo.png" alt="Image of Apples" />
+				</div>
+				<div class="eye-grabber">
+					<h1>Fresh, Crispy, Heavenly.</h1>
+					<h2>100% Organic.</h2>
+					<button class="btn" onclick="window.location.href = '#contact';">Buy Now</button>
+				</div>
+			</div>
+		</section>
+		<!-- /// Section /////////////////// -->
+		<section id="varieties" class="sec-padding">
+			<h3 class="section-heading">VARIETIES</h3>
+			<div class="sec-content flexible">
+				<div class="tile">
+					<img src="./images/variety.png" alt="photo of amber apples" />
+					<h4>Amber</h4>
+					<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
+				</div>
+				<div class="tile">
+					<img src="./images/variety.png" alt="photo of american trel apples" />
+					<h4>American Trel</h4>
+					<p>A small, rounded, very crispy and sweet fruit variety that ripens in mid-September.</p>
+				</div>
+				<div class="tile">
+					<img src="./images/variety.png" alt="photo of red delicious apple" />
+					<h4>Red Delicious</h4>
+					<p>A very popular and widely cultivated variety of apple that ripens in mid-September.</p>
+				</div>
+			</div>
+		</section>
+		<!-- /// Section /////////////////// -->
+		<section id="products" class="sec-padding">
+			<h3 class="section-heading">PRODUCTS</h3>
+			<div class="sec-content flexible">
+				<div class="product-card">
+					<img src="./images/product.png" alt="Smartphone" />
+					<div class="card-body">
+						<div>
+							<h5 class="card-title">Smartphone X</h5>
+							<p class="card-text">
+								Latest generation smartphone with AI camera and stunning
+								display.
+							</p>
+							<p class="price">$999</p>
+						</div>
+						<a href="#" class="btn btn-secondary">Buy Now</a>
+					</div>
+				</div>
+				<div class="product-card">
+					<img src="./images/product.png" alt="Laptop" />
+					<div class="card-body">
+						<div>
+							<h5 class="card-title">Laptop Pro</h5>
+							<p class="card-text">
+								Powerful and lightweight laptop for professionals on the go.
+							</p>
+							<p class="price">$1499</p>
+						</div>
+						<a href="#" class="btn btn-secondary">Buy Now</a>
+					</div>
+				</div>
+				<div class="product-card">
+					<img src="./images/product.png" alt="Smartwatch" />
+					<div class="card-body">
+						<div>
+							<h5 class="card-title">Smartwatch S</h5>
+							<p class="card-text">
+								Track your fitness and stay connected with this sleek
+								smartwatch.
+							</p>
+							<p class="price">$299</p>
+						</div>
+						<a href="#" class="btn btn-secondary">Buy Now</a>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /// Section /////////////////// -->
+		<section id="services" class="sec-padding">
+			<h3 class="section-heading">SERVICES</h3>
+			<div class="sec-content flexible">
+				<p>TO DO</p>
+			</div>
+		</section>
+		<!-- /// Section /////////////////// -->
+		<section id="about" class="sec-padding">
+			<h3 class="section-heading">ABOUT US</h3>
+			<div class="sec-content flexible">
+				<p>
+					We are a group of people with decades of experience in growing and
+					selling apples.
+				</p>
+				<img src="./images/logo.png" alt="A man plucking apples from the tree" />
+			</div>
+		</section>
+		<!-- /// Section /////////////////// -->
+		<section class="sec-padding" id="contact">
+			<h3 class="section-heading">CONTACT</h3>
+			<div class="sec-content flexible">
+				<h6>To make an order or just to know more contact us :</h6>
+				<form id="form" action="https://www.freecodecamp.com/email-submit" method="POST">
+					<input type="email" id="email" name="email" placeholder="Your Email Address" required />
+					<input type="submit" id="submit" class="btn" value="Know More" />
+				</form>
+			</div>
+		</section>
+		<!-- /// Section /////////////////// -->
+	</main>
+	<!-- //////////////////////////////////// -->
+	<footer>
+		Created by
+		<a href="#">XYZ</a>
+	</footer>
+
+	<!-- //////////////////////////////////// -->
+</body>
+
+</html>

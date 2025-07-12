@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+
+	<!-- step1, Installation -->
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+
+<body>
+
+	<p>First name: <strong>todo</strong></p>
+	<p>Last name: <strong>todo</strong></p>
+
+	<!--
+	step1
+	Making the data editable
+	use the value binding, along with some regular HTML <input> controls, to make the 
+	data editable
+	-->
+	<p>First name: <strong data-bind="text: firstName"></strong></p>
+	<p>Last name: <strong data-bind="text: lastName"></strong></p>
+
+	<p>First name: <input data-bind="value: firstName" /></p>
+	<p>Last name: <input data-bind="value: lastName" /></p>
+
+	<!-- computed -->
+	<p>Full name: <strong data-bind="text: fullName"></strong></p>
+
+	<button data-bind="click: capitalizeLastName">Go caps</button>
+
+</body>
+
+</html>

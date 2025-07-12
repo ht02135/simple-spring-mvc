@@ -1,0 +1,49 @@
+/* ////////////////////////// */
+/* Debug */
+
+header,
+main {
+	border: 1px solid var(--black-color);
+	border-collapse: collapse;
+}
+
+section {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+div {
+	border: 1px solid var(--green-color);
+	border-collapse: collapse;
+}
+
+nav {
+	border: 1px solid var(--blue-color);
+	border-collapse: collapse;
+}
+
+ul,
+li {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table,
+th,
+td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+form,
+input,
+button,
+img,
+a,
+h1,
+h2 {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+/* ////////////////////////// */

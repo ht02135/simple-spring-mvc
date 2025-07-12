@@ -1,0 +1,16 @@
+:root {
+	--black-color: #000000;
+	--dark-gray-color: #999999;
+	--very-dark-blue-color: #151948;
+	--mostly-desaturated-dark-blue-color: #5e629c;
+	--bright-blue-color: #3c9cfd;
+	--lime-green-color: #3ecf8e;
+	--light-red-color: #ff704f;
+	--very-light-gray-color: #e2e2e2;
+	--white-color: #ffffff;
+	/* debug color begin */
+	--blue-color: blue;
+	--green-color: green;
+	--red-color: red;
+	/* debug color end */
+}

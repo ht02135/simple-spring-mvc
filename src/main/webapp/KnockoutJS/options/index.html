@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../css/styles.css" />
+	
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+	 
+</head>
+
+<body>
+
+	<p>
+	    Destination country:
+		<!-- Drop-down list -->
+	    <select data-bind="options: $root.availableCountries2"></select>
+	</p>
+	<br>
+	
+	<p>
+	    Choose some countries you would like to visit:
+		<!-- Multi-select list -->
+		<!--
+		1>seem selectedOptions is only for select multiple=true aka Multi-select 
+		hung: i think because you can select multiple options here...
+		2>To control which element in a single-select drop-down list is selected, 
+		you can use the value binding instead.
+		-->
+	    <select data-bind="options: $root.availableCountries2,
+						   selectedOptions: $root.selectedCountry2" 
+				size="5" multiple="true"></select>
+	</p>
+	<br>
+	
+	<!--
+	1>optionsCaption
+	Sometimes, you might not want to select any particular option by default. But a 
+	single-select drop-down list usually starts with some item selected, so how can 
+	you avoid preselecting something? The usual solution is to prefix the list of 
+	options with a special dummy option that just reads “Select an item” or “Please 
+	choose an option” or similar
+	2>optionsText
+	you need to choose which of the objects’ properties should be displayed as the 
+	text in the drop-down list or multi-select list. Example 3 shows how you can 
+	specify that property name by passing an additional parameter called optionsText.
+	3>optionsValue
+	Similar to optionsText, you can also pass an additional parameter called 
+	optionsValue to specify which of the objects’ properties should be used to set 
+	the value attribute on the <option> elements that KO generates
+	4>optionsAfterRender
+	If you need to run some further custom logic on the generated option elements, 
+	you can use the optionsAfterRender callback. See Note 2 below.
+	///////////////////
+	in this case
+	1>options=availableCountries array
+	2>optionsText='countryName' which is property name of availableCountries
+	3>optionsAfterRender: additionalRender only get called when loading each option
+	into select UI
+	-->
+	<p>
+	    Your country:
+	    <select data-bind="options: $root.availableCountries,
+	                       optionsText: 'countryName',
+						   optionsCaption: 'Choose...',
+						   optionsAfterRender: $root.additionalRender,
+	                       value: $root.selectedCountry"></select>
+	</p>
+	<div data-bind="visible: $root.selectedCountry"> <!-- Appears when you select something -->
+	    You have chosen a country with population
+	    <span data-bind="text: $root.selectedCountry() ? $root.selectedCountry().countryPopulation : 'unknown'"></span>.
+	</div>
+	<br>
+	
+</body>
+
+</html>

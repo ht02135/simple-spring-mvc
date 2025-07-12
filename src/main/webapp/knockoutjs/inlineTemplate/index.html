@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>HTML and JS</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../css/styles.css" /> 
+	
+	<!--
+	personally i think inline template is pretty stupid and pointless and no real
+	life application, but lets go thru exercise ...
+	-->	
+	<script type="text/html" id="person-template">
+	    <h3 data-bind="text: name"></h3>
+	    <p>Credits: <span data-bind="text: credits"></span></p>
+	</script>
+	
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script type='text/javascript' src='../../libs/knockout-3.5.1.js' defer ></script>
+	<script type="text/javascript" src="index.js" defer></script>
+
+</head>
+
+<h2>Participants</h2>
+Here are the participants:
+<!--
+template data-binding 'person-template' to buyer and seller
+-->
+<div data-bind="template: { name: 'person-template', data: buyer }"></div>
+<div data-bind="template: { name: 'person-template', data: seller }"></div>
+<br>
+
+<!--
+If you want the equivalent of a foreach binding, but using a named template, 
+you can do so in the natural way:
+-->
+<h2>Participants via 'person-template'</h2>
+Here are the participants:
+<div data-bind="template: { 
+					name: 'person-template', 
+					foreach: people 
+				}"></div>
+<br>
+
+<!--
+equavalent to this
+-->
+<h2>Participants via regular way</h2>
+Here are the participants:
+<div data-bind="foreach: people">
+    <h3 data-bind="text: name"></h3>
+    <p>Credits: <span data-bind="text: credits"></span></p>
+</div>
+<br>
+
+<!--
+Using “as” to give an alias to “foreach” items
+-->
+<h2>Participants via 'person-template' with as 'person'</h2>
+Here are the participants:
+<div data-bind="template: { 
+					name: 'person-template', 
+					foreach: people,
+					as: 'person' }"></div>
+<br>
+
+</html>

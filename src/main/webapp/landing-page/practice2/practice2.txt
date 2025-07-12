@@ -1,0 +1,81 @@
+
+The Bootstrap grid system has four classes: xs (phones), sm (tablets), md (desktops), and lg (larger desktops)
+
+col-lg-6 col-md-12 col-xs-12
+
+/////////////////
+
+Ignoring the letters (xs, sm, md, lg) for now, I'll start with just the numbers...
+
+the numbers (1-12) represent a portion of the total width of any div
+all divs are divided into 12 columns
+so, col-*-6 spans 6 of 12 columns (half the width), col-*-12 spans 12 of 12 columns (the entire width), etc
+So, if you want two equal columns to span a div, write
+
+<div class="col-xs-6">Column 1</div>
+<div class="col-xs-6">Column 2</div>
+Or, if you want three unequal columns to span that same width, you could write:
+
+<div class="col-xs-2">Column 1</div>
+<div class="col-xs-6">Column 2</div>
+<div class="col-xs-4">Column 3</div>
+You'll notice the # of columns always add up to 12. It can be less than twelve, but beware if more than 12, as your offending divs will bump down to the next row 
+
+You can also nest columns within columns, (best with a .row wrapper around them) such as:
+
+<div class="col-xs-6">
+  <div class="row">
+    <div class="col-xs-4">Column 1-a</div>
+    <div class="col-xs-8">Column 1-b</div>
+  </div>
+</div>
+<div class="col-xs-6">
+  <div class="row">
+    <div class="col-xs-2">Column 2-a</div>
+    <div class="col-xs-10">Column 2-b</div>
+  </div>
+</div>
+
+///////////////////////
+
+col-lg- stands for column large ≥ 1200px
+col-md- stands for column medium ≥ 992px
+col-xs- stands for column extra small ≥ 768px
+
+////////////////////////
+
+https://www.w3schools.com/bootstrap/bootstrap_grid_system.asp
+Bootstrap's grid system allows up to 12 columns across the page.
+
+The Bootstrap grid system has four classes:
+
+xs (for phones - screens less than 768px wide)
+sm (for tablets - screens equal to or greater than 768px wide)
+md (for small laptops - screens equal to or greater than 992px wide)
+lg (for laptops and desktops - screens equal to or greater than 1200px wide)
+
+seems if you uses row, then you need to use them??
+<div class="container">
+  <div class="row">
+    <div class="col-*-*"></div>
+    <div class="col-*-*"></div>
+  </div>
+  <div class="row">
+    <div class="col-*-*"></div>
+    <div class="col-*-*"></div>
+    <div class="col-*-*"></div>
+  </div>
+  <div class="row">
+    ...
+  </div>
+</div>
+
+////////////////////////
+
+The CSS float property is a powerful tool used to control the horizontal positioning 
+of elements within their containing elements. It allows elements to be taken out of 
+the normal document flow and positioned to the left or right, enabling text and 
+inline elements to wrap around them. Here’s a detailed explanation of the float 
+property, its values, and practical examples.
+
+
