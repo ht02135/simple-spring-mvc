@@ -1,0 +1,93 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>nav1</title>
+
+	<!--
+	https://tekeye.uk/html/pure-css-menu-examples-includes-dropdown
+	-->
+	<style>
+		div,
+		image {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		
+		.tile {
+			height: 20rem;
+			width: 15rem;
+			background-color: orange;
+			border: 1px solid black;
+			border-collapse: collapse;
+			border-radius: 0.5rem;
+			padding: 0;
+			margin: 0;	
+			/* 
+			2 shadow 
+			///////////////
+			box-shadow h-offset v-offset blur spread color
+			1>horizontal offset of the shadow. A positive value puts 
+			the shadow on the right side of the box, a negative value 
+			puts the shadow on the left side of the box
+			2>vertical offset of the shadow. A positive value puts the 
+			shadow below the box, a negative value puts the shadow above 
+			the box
+			//////////////
+			box-shadow: 0 10px 20px black;
+			v-offset=10px, top has no shadow
+			//////////////
+			box-shadow: 10px 0 20px black;
+			h-offset=10px, left has no shadow
+			//////////////
+			box-shadow: 0 10px 10px black, 0 5px 5px black;
+			this seems to ovrelay shadows...
+			*/
+			box-shadow: 0 5px 5px black, 0 5px 5px black
+			transition: all 0.2s;
+		}
+
+		.tile:hover {
+			transform: scale(1.05);
+			box-shadow: 0 10px 10px black, 0 10px 10px black;
+		}
+		
+		.tile img {
+			height: 100%; /* image box size as % of container */
+			width: 100%;  /* image box size as % of container */
+			object-fit: contain; /* make img fix into div */
+		}
+		
+		.tile h4 {
+			/*
+			https://www.colorhexa.com/e23d3d
+			#e23d3d color description : Bright red.
+			*/
+			color: #e23d3d;
+			font-size: 1.75rem;
+			font-weight: bold;
+			padding-top: 0.90rem;
+			margin: 0;
+		}
+
+		.tile p {
+			font-size: 1.25rem;
+			padding-top: 0.2rem;
+			margin: 0;
+		}
+	</style>
+	
+</head>
+
+<body>
+
+	<div class="tile">
+		<img src="../../images/variety.png" alt="photo of amber apples" />
+		<h4>Amber</h4>
+		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
+	</div>
+
+</body>
+
+</html>
