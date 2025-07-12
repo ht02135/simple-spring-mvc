@@ -1,0 +1,128 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>nav1</title>
+
+	<!--
+	https://tekeye.uk/html/pure-css-menu-examples-includes-dropdown
+	-->
+	<style>
+		ul,
+		li {
+			/*
+			border: 1px solid black;
+			border-collapse: collapse;
+			*/
+		}
+		
+		/* set nav and subnav list item background */
+		.h-nav-list-item, .h-subnav-list-item, .h-subnav-flex-list-item {
+			background:orange;
+		}
+		.h-nav-list-item:hover, .h-subnav-list-item:hover, .h-subnav-flex-list-item:hover {
+			background: blue;
+		}
+		/* style all descendant a of nav */
+		.h-nav a {
+			text-decoration:none;
+			color:white;
+			display: block;
+			padding: 0.5em
+		}
+		/* align top nav menu list horizontal */
+		.h-nav-list-item { 
+			display: inline-block; 
+		}
+		/* align subnav menu list vertical */
+		.h-subnav-list {
+			/*
+			position:absolute;
+			They are not positioned based on their usual place in the document flow,
+			but based on the position of their ancestor.
+			*/
+			position: absolute;
+			display: block; 
+			visibility: hidden;
+			padding: 0px; 
+		}
+		.h-subnav-flex-list {
+			position: absolute;
+			display: flex; 
+			flex-direction: row;
+			align-items: center;
+			justify-items: center;
+			visibility: hidden;
+			padding: 0px; 
+		}
+		/* when hover nav list item, display subnav */
+		.h-nav-list-item:hover > .h-subnav-list, .h-nav-list-item:hover > .h-subnav-flex-list {
+			visibility: visible;
+		}
+		.h-nav-list-item:hover {
+			border-bottom: 2px solid red;
+		}
+		.h-nav-list-item, .h-subnav-list-item, .h-subnav-flex-list-item {
+			list-style: none; /* remove bullet */
+			padding:0; 
+		}
+		.h-subnav-list-item, .h-subnav-flex-list-item  {
+			margin-top: 0.2em; 
+			margin-left: 0.2em; 
+		}
+		/* /////////// additional  ///////////////*/
+		.h-nav {
+			font-size: 1.6rem;
+			font-weight: bold;
+			text-decoration: none;
+			z-index: 100; /* important, so set as 100 */
+		}
+	</style>
+	
+</head>
+
+<body>
+
+	<!--
+		▽ - bigtriangledown
+		▾ - blacktriangledown
+		⊽ - barvee
+		↡ - Darr
+		⇓ - dArr
+		↓ - darr
+		⇓ - DoubleDownArrow
+		↓ - DownArrow
+		⇓ - Downarrow
+		↓ - downarrow
+		⤓ - DownArrowBar
+		↓ - ShortDownArrow
+		⋁ - Vee
+		∨ - vee
+		⊻ - veebar
+		▽ - xdtri
+	-->
+	<div>
+		<nav class="h-nav">
+			<ul class="h-nav-list">
+				<li class="h-nav-list-item"><a href="/">Home</a></li>
+				<li class="h-nav-list-item"><a href="/about">About &ShortDownArrow;</a>
+					<ul class="h-subnav-list">
+						<li class="h-subnav-list-item"><a href="/about/contact">Contact</a></li>
+						<li class="h-subnav-list-item"><a href="/about/faqs">FAQs</a></li>
+					</ul>
+				</li>
+				<li class="h-nav-list-item"><a href="/projects">Projects &ShortDownArrow;</a>
+					<ul class="h-subnav-flex-list">
+						<li class="h-subnav-flex-list-item"><a href="/about/contact">Contact</a></li>
+						<li class="h-subnav-flex-list-item"><a href="/about/faqs">FAQs</a></li>
+					</ul>
+				</li>
+				<li class="h-nav-list-item"><a href="/blog">Blog</a></li>
+			</ul>
+		</nav>
+	</div>
+
+</body>
+
+</html>
