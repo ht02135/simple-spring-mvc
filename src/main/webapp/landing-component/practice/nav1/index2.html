@@ -1,0 +1,96 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>nav1</title>
+
+	<!--
+	https://tekeye.uk/html/pure-css-menu-examples-includes-dropdown
+	-->
+	<style>
+		ul,
+		li {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		
+		/* set nav and subnav list item background */
+		.h-nav-list-item, .h-subnav-list-item {
+			background:orange;
+		}
+		.h-nav-list-item:hover, .h-subnav-list-item:hover {
+			background: blue;
+		}
+		/* style all descendant a of nav */
+		.h-nav a {
+			text-decoration:none;
+			color:white;
+			display:block;
+			padding:0.5em
+		}
+		/* align top nav menu list horizontal */
+		.h-nav-list-item { 
+			display:inline-block; 
+		}
+		/* align subnav menu list vertical */
+		.h-subnav-list {
+			display: block; 
+			position:absolute;
+			visibility:hidden;
+			padding:0; 
+		}
+		/* when hover nav list item, display subnav */
+		.h-nav-list-item:hover > .h-subnav-list {
+			visibility:visible;
+		}
+		.h-nav-list-item, .h-subnav-list-item {
+			list-style: none; /* remove bullet */
+			padding:0; 
+		}
+		.h-subnav-list-item {
+			margin-top: 0.25em; 
+		}
+	</style>
+	
+</head>
+
+<body>
+
+	<!--
+		▽ - bigtriangledown
+		▾ - blacktriangledown
+		⊽ - barvee
+		↡ - Darr
+		⇓ - dArr
+		↓ - darr
+		⇓ - DoubleDownArrow
+		↓ - DownArrow
+		⇓ - Downarrow
+		↓ - downarrow
+		⤓ - DownArrowBar
+		↓ - ShortDownArrow
+		⋁ - Vee
+		∨ - vee
+		⊻ - veebar
+		▽ - xdtri
+	-->
+	<div>
+		<nav class="h-nav">
+			<ul class="h-nav-list">
+				<li class="h-nav-list-item"><a href="/">Home</a></li>
+				<li class="h-nav-list-item"><a href="/about">About &ShortDownArrow;</a>
+					<ul class="h-subnav-list">
+						<li class="h-subnav-list-item"><a href="/about/contact">Contact</a></li>
+						<li class="h-subnav-list-item"><a href="/about/faqs">FAQs</a></li>
+					</ul>
+				</li>
+				<li class="h-nav-list-item"><a href="/projects">Projects</a></li>
+				<li class="h-nav-list-item"><a href="/blog">Blog</a></li>
+			</ul>
+		</nav>
+	</div>
+
+</body>
+
+</html>

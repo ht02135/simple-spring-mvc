@@ -1,0 +1,48 @@
+
+ccs position
+
+https://www.geeksforgeeks.org/css/difference-between-relative-and-absolute-position-in-css/
+
+example of position: relative; property. The element is shifted 50px to the right using the left property, but it still occupies its original space in the document flow.
+
+    <style>
+        div.relative {
+            position: relative;
+            left: 50px;
+            border: 3px solid #73AD21;
+        }
+    </style>
+    
+    <div class="relative">
+        This element has position:relative;
+    </div>
+    
+The absolute element is positioned 80px from the top and right of its closest positioned ancestor (the relative container).
+
+    <style>
+        div.relative {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            border: 3px solid #73AD21;
+        }
+        
+        div.absolute {
+            position: absolute;
+            top: 80px;
+            right: 80px;
+            width: 200px;
+            height: 100px;
+            border: 3px solid #73AD21;
+        }
+    </style>
+    
+    <div class="relative">
+        This element has position: relative;
+        <div class="absolute">
+            This element has position: absolute;
+        </div>
+    </div>
+    
+/////////////////
+

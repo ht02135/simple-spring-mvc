@@ -1,0 +1,75 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>nav1</title>
+
+	<!--
+	https://tekeye.uk/html/pure-css-menu-examples-includes-dropdown
+	-->
+	<style>
+		ul,
+		li {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		
+		/* Change unordered list items in a nav to inline */
+		nav > ul > li {display:inline-block;}
+		/* Drop menu under its parent */
+		nav ul li ul {display: block; position:absolute;}
+		/* Remove list padding and bullet points */
+		nav ul {padding:0; list-style:none;}
+		/* Dropdown list invisible until... */
+		nav ul li ul {visibility:hidden;}
+		/* .. the parent list is hovered over */                  
+		nav ul li:hover > ul {visibility:visible;}
+		/* Format the menu's look */
+		nav li {background:orange;}
+		nav a {text-decoration:none;color:white;display:block;padding:0.5em}
+		nav li:hover {background:blue;}
+		nav ul li ul li {margin-top:0.25em;}
+	</style>
+	
+</head>
+
+<body>
+
+	<!--
+		▽ - bigtriangledown
+		▾ - blacktriangledown
+		⊽ - barvee
+		↡ - Darr
+		⇓ - dArr
+		↓ - darr
+		⇓ - DoubleDownArrow
+		↓ - DownArrow
+		⇓ - Downarrow
+		↓ - downarrow
+		⤓ - DownArrowBar
+		↓ - ShortDownArrow
+		⋁ - Vee
+		∨ - vee
+		⊻ - veebar
+		▽ - xdtri
+	-->
+	<div>
+		<nav class="h-nav">
+			<ul class="h-nav-list">
+				<li class="h-nav-list-item"><a href="/">Home</a></li>
+				<li class="h-nav-list-item"><a href="/about">About &ShortDownArrow;</a>
+					<ul class="h-subnav-list">
+						<li class="h-subnav-list-item"><a href="/about/contact">Contact</a></li>
+						<li class="h-subnav-list-item"><a href="/about/faqs">FAQs</a></li>
+					</ul>
+				</li>
+				<li class="h-nav-list-item"><a href="/projects">Projects</a></li>
+				<li class="h-nav-list-item"><a href="/blog">Blog</a></li>
+			</ul>
+		</nav>
+	</div>
+
+</body>
+
+</html>
