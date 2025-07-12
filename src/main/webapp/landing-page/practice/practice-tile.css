@@ -1,0 +1,74 @@
+div,
+image {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tile {
+	height: 20rem;
+	width: 15rem;
+	background-color: orange;
+	border: 1px solid black;
+	border-collapse: collapse;
+	border-radius: 0.5rem;
+	padding: 0;
+	margin: 0;
+	/* 
+	2 shadow 
+	///////////////
+	box-shadow h-offset v-offset blur spread color
+	1>horizontal offset of the shadow. A positive value puts 
+	the shadow on the right side of the box, a negative value 
+	puts the shadow on the left side of the box
+	2>vertical offset of the shadow. A positive value puts the 
+	shadow below the box, a negative value puts the shadow above 
+	the box
+	//////////////
+	box-shadow: 0 10px 20px black;
+	v-offset=10px, top has no shadow
+	//////////////
+	box-shadow: 10px 0 20px black;
+	h-offset=10px, left has no shadow
+	//////////////
+	box-shadow: 0 10px 10px black, 0 5px 5px black;
+	this seems to ovrelay shadows...
+	*/
+	box-shadow: 0 5px 5px black, 0 5px 5px black;
+	transition: all 0.2s;
+}
+
+.tile:hover {
+	transform: scale(1.05);
+	box-shadow: 0 10px 10px black, 0 10px 10px black;
+}
+
+.tile img {
+	height: 60%;
+	/* image box size as % of container */
+	width: 100%;
+	/* image box size as % of container */
+	object-fit: contain;
+	/* make img fix into div */
+}
+
+.tile h4 {
+	/*
+	https://www.colorhexa.com/e23d3d
+	#e23d3d color description : Bright red.
+	*/
+	color: #e23d3d;
+	height: 10%;
+	width: 100%;
+	font-size: 1.75rem;
+	font-weight: bold;
+	padding: 0.1rem;
+	margin: 0;
+}
+
+.tile p {
+	height: 10%;
+	width: 100%;
+	font-size: 1.25rem;
+	padding: 0.1rem;
+	margin: 0;
+}
