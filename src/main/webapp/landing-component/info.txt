@@ -46,3 +46,63 @@ The absolute element is positioned 80px from the top and right of its closest po
     
 /////////////////
 
+https://www.freecodecamp.org/news/css-positioning-position-absolute-and-relative/
+
+1>By default, the position property for all HTML elements in CSS is set to static.
+
+Elements appear one after the other – directly below one another, according to the order of the HMTL code.
+
+The position property isn't declared in the above code and it therefore reverts to the default position: static. It follows the order of the HTML code.
+
+2>position: relative works the same way as position: static;, but it lets you change an element's position.
+
+To modify the position, you'll need to apply the top, bottom, right, and left properties
+
+The top, bottom, right, and left offsets push the tag away from where it's specified, working in reverse.
+
+top in fact moves the element towards the bottom of the element's parent container. bottom pushes the element towards the top of the element's parent container, and so on.
+
+move the first square to the left by updating the CSS like this:
+
+.one {
+  background-color: powderblue;
+  position: absolute;
+  top: 50px;
+  left: 0;
+}
+
+3>If you update the CSS rule for the first square to the following:
+
+.one {
+  background-color: powderblue;
+  position: absolute;
+}
+
+.one {
+  background-color: powderblue;
+}
+
+.two {
+  background-color: royalblue;
+}
+
+.three {
+  background-color: sienna;
+}
+
+.four {
+  background-color: slateblue;
+}
+
+This is unexpected behavior. The second square has completely disappeared.
+
+Absolute-positioned elements are completely taken out of the regular flow of the web page.
+
+They are not positioned based on their usual place in the document flow, but based on the position of their ancestor.
+
+In the example above, the absolutely positioned square is inside a statically positioned parent.
+
+
+
+
+

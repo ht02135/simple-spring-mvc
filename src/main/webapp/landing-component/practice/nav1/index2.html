@@ -36,6 +36,11 @@
 		/* align subnav menu list vertical */
 		.h-subnav-list {
 			display: block; 
+			/*
+			position:absolute;
+			They are not positioned based on their usual place in the document flow,
+			but based on the position of their ancestor.
+			*/
 			position:absolute;
 			visibility:hidden;
 			padding:0; 
