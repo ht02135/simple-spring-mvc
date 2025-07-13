@@ -1,0 +1,720 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Archive Pagination</title>
+    <style>
+        :root {
+            --primary-color: #f0f2f5;
+            --accent-color: #5d7b9e;
+            --text-color: #414550;
+            --light-text: #73787f;
+            --hover-color: #e4ebf3;
+            --active-color: #5d7b9e;
+            --border-color: #dfe1e6;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 680px;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .archive-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .archive-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .archive-header p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+        
+        .archive-content {
+            margin-bottom: 35px;
+        }
+        
+        .post {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .post:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--light-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-meta .category {
+            background-color: #f5f7fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        
+        .post-meta .date {
+            position: relative;
+            padding-left: 10px;
+        }
+        
+        .post-meta .date::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .post h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            transition: color 0.2s ease;
+        }
+        
+        .post p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--light-text);
+            margin-bottom: 12px;
+        }
+        
+        .post-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .post-link::after {
+            content: "→";
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .post-link:hover {
+            color: #455e7c;
+        }
+        
+        .post-link:hover::after {
+            transform: translateX(4px);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            user-select: none;
+        }
+        
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+        
+        .page-numbers {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .pagination-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pagination-button:hover {
+            background-color: var(--hover-color);
+            border-color: var(--hover-color);
+        }
+        
+        .pagination-button.active {
+            background-color: var(--active-color);
+            color: white;
+            border-color: var(--active-color);
+            box-shadow: 0 2px 8px rgba(93, 123, 158, 0.3);
+            font-weight: 500;
+        }
+        
+        .pagination-button.nav {
+            padding: 0 15px;
+        }
+        
+        .pagination-button.nav.prev {
+            margin-right: 8px;
+        }
+        
+        .pagination-button.nav.next {
+            margin-left: 8px;
+        }
+        
+        .pagination-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .ellipsis {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+        
+        .pagination-button::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.4s ease-out;
+        }
+        
+        .pagination-button:active::before {
+            transform: scale(2);
+            opacity: 0;
+            transition: 0s;
+        }
+        
+        /* For tablet and mobile */
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .archive-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .post h2 {
+                font-size: 1.15rem;
+            }
+            
+            .page-numbers .pagination-button:not(.active):not(.nav) {
+                display: none;
+            }
+            
+            .page-numbers .pagination-button.active {
+                display: flex;
+            }
+            
+            .page-numbers .ellipsis {
+                display: none;
+            }
+            
+            .pagination-info {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.85rem;
+                color: var(--light-text);
+                margin-top: 10px;
+            }
+        }
+        
+        /* Animation for page transition */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .post {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .post:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .post:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .post:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .pagination-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            filter: blur(1px);
+        }
+        
+        .theme-switcher {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            width: 40px;
+            height: 20px;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .theme-switcher-knob {
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        body.dark-theme {
+            --primary-color: #1a1c22;
+            --accent-color: #6b8caf;
+            --text-color: #e1e4e8;
+            --light-text: #a0a4aa;
+            --hover-color: #2c313c;
+            --active-color: #5d7b9e;
+            --border-color: #32363f;
+            --white: #252830;
+        }
+        
+        body.dark-theme .theme-switcher {
+            background-color: #5d7b9e;
+        }
+        
+        body.dark-theme .theme-switcher-knob {
+            transform: translateX(20px);
+        }
+        
+        body.dark-theme .post-meta .category {
+            background-color: #32363f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="archive-header">
+            <div class="theme-switcher" id="themeSwitcher">
+                <div class="theme-switcher-knob"></div>
+            </div>
+            <h1>Design Chronicles</h1>
+            <p>Exploring the nuances of design systems and UX patterns</p>
+        </div>
+        
+        <div class="archive-content" id="archiveContent">
+            <!-- Default content for page 1 -->
+            <div class="post">
+                <div class="post-meta">
+                    <span class="category">Typography</span>
+                    <span class="date">October 18, 2023</span>
+                </div>
+                <h2>Variable Fonts: The Future of Responsive Typography</h2>
+                <p>An exploration of how variable fonts are revolutionizing responsive design by allowing fine-tuned control over weight, width, and slant in a single font file—reducing load times while increasing design flexibility.</p>
+                <a href="#" class="post-link">Read article</a>
+            </div>
+            
+            <div class="post">
+                <div class="post-meta">
+                    <span class="category">UI Components</span>
+                    <span class="date">October 12, 2023</span>
+                </div>
+                <h2>Rethinking Pagination: Beyond Numbers and Arrows</h2>
+                <p>How modern applications are moving beyond traditional pagination patterns with infinite scroll, lazy loading, and contextual navigation that better suits different types of content libraries.</p>
+                <a href="#" class="post-link">Read article</a>
+            </div>
+            
+            <div class="post">
+                <div class="post-meta">
+                    <span class="category">Accessibility</span>
+                    <span class="date">October 5, 2023</span>
+                </div>
+                <h2>Keyboard Navigation Patterns That Actually Work</h2>
+                <p>A detailed analysis of keyboard navigation implementations that enhance accessibility without compromising on visual design, focusing on focus states and intuitive tab orders.</p>
+                <a href="#" class="post-link">Read article</a>
+            </div>
+        </div>
+        
+        <div class="pagination">
+            <div class="pagination-container">
+                <button class="pagination-button nav prev disabled" id="prevButton">Previous</button>
+                
+                <div class="page-numbers" id="pageNumbers">
+                    <button class="pagination-button active" data-page="1">1</button>
+                    <button class="pagination-button" data-page="2">2</button>
+                    <button class="pagination-button" data-page="3">3</button>
+                    <span class="ellipsis">...</span>
+                    <button class="pagination-button" data-page="7">7</button>
+                </div>
+                
+                <button class="pagination-button nav next" id="nextButton">Next</button>
+            </div>
+        </div>
+        
+        <div class="pagination-info" id="paginationInfo">
+            Showing page 1 of 7
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switcher functionality
+            const themeSwitcher = document.getElementById('themeSwitcher');
+            themeSwitcher.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+            });
+            
+            // Pagination functionality
+            const pageButtons = document.querySelectorAll('.pagination-button[data-page]');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const archiveContent = document.getElementById('archiveContent');
+            const paginationInfo = document.getElementById('paginationInfo');
+            
+            let currentPage = 1;
+            const totalPages = 7;
+            
+            // Content for different pages
+            const pageContent = {
+                1: [
+                    {
+                        category: 'Typography',
+                        date: 'October 18, 2023',
+                        title: 'Variable Fonts: The Future of Responsive Typography',
+                        excerpt: 'An exploration of how variable fonts are revolutionizing responsive design by allowing fine-tuned control over weight, width, and slant in a single font file—reducing load times while increasing design flexibility.',
+                    },
+                    {
+                        category: 'UI Components',
+                        date: 'October 12, 2023',
+                        title: 'Rethinking Pagination: Beyond Numbers and Arrows',
+                        excerpt: 'How modern applications are moving beyond traditional pagination patterns with infinite scroll, lazy loading, and contextual navigation that better suits different types of content libraries.',
+                    },
+                    {
+                        category: 'Accessibility',
+                        date: 'October 5, 2023',
+                        title: 'Keyboard Navigation Patterns That Actually Work',
+                        excerpt: 'A detailed analysis of keyboard navigation implementations that enhance accessibility without compromising on visual design, focusing on focus states and intuitive tab orders.',
+                    }
+                ],
+                2: [
+                    {
+                        category: 'Design Systems',
+                        date: 'September 28, 2023',
+                        title: 'Component Variants vs. Props: Finding the Balance',
+                        excerpt: 'Exploring the tradeoffs between creating component variants versus using props for configuration, with practical examples from mature design systems like Material and Polaris.',
+                    },
+                    {
+                        category: 'Performance',
+                        date: 'September 21, 2023',
+                        title: 'The Hidden Cost of CSS Animations',
+                        excerpt: 'A deep dive into how different CSS animation properties affect rendering performance, with guidelines for creating butter-smooth 60fps animations even on low-end devices.',
+                    },
+                    {
+                        category: 'Color Theory',
+                        date: 'September 15, 2023',
+                        title: 'Beyond Light and Dark: Creating Meaningful Color Modes',
+                        excerpt: 'How to design color systems that go beyond binary light/dark modes to address specific user contexts like focus mode, outdoor readability, and accessibility needs.',
+                    }
+                ],
+                3: [
+                    {
+                        category: 'Layout',
+                        date: 'September 8, 2023',
+                        title: 'Mastering CSS Grid for Responsive Layouts',
+                        excerpt: 'A practical guide to building responsive layouts with CSS Grid, featuring techniques for magazine-style layouts that maintain visual hierarchy across breakpoints.',
+                    },
+                    {
+                        category: 'Animation',
+                        date: 'September 1, 2023',
+                        title: 'Meaningful Micro-interactions: Small Details, Big Impact',
+                        excerpt: 'Case studies of effective micro-interactions that enhance user experience by providing feedback, guiding attention, and expressing brand personality.',
+                    },
+                    {
+                        category: 'UX Patterns',
+                        date: 'August 25, 2023',
+                        title: 'Form Design Patterns That Reduce Cognitive Load',
+                        excerpt: 'Analysis of form design techniques that minimize mental effort, reduce errors, and improve completion rates—focusing on input formatting, validation timing, and field grouping.',
+                    }
+                ],
+                4: [
+                    {
+                        category: 'Typography',
+                        date: 'August 18, 2023',
+                        title: 'Fluid Typography Systems for Multi-Device Design',
+                        excerpt: 'How to implement typography that scales smoothly between device sizes without breakpoints, using CSS clamp() and custom properties for maintainable code.',
+                    },
+                    {
+                        category: 'UI Components',
+                        date: 'August 12, 2023',
+                        title: 'Building Better Tooltips: Content Strategy and Timing',
+                        excerpt: 'Guidelines for tooltip design that provides helpful context without interrupting workflow, with emphasis on trigger timing and content brevity.',
+                    },
+                    {
+                        category: 'Accessibility',
+                        date: 'August 5, 2023',
+                        title: 'Color Contrast in Data Visualizations: Beyond WCAG',
+                        excerpt: 'Practical techniques for creating accessible data visualizations that go beyond minimum contrast ratios to ensure legibility and comprehension for all users.',
+                    }
+                ],
+                5: [
+                    {
+                        category: 'Design Systems',
+                        date: 'July 28, 2023',
+                        title: 'Maintaining Design Systems: Governance Models That Work',
+                        excerpt: 'Comparing different governance approaches for design systems in large organizations, with strategies for balancing central control with team autonomy.',
+                    },
+                    {
+                        category: 'Performance',
+                        date: 'July 21, 2023',
+                        title: 'Optimizing Web Fonts for Core Web Vitals',
+                        excerpt: 'Techniques for font loading that improve Largest Contentful Paint (LCP) scores while preserving brand typography, including variable fonts and clever font subsetting.',
+                    },
+                    {
+                        category: 'Color Theory',
+                        date: 'July 15, 2023',
+                        title: 'Color Psychology in Enterprise UIs: Beyond Blue',
+                        excerpt: 'Research-based insights on color use in business applications, examining how strategic color application can improve task completion and reduce cognitive fatigue.',
+                    }
+                ],
+                6: [
+                    {
+                        category: 'Layout',
+                        date: 'July 8, 2023',
+                        title: 'Content-Aware Layouts with Container Queries',
+                        excerpt: 'Exploring how container queries enable truly responsive components that adapt to their parent container rather than just the viewport size.',
+                    },
+                    {
+                        category: 'Animation',
+                        date: 'July 1, 2023',
+                        title: 'State Transitions in Complex UIs',
+                        excerpt: 'Strategies for designing transitions between complex states that maintain context and spatial relationships while communicating change clearly.',
+                    },
+                    {
+                        category: 'UX Patterns',
+                        date: 'June 25, 2023',
+                        title: 'Progressive Disclosure in Data-Heavy Interfaces',
+                        excerpt: 'How to use progressive disclosure principles to design interfaces that handle large datasets without overwhelming users, with examples from analytics dashboards.',
+                    }
+                ],
+                7: [
+                    {
+                        category: 'Typography',
+                        date: 'June 18, 2023',
+                        title: 'Typographic Rhythm in Digital Interfaces',
+                        excerpt: 'A detailed examination of how vertical rhythm and baseline grids translate from print to digital, with practical CSS techniques for maintaining harmony.',
+                    },
+                    {
+                        category: 'UI Components',
+                        date: 'June 12, 2023',
+                        title: 'Table Design for Complex Data Sets',
+                        excerpt: 'Design patterns for complex data tables that balance information density with usability, exploring sorting, filtering, and progressive disclosure techniques.',
+                    },
+                    {
+                        category: 'Accessibility',
+                        date: 'June 5, 2023',
+                        title: 'Audio Cues and Voice Interfaces: The Non-Visual Experience',
+                        excerpt: 'Guidelines for designing effective audio feedback and voice interactions that complement visual interfaces and provide alternative navigation paths.',
+                    }
+                ]
+            };
+            
+            // Update content based on page number
+            function updateContent(pageNumber) {
+                // Clear current content
+                archiveContent.innerHTML = '';
+                
+                // Get content for selected page
+                const content = pageContent[pageNumber];
+                
+                // Generate new posts
+                content.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'post';
+                    
+                    postElement.innerHTML = `
+                        <div class="post-meta">
+                            <span class="category">${post.category}</span>
+                            <span class="date">${post.date}</span>
+                        </div>
+                        <h2>${post.title}</h2>
+                        <p>${post.excerpt}</p>
+                        <a href="#" class="post-link">Read article</a>
+                    `;
+                    
+                    archiveContent.appendChild(postElement);
+                });
+                
+                // Update pagination info
+                paginationInfo.textContent = `Showing page ${pageNumber} of ${totalPages}`;
+            }
+            
+            // Update pagination UI
+            function updatePagination(pageNumber) {
+                // Update active button state
+                pageButtons.forEach(button => {
+                    if (parseInt(button.dataset.page) === pageNumber) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+                
+                // Update prev/next buttons
+                prevButton.classList.toggle('disabled', pageNumber === 1);
+                nextButton.classList.toggle('disabled', pageNumber === totalPages);
+                
+                // Update page numbers display
+                const pageNumbers = document.getElementById('pageNumbers');
+                pageNumbers.innerHTML = '';
+                
+                // Logic for which page numbers to show
+                let pagesToShow = [1];
+                
+                if (pageNumber > 3) {
+                    pagesToShow.push('...');
+                }
+                
+                for (let i = Math.max(2, pageNumber - 1); i <= Math.min(totalPages - 1, pageNumber + 1); i++) {
+                    pagesToShow.push(i);
+                }
+                
+                if (pageNumber < totalPages - 2) {
+                    pagesToShow.push('...');
+                }
+                
+                if (totalPages > 1) {
+                    pagesToShow.push(totalPages);
+                }
+                
+                // Create page number buttons
+                pagesToShow.forEach(page => {
+                    if (page === '...') {
+                        const ellipsis = document.createElement('span');
+                        ellipsis.className = 'ellipsis';
+                        ellipsis.textContent = '...';
+                        pageNumbers.appendChild(ellipsis);
+                    } else {
+                        const button = document.createElement('button');
+                        button.className = `pagination-button ${page === pageNumber ? 'active' : ''}`;
+                        button.textContent = page;
+                        button.dataset.page = page;
+                        button.addEventListener('click', () => goToPage(page));
+                        pageNumbers.appendChild(button);
+                    }
+                });
+            }
+            
+            // Navigate to specific page
+            function goToPage(pageNumber) {
+                pageNumber = parseInt(pageNumber);
+                
+                if (pageNumber !== currentPage && pageNumber >= 1 && pageNumber <= totalPages) {
+                    currentPage = pageNumber;
+                    updateContent(currentPage);
+                    updatePagination(currentPage);
+                }
+            }
+            
+            // Event listeners for pagination buttons
+            pageButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    goToPage(parseInt(this.dataset.page));
+                });
+            });
+            
+            prevButton.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    goToPage(currentPage - 1);
+                }
+            });
+            
+            nextButton.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    goToPage(currentPage + 1);
+                }
+            });
+            
+            // Initialize with page 1
+            updatePagination(currentPage);
+        });
+    </script>
+</body>
+</html>

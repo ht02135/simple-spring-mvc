@@ -1,0 +1,728 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card-Based Pagination Interface</title>
+    <style>
+        :root {
+            --primary: #3a6ea5;
+            --primary-light: #c0d6e4;
+            --primary-dark: #2a4d6e;
+            --secondary: #ff7e5f;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 680px;
+            height: 680px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 25px 0 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--gray);
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+            padding-top: 10px;
+        }
+
+        .card-container {
+            position: relative;
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .card-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: calc(50% - 10px);
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            transform: translateY(0);
+            position: relative;
+            animation: cardAppear 0.5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-light);
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-tag {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .pagination-container {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .page-item {
+            list-style: none;
+            transition: var(--transition);
+        }
+
+        .page-link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-link:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .page-link.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-link.active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: translate(-50%, -50%) scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        .page-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            font-weight: 700;
+            color: var(--gray);
+        }
+
+        .page-nav-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .page-nav-btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        .page-nav-btn:disabled {
+            color: var(--gray);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            position: absolute;
+            right: 15px;
+            font-size: 12px;
+            color: var(--gray);
+            background-color: var(--light);
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .page-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .card-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
+        .no-results-icon {
+            font-size: 40px;
+            color: var(--primary-light);
+            margin-bottom: 15px;
+        }
+
+        .no-results-text {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .no-results-subtext {
+            font-size: 14px;
+            color: var(--gray);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        /* Animation for page transitions */
+        .page-transition {
+            animation: pageTransition 0.3s ease-in-out;
+        }
+
+        @keyframes pageTransition {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards {
+                gap: 15px;
+            }
+            
+            .card {
+                width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .pagination {
+                gap: 2px;
+            }
+            
+            .page-link {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .page-indicator {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Design Resources</h1>
+            <p>Curated collection of essential design assets and inspiration for your next project.</p>
+        </div>
+        
+        <div class="card-container">
+            <div class="cards" id="cardsContainer">
+                <!-- Cards will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="pagination-container">
+            <div class="page-indicator">
+                <span id="currentPageIndicator">Page 1 of 5</span>
+            </div>
+            <nav class="pagination" aria-label="Card pagination">
+                <button class="page-nav-btn" id="prevBtn" aria-label="Previous page" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                
+                <ul class="pagination" id="paginationNumbers">
+                    <!-- Pagination numbers will be populated by JavaScript -->
+                </ul>
+                
+                <button class="page-nav-btn" id="nextBtn" aria-label="Next page">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample data for cards - Realistic design resources data
+            const cardData = [
+                {
+                    title: "Grid Layout Templates",
+                    description: "Collection of responsive grid systems for structured UI design with flexible breakpoints.",
+                    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Layout"
+                },
+                {
+                    title: "Color Harmony Guide",
+                    description: "Professional palettes with accessibility ratings and contrast values for inclusive design.",
+                    image: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Color Theory"
+                },
+                {
+                    title: "Typography Pairing Kit",
+                    description: "Curated font combinations with typographic scales for balanced visual hierarchy.",
+                    image: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Typography"
+                },
+                {
+                    title: "Micro-interaction Library",
+                    description: "Ready-to-use subtle animations that enhance user feedback and interface responsiveness.",
+                    image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Animation"
+                },
+                {
+                    title: "UX Pattern Collection",
+                    description: "Research-backed interface patterns solving common usability problems across platforms.",
+                    image: "https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "UX Design"
+                },
+                {
+                    title: "Form Component Kit",
+                    description: "Accessible form elements with validation states and error handling patterns.",
+                    image: "https://images.unsplash.com/photo-1595776613215-fe04b78de7d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Components"
+                },
+                {
+                    title: "Iconography System",
+                    description: "Cohesive vector icon set with consistent visual language across multiple categories.",
+                    image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Icons"
+                },
+                {
+                    title: "Mobile Navigation Patterns",
+                    description: "Touch-optimized navigation solutions for complex information architecture.",
+                    image: "https://images.unsplash.com/photo-1559028006-448665bd7c7b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Mobile UI"
+                },
+                {
+                    title: "Data Visualization Templates",
+                    description: "Chart and graph frameworks for translating complex data into intuitive visuals.",
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Data Design"
+                },
+                {
+                    title: "Accessibility Guidelines",
+                    description: "Practical implementation guide for WCAG compliance with code examples and checklists.",
+                    image: "https://images.unsplash.com/photo-1584697964358-3e14ca57658b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Accessibility"
+                },
+                {
+                    title: "Card UI Patterns",
+                    description: "Versatile card designs for content organization with responsive behaviors.",
+                    image: "https://images.unsplash.com/photo-1561070791-32d8b0659445?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "UI Components"
+                },
+                {
+                    title: "Prototyping Wireframes",
+                    description: "Low-fidelity wireframe templates for rapid concept validation and user testing.",
+                    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Wireframing"
+                },
+                {
+                    title: "Responsive Image Patterns",
+                    description: "Techniques for optimal image delivery across devices with performance considerations.",
+                    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Performance"
+                },
+                {
+                    title: "Design System Examples",
+                    description: "Component libraries and documentation structures from leading design systems.",
+                    image: "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Systems"
+                },
+                {
+                    title: "Dark Mode Conversions",
+                    description: "Guidelines for adapting interfaces to dark mode with proper contrast and readability.",
+                    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "UI Themes"
+                },
+                {
+                    title: "Empty State Designs",
+                    description: "Creative solutions for zero-data screens that guide users and reduce confusion.",
+                    image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "UX Patterns"
+                },
+                {
+                    title: "Motion Design Principles",
+                    description: "Animation timing and easing functions that create natural, purposeful movement.",
+                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Motion"
+                },
+                {
+                    title: "Whitespace Usage Guide",
+                    description: "Strategies for proper spatial relationships that improve content legibility and focus.",
+                    image: "https://images.unsplash.com/photo-1557682250-33bd709cbe85?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Composition"
+                },
+                {
+                    title: "Dashboard UI Framework",
+                    description: "Modular components for data-heavy interfaces with customizable widgets and layouts.",
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Dashboard"
+                },
+                {
+                    title: "Loading State Collection",
+                    description: "Engaging loaders and progress indicators that maintain user engagement during wait times.",
+                    image: "https://images.unsplash.com/photo-1607706189992-eae578626c86?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    tag: "Microinteractions"
+                }
+            ];
+
+            const itemsPerPage = 6;
+            const totalPages = Math.ceil(cardData.length / itemsPerPage);
+            let currentPage = 1;
+            
+            const cardsContainer = document.getElementById('cardsContainer');
+            const paginationNumbers = document.getElementById('paginationNumbers');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const currentPageIndicator = document.getElementById('currentPageIndicator');
+
+            // Initialize pagination
+            function initPagination() {
+                // Clear pagination
+                paginationNumbers.innerHTML = '';
+                
+                const maxPagesToShow = window.innerWidth < 600 ? 3 : 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+                let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+                if (endPage - startPage + 1 < maxPagesToShow) {
+                    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+                }
+
+                // Add first page button if not already in range
+                if (startPage > 1) {
+                    addPageButton(1);
+                    
+                    if (startPage > 2) {
+                        addEllipsis();
+                    }
+                }
+
+                // Add page numbers
+                for (let i = startPage; i <= endPage; i++) {
+                    addPageButton(i);
+                }
+
+                // Add last page button if not already in range
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        addEllipsis();
+                    }
+                    
+                    addPageButton(totalPages);
+                }
+
+                // Update navigation buttons
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages;
+                
+                // Update current page indicator
+                currentPageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+            }
+
+            function addPageButton(pageNum) {
+                const listItem = document.createElement('li');
+                listItem.className = 'page-item';
+                
+                const pageLink = document.createElement('a');
+                pageLink.className = 'page-link' + (pageNum === currentPage ? ' active' : '');
+                pageLink.textContent = pageNum;
+                pageLink.href = '#';
+                pageLink.setAttribute('aria-label', `Page ${pageNum}`);
+                
+                pageLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (currentPage !== pageNum) {
+                        goToPage(pageNum);
+                    }
+                });
+                
+                listItem.appendChild(pageLink);
+                paginationNumbers.appendChild(listItem);
+            }
+
+            function addEllipsis() {
+                const listItem = document.createElement('li');
+                listItem.className = 'page-item';
+                
+                const pageEllipsis = document.createElement('span');
+                pageEllipsis.className = 'page-dots';
+                pageEllipsis.textContent = '...';
+                pageEllipsis.setAttribute('aria-hidden', 'true');
+                
+                listItem.appendChild(pageEllipsis);
+                paginationNumbers.appendChild(listItem);
+            }
+
+            function displayCards() {
+                // Show loading state
+                cardsContainer.innerHTML = '';
+                
+                // Calculate start and end indices for the current page
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = Math.min(startIndex + itemsPerPage, cardData.length);
+                
+                // Check if there are no cards to display
+                if (cardData.length === 0) {
+                    showNoResults();
+                    return;
+                }
+
+                // Create and append card elements
+                for (let i = startIndex; i < endIndex; i++) {
+                    const card = cardData[i];
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card';
+                    cardElement.style.animationDelay = `${(i - startIndex) * 0.1}s`;
+                    
+                    cardElement.innerHTML = `
+                        <img class="card-img" src="${card.image}" alt="${card.title}">
+                        <div class="card-content">
+                            <h3 class="card-title">${card.title}</h3>
+                            <p class="card-text">${card.description}</p>
+                            <span class="card-tag">${card.tag}</span>
+                        </div>
+                    `;
+                    
+                    cardsContainer.appendChild(cardElement);
+                }
+                
+                // Add class for page transition animation
+                cardsContainer.classList.add('page-transition');
+                
+                // Remove the animation class after it completes
+                setTimeout(() => {
+                    cardsContainer.classList.remove('page-transition');
+                }, 300);
+            }
+
+            function showNoResults() {
+                const noResultsElement = document.createElement('div');
+                noResultsElement.className = 'no-results';
+                
+                noResultsElement.innerHTML = `
+                    <div class="no-results-icon">📂</div>
+                    <h3 class="no-results-text">No resources found</h3>
+                    <p class="no-results-subtext">We couldn't find any design resources matching your criteria.</p>
+                `;
+                
+                cardsContainer.appendChild(noResultsElement);
+            }
+
+            function goToPage(pageNum) {
+                currentPage = pageNum;
+                displayCards();
+                initPagination();
+                
+                // Smooth scroll to top of card container
+                cardsContainer.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Event listeners for navigation buttons
+            prevBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    goToPage(currentPage - 1);
+                }
+            });
+
+            nextBtn.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    goToPage(currentPage + 1);
+                }
+            });
+
+            // Handle window resize to adjust pagination display
+            window.addEventListener('resize', function() {
+                initPagination();
+            });
+
+            // Initialize the pagination and display cards
+            initPagination();
+            displayCards();
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+                    goToPage(currentPage - 1);
+                } else if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+                    goToPage(currentPage + 1);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
