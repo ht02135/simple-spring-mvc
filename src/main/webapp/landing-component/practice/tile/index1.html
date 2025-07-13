@@ -14,7 +14,7 @@
 			border: 1px solid black;
 			border-collapse: collapse;
 		}
-		
+
 		.tile {
 			height: 20rem;
 			width: 15rem;
@@ -23,7 +23,7 @@
 			border-collapse: collapse;
 			border-radius: 0.5rem;
 			padding: 0;
-			margin: 0;	
+			margin: 0;
 			/* 
 			2 shadow 
 			///////////////
@@ -52,13 +52,18 @@
 			transform: scale(1.05);
 			box-shadow: 0 10px 10px black, 0 10px 10px black;
 		}
-		
+
 		.tile img {
-			height: 60%; /* image box size as % of container */
-			width: 100%;  /* image box size as % of container */
-			object-fit: contain; /* make img fix into div */
+			height: 60%;
+			/* image box size as % of container */
+			width: 100%;
+			/* image box size as % of container */
+			object-fit: contain;
+			/* make img fix into div */
+			border-top-left-radius: 0.5rem;
+			border-top-right-radius: 0.5rem;
 		}
-		
+
 		.tile h4 {
 			/*
 			https://www.colorhexa.com/e23d3d
@@ -81,7 +86,7 @@
 			margin: 0;
 		}
 	</style>
-	
+
 </head>
 
 <body>
@@ -92,14 +97,14 @@
 		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
 	</div>
 	<br>
-	
+
 	<div class="tile">
 		<img src="../../images/product.png" alt="photo of amber apples" />
 		<h4>Amber</h4>
 		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
 	</div>
 	<br>
-	
+
 	<div class="tile">
 		<img src="../../images/service.png" alt="photo of amber apples" />
 		<h4>Amber</h4>
@@ -110,3 +115,4 @@
 </body>
 
 </html>
+

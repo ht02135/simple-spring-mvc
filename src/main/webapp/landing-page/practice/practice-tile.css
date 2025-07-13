@@ -47,8 +47,8 @@ image {
 	/* image box size as % of container */
 	width: 100%;
 	/* image box size as % of container */
-	object-fit: contain;
-	/* make img fix into div */
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
 }
 
 .tile h4 {
@@ -72,3 +72,4 @@ image {
 	padding: 0.1rem;
 	margin: 0;
 }
+
