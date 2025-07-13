@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<style>
+		.normal {
+			font-size: 14px;
+			width: 100px;
+			padding: 5px;
+			background-color: lightskyblue;
+		}
+
+		.normal:hover {
+			background-color: greenyellow;
+			padding: 15px;
+		}
+	</style>
+	<style>
+		.delay {
+			font-size: 14px;
+			width: 100px;
+			padding: 5px;
+			/*
+		  CSS transition - delay Value
+		  The transition takes 2s to complete, and it starts after a delay of 0.5s 
+		  */
+			transition: padding 2s .5s;
+			background-color: lightskyblue;
+		}
+
+		.delay:hover {
+			background-color: greenyellow;
+			padding: 15px;
+		}
+	</style>
+	<style>
+		.ease {
+			font-size: 14px;
+			width: 100px;
+			padding: 5px;
+			/*
+			starting a smooth transition over the 
+			duration of 4s with 
+			an ease-in-out timing function 
+			and a delay of 0.7s
+			/////////////////////////
+			with this, when hover
+			1>background immediately transition to red
+			2>but only padding transitio overtime....
+			*/
+			transition: padding 4s ease-in-out 0.7s;
+			background-color: lightskyblue;
+		}
+
+		.ease:hover {
+			background-color: red;
+			padding: 15px;
+		}
+	</style>
+	<style>
+		.all {
+			font-size: 14px;
+			width: 100px;
+			padding: 5px;
+			/*
+			slight difference if use all
+			i also noticed transition of blue background color to red background color...
+			*/
+			transition: all 4s ease-in-out 0.7s;
+			background-color: lightskyblue;
+		}
+
+		.all:hover {
+			background-color: red;
+			padding: 15px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="normal">normal</div>
+	<br>
+	
+	<div class="delay">delay</div>
+	<br>
+	
+	<div class="ease">ease</div>
+	<br>
+	
+	<div class="all">all</div>
+	<br>
+
+</body>
+
+</html>
