@@ -1,0 +1,79 @@
+.product-card {
+	height: 25rem;
+	max-width: 20rem;
+	background-color: white;
+	border: none;
+	border-radius: 15px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-shadow: 0 5px 5px black, 0 5px 5px black;
+	/*
+	hmn, why not just all, so comment out
+	transition: transform 0.2s ease, box-shadow 0.3s ease;
+	*/
+	transition: all 0.2s;
+}
+
+.product-card:hover {
+	box-shadow: 0 10px 10px black, 0 10px 10px black;
+	transform: translateY(-5px);
+}
+
+.product-card img {
+	max-height: 50%;
+	/* this approach is set max img height */
+	width: 100%;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+.product-card .card-body {
+	max-height: 50%;
+	text-align: center;
+	padding: 3px;
+	display: flex;
+	/*
+	1>flex-grow: 0;
+	The element will not grow if there's space available. It will only use 
+	the space it needs.
+	2>flex-grow: 1;
+	The element will grow by a factor of 1. It will fill up the remaining 
+	space if no other flexbox item has a flex-grow value. 
+	////////////////////
+	originally
+	flex-grow: 1;  cause husge space between text content and button
+	setting to flex-grow: 0;
+	*/
+	flex-grow: 0;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.product-card .pm0 {
+	padding: 0;
+	margin: 0;
+}
+
+.product-card .card-title {
+	color: #4a148c;
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin-bottom: 3px;
+}
+
+.product-card .card-text {
+	color: black;
+	font-size: 0.9rem;
+	margin-bottom: 3px;
+}
+
+.product-card .price {
+	color: #4a148c;
+	font-size: 1.1rem;
+	font-weight: 700;
+	margin-bottom: 20px;
+}
+

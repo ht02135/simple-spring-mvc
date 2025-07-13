@@ -102,6 +102,18 @@ They are not positioned based on their usual place in the document flow, but bas
 
 In the example above, the absolutely positioned square is inside a statically positioned parent.
 
+//////////////////
+
+flex-grow: 1
+
+https://cssreference.io/property/flex-grow/
+
+1>flex-grow: 0;
+The element will not grow if there's space available. It will only use the space it needs.
+
+2>flex-grow: 1;
+The element will grow by a factor of 1. It will fill up the remaining space if no other flexbox item has a flex-grow value.
+
 
 
 
