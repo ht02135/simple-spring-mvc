@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+		.container {
+			display: grid;
+			justify-content: center;
+			align-items: center;
+			gap: 30px;
+		}
+
+		.boxes {
+			padding: 50px;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		/*
+		box-shadow: h-offset v-offset blur spread color 
+		*/
+		.first {
+			background-color: lightcoral;
+			box-shadow: 10px -10px grey;
+		}
+
+		/*
+		blur=20px
+		*/
+		.second {
+			background-color: lightcoral;
+			box-shadow: 10px 10px 20px rgb(51, 204, 0);
+		}
+
+		/*
+		blur=40px, spread=-5px
+		blur=It defines the blur radius. Higher values have higher blur. Optional.
+		spread=It defines the spread radius. Positive values increases size of 
+		shadow, negative values decreases size of shadow. Optional
+		////////////////////
+		eyeball wise, gut feeling, dont mess with spread, try blur most time...
+		*/
+		.third {
+			background-color: lightcoral;
+			box-shadow: 10px 10px 20px -10px hsl(225, 100%, 50%);
+		}
+	</style>
+</head>
+
+<body>
+	<h2>
+		CSS box-shadow property
+	</h2>
+	<p>
+		The color can be specified as third parameter,
+		fourth parameter of even fifth parameter.
+		The specified color will be applied to the shadow.
+	</p>
+	<div class="container">
+		<p class="first boxes">
+			box-shadow: 10px -10px grey
+		</p>
+		<p class="second boxes">
+			box-shadow: 10px 10px 20px rgb(51, 204, 0)
+		</p>
+		<p class="third boxes">
+			box-shadow: 10px 10px 40px -5px hsl(225, 100%, 50%)
+		</p>
+
+	</div>
+
+</body>
+
+</html>
+

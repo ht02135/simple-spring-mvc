@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<style>
+		body {
+			height: 300px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: #f0f0f0;
+			font-family: Arial, sans-serif;
+		}
+	</style>
+	<style>
+		/* The Box Element */
+		.translate {
+			width: 200px;
+			height: 200px;
+			background-color: #4CAF50;
+			color: white;
+			font-size: 1.5em;
+			border-radius: 10px;
+			/* 
+			Initial 2D Translation 
+			CSS translate() function moves an element along the X and Y axes.
+			*/
+			transform: translate(50px, 50px);
+			transition: transform 0.6s ease;
+		}
+
+		/* Hover State with Different 2D Translation */
+		.translate:hover {
+			transform: translate(-50px, -50px);
+			background-color: #2ecc71;
+			cursor: pointer;
+		}
+	</style>
+	<style>
+		/* The Box Element */
+		.rotate {
+			width: 200px;
+			height: 200px;
+			background-color: red;
+			color: white;
+			font-size: 1.5em;
+			border-radius: 10px;
+			/* 
+			Initial 2D Rotation 
+			CSS rotate() function rotates an element around a specified point on 
+			the 2D plane.
+			*/
+			transform: rotate(15deg);
+			transition: transform 0.6s ease;
+		}
+
+		/* Hover State with Different 2D Rotation */
+		.rotate:hover {
+			transform: rotate(-15deg);
+			background-color: red;
+			cursor: pointer;
+		}
+	</style>
+	<style>
+	    /* The Box Element */
+	    .scale {
+	        width: 150px;
+	        height: 150px;
+	        background-color: #4CAF50;
+	        color: white;
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        font-size: 1.5em;
+	        border-radius: 10px;
+	        /* Initial 2D Scaling */
+	        transform: scale(1);
+	        transition: transform 0.6s ease;
+	    }
+
+	    /* Hover State with Different 2D Scaling */
+	    .scale:hover {
+	        transform: scale(1.5);
+	        background-color: #2ecc71;
+	        cursor: pointer;
+	    }
+	</style>
+</head>
+
+<body>
+	<div class="translate">
+		translate
+	</div>
+	<br>
+	<br>
+	
+	<div class="rotate">
+		rotate
+	</div>
+	<br>
+	<br>
+
+	<div class="scale">
+		scale
+	</div>
+	<br>
+	<br>
+	
+</body>
+
+
+</html>
