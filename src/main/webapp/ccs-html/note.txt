@@ -1,0 +1,46 @@
+
+https://www.tutorialspoint.com/css/css_px-to-em-conversion.htm
+
+Pixels (px) are a fixed unit of measurement, which represent the exact number of dots on a screen. It does not adapt to other elements on the page or user display settings.
+
+Em units (em) are relative units based on the font size of the element or its parent element. It is used in responsive and flexible layouts. One em unit is equal to current font-size.
+
+///////////////
+
+https://stackoverflow.com/questions/609517/why-em-instead-of-px
+
+1>px is an absolute unit of measurement
+
+2>em is not an absolute unit - it is a unit that is relative to the currently chosen font size.
+
+Use em when you specifically want the size of something to depend on the current font size.
+
+3>rem is like em, but it's relative to the base font size of the document 
+
+4>% is also a relative unit, in this case, relative to either the height or width of a parent element.
+
+5>vh, vw, vmin, and vmax are relative units like %, but they are relative to the size of the viewport (size of the viewable area of the window)
+
+///////////////////
+
+It's of use for everything that has to scale according to the font size.
+
+It's especially useful on browsers which implement zoom by scaling the font size. So if you size all your elements using em they scale accordingly.
+
+Because the em (http://en.wikipedia.org/wiki/Em_(typography)) is directly proportional to the font size currently in use. If the font size is, say, 16 points, one em is 16 points. If your font size is 16 pixels (note: not the same as points), one em is 16 pixels.
+
+Because the em (http://en.wikipedia.org/wiki/Em_(typography)) is directly proportional to the font size currently in use. If the font size is, say, 16 points, one em is 16 points. If your font size is 16 pixels (note: not the same as points), one em is 16 pixels.
+
+This leads to two (related) things:
+
+it's easy to keep proportions, if you choose to edit your font sizes in your CSS later on.
+Many browsers support custom font sizes, overriding your CSS. If you design everything in pixels, your layout might break in these cases. But, if you use ems, these overridings should mitigate these problems.
+
+translate em is better...
+
+////////////////////////
+
+
+
+
+

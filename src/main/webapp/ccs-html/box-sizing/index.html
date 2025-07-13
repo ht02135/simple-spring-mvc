@@ -1,0 +1,38 @@
+<html> 
+<head>
+<style>
+   .content-box {
+      width: 200px;
+      height: 100px;
+      padding: 10px;
+      border: 3px solid green;
+      background-color: rgb(241, 234, 85);
+      box-sizing: content-box;
+   }
+   .border-box {
+      width: 200px;
+      height: 100px;  
+      padding: 10px;  
+      border: 3px solid rgb(64, 10, 215);
+      background-color: lightpink;
+	  /*
+	  content-box: This is the default value. When this value is passed to 
+	  box-sizing property, it returns the default behavior, where padding 
+	  or/and border are added in the total width and height of the element.
+
+	  border-box: When this value is passed to box-sizing property, it tells 
+	  the browser to adjust the padding or margin values, that are passed to 
+	  an element. This results in shrinking the content area and absorbing 
+	  the border or/and padding specified for the element. It is the default 
+	  styling used for <table>, <select>, <button>, and <input> elements.
+	  */
+      box-sizing: border-box;
+   }
+</style>
+</head>
+<body>
+   <div class="content-box">CONTENT BOX</div><br />
+   
+   <div class="border-box">BORDER BOX</div>
+</body>
+</html>
