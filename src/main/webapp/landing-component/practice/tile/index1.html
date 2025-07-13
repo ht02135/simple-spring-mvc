@@ -16,13 +16,14 @@
 		}
 
 		.tile {
+			background-color: orange;
 			height: 20rem;
 			width: 15rem;
-			background-color: orange;
+			position: relative;
 			border: 1px solid black;
 			border-collapse: collapse;
 			border-radius: 0.5rem;
-			padding: 0;
+			padding: 0.2rem;
 			margin: 0;
 			/* 
 			2 shadow 
@@ -54,12 +55,11 @@
 		}
 
 		.tile img {
-			height: 60%;
+			height: 65%;
 			/* image box size as % of container */
 			width: 100%;
 			/* image box size as % of container */
-			object-fit: contain;
-			/* make img fix into div */
+			position: relative;
 			border-top-left-radius: 0.5rem;
 			border-top-right-radius: 0.5rem;
 		}
@@ -72,18 +72,30 @@
 			color: #e23d3d;
 			height: 10%;
 			width: 100%;
-			font-size: 1.75rem;
+			position: relative;
+			font-size: 1.65rem;
 			font-weight: bold;
-			padding: 0.1rem;
+			padding-left: 0.2rem;
+			padding-top: 0.2rem;
 			margin: 0;
 		}
 
 		.tile p {
 			height: 10%;
 			width: 100%;
+			position: relative;
 			font-size: 1.25rem;
-			padding: 0.1rem;
+			padding-left: 0.2rem;
+			padding-top: 0;
 			margin: 0;
+		}
+		
+		.tile-object-fit-contain {
+			object-fit: contain;
+		}
+		
+		.tile-object-fit-cover {
+			object-fit: cover;
 		}
 	</style>
 
@@ -97,17 +109,24 @@
 		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
 	</div>
 	<br>
-
+	
 	<div class="tile">
-		<img src="../../images/product.png" alt="photo of amber apples" />
-		<h4>Amber</h4>
+		<img class="tile-object-fit-contain" src="../../images/variety.png" alt="photo of amber apples" />
+		<h4>Amber (contain)</h4>
 		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
 	</div>
 	<br>
 
 	<div class="tile">
-		<img src="../../images/service.png" alt="photo of amber apples" />
-		<h4>Amber</h4>
+		<img class="tile-object-fit-cover" src="../../images/product.png" alt="photo of amber apples" />
+		<h4>Amber (cover)</h4>
+		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
+	</div>
+	<br>
+
+	<div class="tile">
+		<img class="tile-object-fit-cover" src="../../images/service.png" alt="photo of amber apples" />
+		<h4>Amber (cover)</h4>
 		<p>This red, medium-sized fruit becomes fully ripe in mid-October.</p>
 	</div>
 	<br>

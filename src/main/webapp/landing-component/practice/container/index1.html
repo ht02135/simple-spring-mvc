@@ -8,10 +8,8 @@
 	<style>
 		div,
 		image {
-			/*
 			border: 1px solid black;
 			border-collapse: collapse;
-			*/
 		}
 
 		.container {
@@ -21,13 +19,15 @@
 			border: 1px solid black;
 			border-collapse: collapse;
 			border-radius: 0.5rem;
-			padding: 0px;
+			padding: 0.2rem;
+			margin: 0;
 			box-shadow: 0 5px 5px black, 0 5px 5px black;
 			transition: all 0.2s;
 		}
 		
 		.container:hover {
 			transform: scale(1.05);
+			box-shadow: 0 10px 10px black, 0 10px 10px black;
 		}
 
 		.container img {
@@ -39,14 +39,14 @@
 		}
 
 		.container h4 {
+            color: #e23d3d;
 			height: 10%;
 			width: 100%;
 			position: relative;
-			color: #e23d3d;
 			font-size: 1.65rem;
 			font-weight: bold;
-			padding-left: 0.3rem;
-			padding-top: 0.3rem;
+			padding-left: 0.2rem;
+			padding-top: 0.2rem;
 			margin: 0;
 		}
 
@@ -55,7 +55,7 @@
 			width: 100%;
 			position: relative;
 			font-size: 1.25rem;
-			padding-left: 0.3rem;
+			padding-left: 0.2rem;
 			padding-top: 0;
 			margin: 0;
 		}
