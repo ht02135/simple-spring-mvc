@@ -1,0 +1,122 @@
+/* Dark mode toggle */
+.theme-toggle {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background: none;
+	border: none;
+	color: #4a5568;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	padding: 8px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.theme-toggle:hover {
+	background-color: #edf2f7;
+	transform: rotate(15deg);
+}
+
+/* Dark mode styles */
+body.dark-mode {
+	background-color: #1a202c;
+	color: #e2e8f0;
+}
+
+body.dark-mode .catalog-header h1 {
+	color: #e2e8f0;
+}
+
+body.dark-mode .catalog-header p {
+	color: #a0aec0;
+}
+
+body.dark-mode .filter-bar {
+	border-bottom-color: #2d3748;
+}
+
+body.dark-mode .view-btn {
+	color: #a0aec0;
+}
+
+body.dark-mode .view-btn.active {
+	color: #e2e8f0;
+	background-color: #2d3748;
+}
+
+body.dark-mode .view-btn:hover {
+	background-color: #2d3748;
+}
+
+body.dark-mode .sort-select {
+	border-color: #2d3748;
+	background-color: #2d3748;
+	color: #e2e8f0;
+}
+
+body.dark-mode .sort-select:hover,
+body.dark-mode .sort-select:focus {
+	border-color: #4a5568;
+}
+
+body.dark-mode .product-card {
+	background-color: #2d3748;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .product-image {
+	background-color: #4a5568;
+}
+
+body.dark-mode .product-name {
+	color: #e2e8f0;
+}
+
+body.dark-mode .product-price {
+	color: #63b3ed;
+}
+
+body.dark-mode .pagination {
+	background-color: #2d3748;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .pagination-item {
+	color: #a0aec0;
+}
+
+body.dark-mode .pagination-item:hover {
+	color: #e2e8f0;
+	background-color: #4a5568;
+}
+
+body.dark-mode .pagination-item.active {
+	background-color: #3182ce;
+	color: #e2e8f0;
+}
+
+body.dark-mode .pagination-arrow {
+	background: #1a202c;
+	color: #a0aec0;
+}
+
+body.dark-mode .pagination-arrow:hover {
+	background-color: #4a5568;
+	color: #e2e8f0;
+}
+
+body.dark-mode .page-info {
+	color: #a0aec0;
+}
+
+body.dark-mode .theme-toggle {
+	color: #a0aec0;
+}
+
+body.dark-mode .theme-toggle:hover {
+	background-color: #4a5568;
+}
+

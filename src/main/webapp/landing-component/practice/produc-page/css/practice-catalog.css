@@ -1,0 +1,27 @@
+.catalog-container {
+	width: 100%;
+	max-width: 650px;
+	margin: 0 auto;
+}
+
+.catalog-header {
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.catalog-header h1 {
+	font-size: 28px;
+	font-weight: 700;
+	margin-bottom: 12px;
+	color: #2d3748;
+	letter-spacing: -0.5px;
+}
+
+.catalog-header p {
+	font-size: 16px;
+	color: #718096;
+	max-width: 500px;
+	margin: 0 auto;
+	line-height: 1.5;
+}
+
