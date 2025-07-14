@@ -1,0 +1,139 @@
+.pagination-container {
+	background: white;
+	border-top: 1px solid #e0e0e0;
+	padding: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 0 0 12px 12px;
+	box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+	position: relative;
+}
+
+.pagination {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.page-item {
+	list-style: none;
+	transition: var(--transition);
+}
+
+.page-link {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	color: var(--gray);
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 14px;
+	transition: var(--transition);
+	cursor: pointer;
+	border: 2px solid transparent;
+	position: relative;
+	overflow: hidden;
+}
+
+.page-link:hover {
+	color: var(--primary);
+	background-color: var(--primary-light);
+}
+
+.page-link.active {
+	background-color: var(--primary);
+	color: white;
+	border-color: var(--primary);
+}
+
+.page-link.active::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	transform: translate(-50%, -50%) scale(0);
+	animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+	to {
+		transform: translate(-50%, -50%) scale(2.5);
+		opacity: 0;
+	}
+}
+
+.page-dots {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 36px;
+	height: 36px;
+	font-weight: 700;
+	color: var(--gray);
+}
+
+.page-nav-btn {
+	background: none;
+	border: none;
+	color: var(--primary);
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: var(--transition);
+}
+
+.page-nav-btn:hover {
+	background-color: var(--primary-light);
+}
+
+.page-nav-btn:disabled {
+	color: var(--gray);
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.page-indicator {
+	position: absolute;
+	right: 15px;
+	font-size: 12px;
+	color: var(--gray);
+	background-color: var(--light);
+	padding: 5px 10px;
+	border-radius: 12px;
+	font-weight: 500;
+}
+
+.page-title {
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--primary-dark);
+	margin-bottom: 5px;
+}
+
+/* Animation for page transitions */
+.page-transition {
+	animation: pageTransition 0.3s ease-in-out;
+}
+
+@keyframes pageTransition {
+	0% {
+		opacity: 0;
+		transform: translateY(15px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

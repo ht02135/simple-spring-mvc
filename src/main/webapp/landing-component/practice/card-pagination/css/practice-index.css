@@ -1,0 +1,115 @@
+@import url('practice-card.css');
+@import url('practice-pagination.css');
+
+div,
+svg,
+select,
+button {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+:root {
+	--primary: #3a6ea5;
+	--primary-light: #c0d6e4;
+	--primary-dark: #2a4d6e;
+	--secondary: #ff7e5f;
+	--light: #f8f9fa;
+	--dark: #212529;
+	--gray: #6c757d;
+	--card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	--transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+	background-color: #f0f2f5;
+	color: var(--dark);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: 20px;
+	transition: var(--transition);
+}
+
+.container {
+	width: 100%;
+	max-width: 680px;
+	height: 680px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow: hidden;
+}
+
+.header {
+	padding: 25px 0 20px;
+	text-align: center;
+}
+
+.header h1 {
+	font-size: 28px;
+	font-weight: 800;
+	margin-bottom: 10px;
+	color: var(--primary-dark);
+	position: relative;
+	display: inline-block;
+}
+
+.header h1::after {
+	content: '';
+	position: absolute;
+	bottom: -8px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 40%;
+	height: 3px;
+	background: var(--secondary);
+	border-radius: 10px;
+}
+
+.header p {
+	font-size: 16px;
+	color: var(--gray);
+	line-height: 1.6;
+	max-width: 500px;
+	margin: 0 auto;
+	padding-top: 10px;
+}
+
+
+/*  ///////////////////////////////////////  */
+
+@media (max-width: 600px) {
+	.cards {
+		gap: 15px;
+	}
+
+	.card {
+		width: 100%;
+	}
+
+	.header h1 {
+		font-size: 24px;
+	}
+
+	.pagination {
+		gap: 2px;
+	}
+
+	.page-link {
+		width: 32px;
+		height: 32px;
+	}
+
+	.page-indicator {
+		display: none;
+	}
+}
