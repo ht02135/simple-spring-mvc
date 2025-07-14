@@ -47,7 +47,7 @@ const products = [
 	}
 ];
 
-
+/* //////////////////////////////////////// */
 
 // Function to render products for the current page
 function renderProducts() {
@@ -78,7 +78,7 @@ function renderProducts() {
 	updatePageInfo();
 }
 
-
+/* //////////////////////////////////////// */
 
 // Function to update page info text
 function updatePageInfo() {

@@ -1,5 +1,6 @@
 // Toggle between grid and list view
 const viewBtns = document.querySelectorAll('.view-btn');
+
 viewBtns.forEach(btn => {
 	btn.addEventListener('click', () => {
 		viewBtns.forEach(b => b.classList.remove('active'));
