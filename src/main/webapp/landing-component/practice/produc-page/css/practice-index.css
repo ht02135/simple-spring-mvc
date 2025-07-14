@@ -1,3 +1,10 @@
+
+@import url('practice-theme-toggle.css');
+@import url('practice-catalog.css');
+@import url('practice-view-options.css');
+@import url('practice-product.css');
+@import url('practice-pagination.css');
+
 div,
 svg,
 select,
