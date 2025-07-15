@@ -1,0 +1,132 @@
+.pagination-container {
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+	border-top: 1px solid var(--gray-light);
+}
+
+.pagination-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.75rem;
+	font-size: 0.875rem;
+	color: var(--gray);
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.pagination button {
+	min-width: 2rem;
+	height: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid var(--gray-light);
+	border-radius: var(--border-radius);
+	background-color: white;
+	color: var(--dark);
+	cursor: pointer;
+	transition: var(--transition);
+	position: relative;
+}
+
+.pagination button span {
+	display: inline-block;
+	transition: var(--transition);
+}
+
+.pagination button:hover {
+	background-color: var(--primary-light);
+	border-color: var(--primary);
+	color: var(--primary);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(58, 134, 255, 0.2);
+}
+
+.pagination button.active {
+	background-color: var(--primary);
+	border-color: var(--primary);
+	color: white;
+	font-weight: 600;
+}
+
+.pagination button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	background-color: var(--gray-light);
+	transform: none;
+	box-shadow: none;
+}
+
+.pagination button.jump {
+	background-color: var(--light);
+}
+
+/* Tooltip */
+.pagination button[data-tooltip]:before {
+	content: attr(data-tooltip);
+	position: absolute;
+	top: -35px;
+	left: 50%;
+	transform: translateX(-50%) scale(0.8);
+	background-color: var(--dark);
+	color: white;
+	padding: 0.5rem;
+	border-radius: var(--border-radius);
+	font-size: 0.75rem;
+	white-space: nowrap;
+	opacity: 0;
+	pointer-events: none;
+	transition: all 0.2s ease-in-out;
+}
+
+.pagination button[data-tooltip]:after {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%) scale(0.8);
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--dark) transparent transparent transparent;
+	opacity: 0;
+	pointer-events: none;
+	transition: all 0.2s ease-in-out;
+}
+
+.pagination button[data-tooltip]:hover:before,
+.pagination button[data-tooltip]:hover:after {
+	opacity: 1;
+	transform: translateX(-50%) scale(1);
+}
+
+.ellipsis {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 2rem;
+	height: 2rem;
+}
+
+/* Animation */
+@keyframes pulse {
+
+	0%,
+	100% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+.pagination button:active span {
+	animation: pulse 0.3s ease-in-out;
+}

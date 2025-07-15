@@ -1,0 +1,80 @@
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="keywords" content="Bootstrap, Landing page, Template, Business, Service">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="author" content="Grayrids">
+
+	<title>Practicw Template</title>
+
+	<link rel="stylesheet" href="../lib/css/practice-bootstrap.min.css">
+	<!--
+	<link rel="stylesheet" href="css/practice-table.css">
+	<link rel="stylesheet" href="css/practice-pagination.css">
+	-->
+	<link rel="stylesheet" href="css/practice-index.css">
+
+	<script src="../lib/js/practice-jquery-min.js" defer></script>
+	<script src="../lib/js/practice-jquery.nav.js" defer></script>
+	<script src="../lib/js/practice-jquery.easing.min.js" defer></script>
+	<script src="../lib/js/practice-jquery.magnific-popup.min.js" defer></script>
+	<script src="../lib/js/practice-bootstrap.min.js" defer></script>
+	<script src="js/practice-index.js" defer></script>
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="data-controls">
+			<div class="title">Financial Transactions</div>
+			<div class="rows-per-page">
+				<span>Rows per page:</span>
+				<select id="rowsPerPage">
+					<option value="5">5</option>
+					<option value="10" selected>10</option>
+					<option value="20">20</option>
+					<option value="50">50</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="table-container">
+			<div class="table-loader">
+				<div class="loader"></div>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Transaction ID</th>
+						<th>Date</th>
+						<th>Amount</th>
+						<th>Category</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+					<!-- Table rows will be dynamically inserted here -->
+				</tbody>
+			</table>
+		</div>
+
+		<div class="pagination-container">
+			<div class="pagination-info">
+				<span id="pageInfo">Showing <b>1-10</b> of <b>87</b> items</span>
+				<span>Jump to page:
+					<input type="number" id="jumpToPage" min="1"
+						style="width: 50px; padding: 0.25rem; border: 1px solid var(--gray-light); border-radius: var(--border-radius);">
+				</span>
+			</div>
+			<div class="pagination" id="pagination">
+				<!-- Pagination buttons will be dynamically inserted here -->
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
