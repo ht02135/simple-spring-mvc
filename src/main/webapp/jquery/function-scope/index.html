@@ -1,0 +1,61 @@
+<!-- basic html setup -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Page title</title>
+
+	<!--
+	https://stackoverflow.com/questions/10649867/should-a-javascript-function-be-written-and-called-inside-jquery-document-ready
+	-->
+	<script type='text/javascript' src='../../libs/jquery-3.7.1.min.js' defer></script>
+	<script type="text/javascript" src="../../libs/jquery.tmpl.min.js" defer></script>
+	<script src="index.js" defer></script>
+
+	<script>
+	    // placing <script> tag in the <head> tag is considered as a bad practice
+	    // I use it for the example but you should not do the same in real code
+
+	    // define your functionsin the <head> tag
+	    function getFoo() {
+	        return "foo";
+	    }
+	    function getAnchor() {
+	        return document.getElementsByTagName('a');
+	    }
+	</script>
+	
+    <script>
+        // reference: ONE
+        // call your function in the <head> tag
+        console.log( "within head - one", getFoo() ); // "foo"
+        console.log( "within head - one", getAnchor() ); // empty array
+    </script>
+    <script>
+        // reference: TWO
+        $(document).ready(function(){
+            // call your function inside the jQuery 'ready' event
+            console.log( "within head - ready two", getFoo() ); // "foo"
+            console.log( "within head - ready two", getAnchor() ); // array with one element
+        });
+    </script>
+</head>
+<body>
+
+    <a href="www.example.com">bar</a>
+    <script>
+        // reference: THREE
+        // call your function at the end of the <body> tag
+        console.log( "within body - three", getFoo() ); // "foo"
+        console.log("within body - three",  getAnchor() ); // array with one element
+    </script>
+    <script>
+        // reference: FOUR
+        $(document).ready(function(){
+            // call your function inside the jQuery 'ready' event
+            console.log( "within body - ready four", getFoo() ); // "foo"
+            console.log( "within body - ready four", getAnchor() ); // array with one element
+        });
+    </script>
+</body>
+</html>
