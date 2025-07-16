@@ -10,6 +10,13 @@ method is beyond me.
 
 ////////////////////
 
+Implementation
+We are going to create a Shape interface and a concrete class implementing it. We create an abstract factory class AbstractFactory as next step. Factory class ShapeFactory is defined, which extends AbstractFactory. A factory creator/generator class FactoryProducer is created.
+
+AbstractFactoryPatternDemo, our demo class uses FactoryProducer to get a AbstractFactory object. It will pass information (CIRCLE / RECTANGLE / SQUARE for Shape) to AbstractFactory to get the type of object it needs.
+
+///////////////////////
+
 Shape.java
 public interface Shape {
    void draw();
