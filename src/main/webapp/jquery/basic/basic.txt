@@ -1,0 +1,58 @@
+
+https://www.tutorialspoint.com/jquery/jquery-basics.htm
+
+/////////////
+
+Functions
+A function in JavaScript (jQuery) can be either named or anonymous. A 
+named function can be defined using function keyword as follows −
+
+function named(){
+   // do some stuff here
+}
+
+/////////////
+
+An anonymous function can be defined in similar way as a normal function 
+but it would not have any name.
+
+A anonymous function can be assigned to a variable or passed to a method 
+as shown below.
+
+var handler = function (){
+   // do some stuff here
+}
+
+/////////////
+
+JQuery makes a use of anonymous functions very frequently as follows −
+
+$(document).ready(function(){
+   // do some stuff here
+});
+
+/////////////
+
+Arguments
+JavaScript (jQuery) variable arguments is a kind of array which has 
+length property. Following example explains it very well −
+
+function func(x){
+   console.log(typeof x, arguments.length);
+}
+
+func();                //==> "undefined", 0
+func(1);               //==> "number", 1
+func("1", "2", "3");   //==> "string", 3
+
+/////////////
+
+The arguments object also has a callee property, which refers to the function you're inside of. For example −
+
+function func() {
+   return arguments.callee;
+}
+
+func();                // ==> func
+
+///////////
