@@ -1,0 +1,154 @@
+
+https://www.tutorialspoint.com/hr_interview_questions/behavioral_questions.htm
+
+STAR Technique
+To answer Behavioral Questions, employ the STAR technique −
+
+S = Situation − (recall an incident in your life that suits the situation)
+
+T = Task − (recall an incident in your life that suits the task)
+
+A = Action − (mention the course of action you opted to address the situation or task)
+
+R = Result − (mention the result of your action and the outcome)
+
+/////////////
+
+1. Tell me about an incident where you worked effectively under pressure.
+
+pull T = Task − (recall an incident in your life that suits the task)
+
+T − As we had already picked up specific sub-topics to talk on individually, this 
+sudden addition of content did put a lot of pressure on us, especially because it 
+had taken us months of research to come up with our material.
+
+/////////////
+
+2. Describe a bad experience you had working with your ex-employer.
+
+Never bad-mouth previous colleagues and ex-employees. Instead of focusing on the 
+details of the incident, put more emphasis on the part where you managed to make 
+him see your point-of-view.
+
+For Example − They were thinking from a different point of view, but in the end, 
+they managed to understand my concerns as well.
+
+/////////////
+
+3. Describe how you handle disagreement.
+
+pull T = Task − (recall an incident in your life that suits the task)
+
+For Example − We had once designed a template for a group presentation, however one 
+member wasnt too happy with him being asked to conclude. I suggested he should give 
+it a trial run. At the end, he realized that he was as good at concluding as he was 
+at opening a presentation.
+
+/////////////
+
+4. Explain a situation when you explained a complex idea simply.
+
+pull T = Task − (recall an incident in your life that suits the task)
+
+This is a standard question in Customer Service, Sales & Marketing, IT and education 
+sectors. Provide specific, job-related examples.
+
+For Example − Yes, I designed a presentation that explained all the points in a 
+clear manner. I also created a document describing the concept in simple words and 
+handed it to the audience.
+
+/////////////
+
+5. Describe a time when you had to adapt to a change at work.
+
+Asking about incidents where you had to change your style of working is very common 
+in Behavioral Interviews. Recruiters want to check your adaptability skills, as 
+someone with a firm notion wont be flexible to adjust to a process.
+
+/////////////
+
+6. Describe a time when you made a mistake.
+
+Companies prefer candidates who have made mistakes in the past and have learnt from 
+them, as opposed to those who follow rules only because someone has told them to. 
+They need people who know the reason behind a decision.
+
+Mention the mistake and be honest about it, but always make sure that you follow it 
+up with what you learnt from that episode and the improvements it has brought to your 
+efficiency.
+
+For Example − In the first week of my appointment, I had miscalculated the estimated 
+time needed to complete a project assigned to me, which resulted in a chain of 
+miscommunications. It taught me that deadlines are to be respected.
+
+/////////////
+
+7. Describe a time when you delegated tasks to team-mates.
+
+Questions about managing teams are not asked only in managerial jobs. Employers want 
+to see managerial skills in their employees. They want people in their team who can 
+motivate others and accomplish a task in a given time-frame. The best way to answer 
+such questions will be to base your answer on capability, experience, task force, etc.
+
+For Example − Based on their individual strengths, I delegated the complex 
+algorithm-writing tasks to Tarun, as he has more experienced than the others. I asked 
+Rohan to handle data check, as he was very accurate in his testing skills. I handled 
+QA, as I had maximum experience in Quality Analysis.
+
+/////////////
+
+8. Describe when you were blamed for somebody elses mistake.
+
+These types of questions are designed to check your personality and skills at handling 
+stressful situations. The standard rules of interviewing answers apply here too − no 
+bad-mouthing ex-employees or supervisors.
+
+For Example − Once I was blamed for not taking a sufficiently-detailed survey in a 
+locality, which affected our sales figures for that month. Although I was not in the 
+Marketing Analysis team, I took a note of the issue and, without passing blame, 
+politely passed it to the concerned department.
+
+/////////////
+
+9. Describe a difficult situation that you faced and how you handled it.
+
+When questions like these are asked, give an answer that portrays your ability to 
+identify, analyze, and solve problems.
+
+For Example − "We were getting a lot of complaints about the customers not getting 
+the deliveries on time. I met the Manager of Delivery Department and he told me that 
+the problem was acute during peak traffic hours. We both charted alternative routes 
+with lesser traffic congestion during peak hours, i.e., 5:00PM till 8:00PM. Due to 
+our efforts, our complaint call volume was reduced by 30%."
+
+/////////////
+
+10. Describe a new suggestion that you had made to your supervisor.
+
+The ability of being a self-starter who likes to explore suitable alternatives of 
+arriving at a solution and coming up with practical ideas are very important at 
+any workplace.
+
+For Example − "Our Company had launched a new product and the Sales Team were 
+getting trained on it. We, being from the Orders Department, were not privy to 
+the training. I requested the Management to include us in the training team too, 
+as that would help us understand the orders and provide better solutions to 
+customers.
+
+/////////////
+
+11. Describe when you had to take a judgement on a difficult decision.
+
+By asking this question, the interviewer is checking your ability to implement 
+logical decisions. You need to express your logical method of thinking out each 
+step, calculating the implementation with team-mates, weighing in alternatives, 
+and choosing the best action route.
+
+For Example − "I was assigned the task of purchasing office equipment. We used 
+to follow a "purchase-per-month" mode of purchase and payment. I thought of opting 
+for a bulk purchase of six months, as I could hardly see the difference in payment 
+in the per-month structure. Also, by ordering in bulk, we could get discounts and 
+freebies. We opted for a bulk purchase in January, which proved to be a wise 
+decision, as the prices of electronic goods increased by 15% with the new budget."
+
+/////////////
