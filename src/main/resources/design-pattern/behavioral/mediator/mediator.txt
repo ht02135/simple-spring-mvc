@@ -3,14 +3,23 @@ https://www.tutorialspoint.com/design_pattern/mediator_pattern.htm
 
 ///////////////
 
-Mediator pattern is used to reduce communication complexity between multiple objects or classes. This pattern provides a mediator class which normally handles all the communications between different classes and supports easy maintenance of the code by loose coupling. Mediator pattern falls under behavioral pattern category.
+Mediator pattern is used to reduce communication complexity between multiple 
+objects or classes. This pattern provides a mediator class which normally 
+handles all the communications between different classes and supports easy 
+maintenance of the code by loose coupling. Mediator pattern falls under 
+behavioral pattern category.
 
 ///////////////
 
 Implementation
-We are demonstrating mediator pattern by example of a chat room where multiple users can send message to chat room and it is the responsibility of chat room to show the messages to all users. We have created two classes ChatRoom and User. User objects will use ChatRoom method to share their messages.
+We are demonstrating mediator pattern by example of a chat room where 
+multiple users can send message to chat room and it is the responsibility 
+of chat room to show the messages to all users. We have created two 
+classes ChatRoom and User. User objects will use ChatRoom method to 
+share their messages.
 
-MediatorPatternDemo, our demo class, will use User objects to show communication between them.
+MediatorPatternDemo, our demo class, will use User objects to show 
+communication between them.
 
 ///////////////
 
@@ -25,6 +34,11 @@ public class ChatRoom {
       System.out.println(new Date().toString() + " [" + user.getName() + "] : " + message);
    }
 }
+
+hung: some how i dont like this example, because they use classic method to
+demostrate the example...  i will need to find example online where obj method
+is used...  translate need to decide when mediator obj is created and how is
+passed to user of mediator obj via creation method or set method???
 
 Step 2
 Create user class
