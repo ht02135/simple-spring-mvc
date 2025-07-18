@@ -1,0 +1,25 @@
+
+https://www.w3schools.com/angular/default.asp
+
+////////////////
+
+disable shitty ending quote in eclipse
+
+In the preferences TextMate > Language Configurations select the content 
+type (probably, org.eclipse.wildwebdeveloper.js) and in the Auto Closing 
+Pairs tab bellow uncheck the checkbox Enable auto closing brackets at 
+the bottom.
+
+////////////////
+
+reminder to myself, angularjs is pretty shitty in eclipse because it epic
+fail recognize angular expression in html css style...  so doing this
+in notepad, so i dont have to look at eye sore error...
+
+we can simplying open workplace folder in notepad++ to get file browsing
+ability
+
+/////////////
+
+
+

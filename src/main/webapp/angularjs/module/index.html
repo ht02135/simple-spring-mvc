@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<title>The jQuery Example</title>
+	<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+	<!--
+	not working, oh boy >.<
+	<script type="text/javascript" src="../../libs/angular-1.6.9.min.js" defer></script>
+	<script defer>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function ($scope) {
+			$scope.firstName = "John";
+			$scope.lastName = "Doe";
+		});
+	</script>
+	-->
+</head>
+
+<body>
+
+	<!--
+	AngularJS modules define AngularJS applications.
+	AngularJS controllers control AngularJS applications.
+	The ng-app directive defines the application, the ng-controller directive 
+	defines the controller.
+	-->
+	<inputdiv ng-app="myApp" ng-controller="myCtrl" ng-init="myCol='lightblue'" >
+
+		First Name: <input type="text" ng-model="firstName"><br>
+		Last Name: <input type="text" ng-model="lastName"><br>
+		<br>
+		Full Name: {{firstName + " " + lastName}}
+		
+		<!--
+		AngularJS Expressions
+		AngularJS expressions can be written inside double braces: {{ expression }}.
+		AngularJS expressions can also be written inside a directive: ng-bind="expression".
+		-->
+		<br>
+		<p>Full Name: {{firstName + " " + lastName}}</p>
+		<p>Full Name: <span ng-bind="firstName"></span> <span ng-bind="lastName"></span></p>
+		
+		<!--
+		You can write expressions wherever you like, AngularJS will simply resolve 
+		the expression and return the result.
+		Example: Let AngularJS change the value of CSS properties.
+		///////////////////
+		<input style="background-color : blue;" ng-model="myCol"> <-- fine
+		<input style="background-color : {{myCol}};" ng-model="myCol"> <-- error why?
+		-->
+		<input style="background-color : {{myCol}};" ng-model="myCol">
+	</div>
+
+	<script>
+		/*
+		AngularJS modules define applications:
+		AngularJS controllers control applications:
+		*/
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function ($scope) {
+			$scope.firstName = "John";
+			$scope.lastName = "Doe";
+		});
+	</script>
+</body>
+
+</html>

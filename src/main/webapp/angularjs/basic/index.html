@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js" defer></script>
+
+<body>
+
+	<div ng-app="" ng-init="firstName='John'" data-ng-init="firstName2='John'">
+		<!--
+	AngularJS extends HTML with ng-directives.
+	1>The ng-app directive defines an AngularJS application.
+	2>The ng-model directive binds the value of HTML controls (input, select, 
+	textarea) to application data.
+	3>The ng-bind directive binds application data to the HTML view.
+	///////////////////
+	The ng-app directive tells AngularJS that the <div> element is the 
+	"owner" of an AngularJS application.
+	///////////////////
+	The ng-init directive initializes AngularJS application variables.
+	-->
+		<p>Name : <input type="text" ng-model="name"></p>
+		<h1>Hello {{name}}</h1>
+		
+		<p ng-bind="name"></p>
+
+		<p>The name is <span ng-bind="firstName"></span></p>
+	</div>
+</body>
+
+</html>
