@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body>
+
+	<!--
+	An AngularJS module defines an application.
+	The module is a container for the different parts of an application.
+	The module is a container for the application controllers. 
+	////////////////
+	Add a controller to your application, and refer to the controller 
+	with the ng-controller directive:
+	////////////////
+	AngularJS has a set of built-in directives which you can use to add 
+	functionality to your application.
+	https://www.w3schools.com/angular/angular_ref_directives.asp
+	///////////////
+	When naming a directive, you must use a camel case name, w3TestDirective, 
+	but when invoking it, you must use – separated name, w3-test-directive:
+	roll my eye, what a joke...
+	-->
+	<div ng-app="myApp" ng-controller="myCtrl" w3-test-directive-2 >
+		{{ firstName + " " + lastName }}
+	</div>
+
+	<!--  ///////////////////////////////////////////// -->
+	<script>
+	/*
+	A module is created by using the AngularJS function angular.module
+	The "myApp" parameter refers to an HTML element in which the application will run.
+	*/
+	var app = angular.module("myApp", []);
+	
+	app.controller("myCtrl", function($scope) {
+  		$scope.firstName = "John";
+  		$scope.lastName = "Doe";
+	});
+	
+	app.directive("w3TestDirective2", function() {
+  		return {
+    		template : "I was made in a directive constructor!"
+  		};
+	});
+
+	</script>
+</body>
+
+</html>

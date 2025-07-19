@@ -63,32 +63,40 @@
 		AngularJS numbers are like JavaScript numbers:
 		-->
 		<p>Total in dollar: {{ quantity * cost }}</p>
-		<p>Total in dollar: <span ng-bind="quantity * cost"></span></p>
+		<p>
+			Total in dollar: <span ng-bind="quantity * cost"></span>
+		</p>
 
 		<!-- 
 		AngularJS strings are like JavaScript strings:
 		-->
 		<p>The name is {{ firstName + " " + lastName }}</p>
-		<p>The name is <span ng-bind="firstName + ' ' + lastName"></span></p>
-		
+		<p>
+			The name is <span ng-bind="firstName + ' ' + lastName"></span>
+		</p>
+
 		<!-- 
 		AngularJS objects are like JavaScript objects:
 		-->
 		<p>The name is {{ person.lastName }}</p>
-		<p>The name is <span ng-bind="person.lastName"></span></p>
-		
+		<p>
+			The name is <span ng-bind="person.lastName"></span>
+		</p>
+
 		<!-- 
 		AngularJS arrays are like JavaScript arrays:
 		-->
 		<p>The third result is {{ points[2] }}</p>
-		<p>The third result is <span ng-bind="points[2]"></span></p>
-		
+		<p>
+			The third result is <span ng-bind="points[2]"></span>
+		</p>
+
 		<!--  
 		AngularJS expressions do not support conditionals, loops, and exceptions, 
 		while JavaScript expressions do.
 		AngularJS expressions support filters, while JavaScript expressions do not.
 		-->
-		
+
 	</div>
 
 	<!--  ///////////////////////////////////////////// -->
@@ -102,7 +110,7 @@
 				$scope.firstName = "John";
 				$scope.lastName = "Doe";
 			});
-		</script>
+	</script>
 </body>
 
 </html>
