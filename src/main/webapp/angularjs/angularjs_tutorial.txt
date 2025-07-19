@@ -21,5 +21,13 @@ ability
 
 /////////////
 
+reminder to myself
+1>intellj is shitty without good search functionality
+2>vscode another shitshow without direct save or save all buttons, epic fail
+
+disable shitty html >> validation on script and style
+necessary evil so i dont get trolled by eclipse css style angular expression...
+
+
 
 
