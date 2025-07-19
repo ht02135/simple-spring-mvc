@@ -33,45 +33,64 @@ input.ng-invalid {
 
 	<!-- you can only have one ng-app -->
 	<div ng-app="myApp" ng-controller="myCtrl">
-		Name: <input ng-model="name">
-		
+
 		<!-- Two-Way Binding -->
 		<div>
 			Name: <input ng-model="name">
   			<h1>You entered: {{name}}</h1>
 		</div>
 	
-		<!-- 
-		The ng-model directive can provide type validation for 
-		application data (number, e-mail, required): 
-		-->
-		<form name="myForm">
-  			Email: <input type="email" name="myAddress" ng-model="text">
-  			<span ng-show="myForm.myAddress.$error.email">
-  				Not a valid e-mail address
-  			</span>
-  			<p>Enter your e-mail address in the input field. 
-  			   AngularJS will display an errormessage if the 
-  			   address is not an e-mail.
-  			</p>
-		</form>
+		<div>
+			<!-- 
+			The ng-model directive can provide type validation for 
+			application data (number, e-mail, required): 
+			-->
+			<form name="myForm">
+  				Email: <input type="email" name="myAddress" ng-model="text">
+  				<span ng-show="myForm.myAddress.$error.email">
+  					Not a valid e-mail address
+  				</span>
+  				<p>Enter your e-mail address in the input field. 
+				   AngularJS will display an errormessage if the 
+				   address is not an e-mail.
+				</p>
+			</form>
 		
-		<!-- 
-		The ng-model directive can provide status for application 
-		data (valid, dirty, touched, error): 
-		-->
-		<h1>Status</h1>
-  		{{myForm.myAddress.$valid}}
-  		{{myForm.myAddress.$dirty}}
-  		{{myForm.myAddress.$touched}}
+			<!-- 
+			The ng-model directive can provide status for application 
+			data (valid, dirty, touched, error): 
+			-->
+			<h1>Status</h1>
+  			{{myForm.myAddress.$valid}}
+  			{{myForm.myAddress.$dirty}}
+  			{{myForm.myAddress.$touched}}
+  		</div>
+  		
+  		<div>
+  			<h1 ng-click="changeName()">{{firstname}}</h1>
+  			<p>Click on the header to run the "changeName" function.</p>
+  		</div>
+  		
 	</div>
 
 	<!--  ///////////////////////////////////////////// -->
+	
+	<!-- 
+	Because of the immediate synchronization of the model and the view, 
+	the controller can be completely separated from the view, and simply 
+	concentrate on the model data. Thanks to the data binding in AngularJS, 
+	the view will reflect any changes made in the controller.
+	-->
 	<script>
 	var app = angular.module('myApp', []);
 	
 	app.controller('myCtrl', function($scope) {
   		$scope.name = "John Doe";
+  		
+  		$scope.firstname = "John";
+    	$scope.changeName = function() {
+        	$scope.firstname = "Nelly";
+    	}
 	});
 	</script>
 </body>
