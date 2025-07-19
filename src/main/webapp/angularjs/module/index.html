@@ -2,9 +2,9 @@
 <html lang="en-US">
 
 <head>
-	<title>The jQuery Example</title>
-	<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
-	<!--
+<title>The jQuery Example</title>
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+<!--
 	not working, oh boy >.<
 	<script type="text/javascript" src="../../libs/angular-1.6.9.min.js" defer></script>
 	<script defer>
@@ -25,13 +25,19 @@
 	The ng-app directive defines the application, the ng-controller directive 
 	defines the controller.
 	-->
-	<inputdiv ng-app="myApp" ng-controller="myCtrl" ng-init="myCol='lightblue';quantity=1;cost=5">
+	<div ng-app="myApp" ng-controller="myCtrl"
+		ng-init="
+			myCol='lightblue';
+			quantity=1;cost=5;
+			firstName='John';
+			lastName='Doe';
+			person={firstName:'John',lastName:'Doe'};
+			points=[1,15,19,2,40];
+		">
 
-		First Name: <input type="text" ng-model="firstName"><br>
-		Last Name: <input type="text" ng-model="lastName"><br>
-		<br>
+		First Name: <input type="text" ng-model="firstName"> <br>
+		Last Name: <input type="text" ng-model="lastName"> <br> <br>
 		Full Name: {{firstName + " " + lastName}}
-
 		<!--
 		AngularJS Expressions
 		AngularJS expressions can be written inside double braces: {{ expression }}.
@@ -39,7 +45,9 @@
 		-->
 		<br>
 		<p>Full Name: {{firstName + " " + lastName}}</p>
-		<p>Full Name: <span ng-bind="firstName"></span> <span ng-bind="lastName"></span></p>
+		<p>
+			Full Name: <span ng-bind="firstName"></span> <span ng-bind="lastName"></span>
+		</p>
 
 		<!--
 		You can write expressions wherever you like, AngularJS will simply resolve 
@@ -49,15 +57,42 @@
 		<input style="background-color : blue;" ng-model="myCol"> <-- fine
 		<input style="background-color : {{myCol}};" ng-model="myCol"> <-- error why?
 		-->
-		<input style="background-color : {{myCol}};" ng-model="myCol">
+		<input style="background-color: {{myCol" ng-model="myCol">
 
 		<!--
 		AngularJS numbers are like JavaScript numbers:
 		-->
 		<p>Total in dollar: {{ quantity * cost }}</p>
-		</div>
+		<p>Total in dollar: <span ng-bind="quantity * cost"></span></p>
 
-		<script>
+		<!-- 
+		AngularJS strings are like JavaScript strings:
+		-->
+		<p>The name is {{ firstName + " " + lastName }}</p>
+		<p>The name is <span ng-bind="firstName + ' ' + lastName"></span></p>
+		
+		<!-- 
+		AngularJS objects are like JavaScript objects:
+		-->
+		<p>The name is {{ person.lastName }}</p>
+		<p>The name is <span ng-bind="person.lastName"></span></p>
+		
+		<!-- 
+		AngularJS arrays are like JavaScript arrays:
+		-->
+		<p>The third result is {{ points[2] }}</p>
+		<p>The third result is <span ng-bind="points[2]"></span></p>
+		
+		<!--  
+		AngularJS expressions do not support conditionals, loops, and exceptions, 
+		while JavaScript expressions do.
+		AngularJS expressions support filters, while JavaScript expressions do not.
+		-->
+		
+	</div>
+
+	<!--  ///////////////////////////////////////////// -->
+	<script>
 			/*
 			AngularJS modules define applications:
 			AngularJS controllers control applications:
