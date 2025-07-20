@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<!-- 
+	All applications have a $rootScope which is the scope created 
+	on the HTML element that contains the ng-app directive.
+	-->
+	<div>
+		<p>The rootScope's favorite color:</p>
+		<h1>{{color}}</h1>
+	</div>
+
+	<div ng-controller="myCtrl">
+		<div>
+			<p>The scope of the controller's favorite color:</p>
+			<h1>{{color}}</h1>
+		</div>
+	
+		<div>
+			<input ng-model="name">
+			<h1>My name is {{name}}</h1>
+		</div>
+		
+		<div>
+			<ul>
+  				<li ng-repeat="x in names">{{x}}</li>
+			</ul>
+		</div>
+	</div> <!-- ng-controller -->
+	
+	<!--  ///////////////////////////////////////////// -->
+	
+	<script>
+	/*
+	When adding properties to the $scope object in the controller, 
+	the view (HTML) gets access to these properties.
+	In the view, you do not use the prefix $scope, you just refer 
+	to a property name, like {{carname}}.
+	///////////////////
+	AngularJS application to consist of:
+	1>View, which is the HTML.
+	2>Model, which is the data available for the current view.
+	3>Controller, which is the JavaScript function that makes/
+	changes/removes/controls the data. 
+	4>Then the scope is the Model.
+	*/
+	var app = angular.module('myApp', []);
+	
+	app.run(function($rootScope) {
+  		$rootScope.color = 'blue';
+	});
+
+	app.controller('myCtrl', function($scope) {
+  		$scope.name = "John Doe";
+  		$scope.names = ["Emil", "Tobias", "Linus"];
+  		$scope.color = "red";
+	});
+	</script>
+</body> <!-- ng-app -->
+
+</html>

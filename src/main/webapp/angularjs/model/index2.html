@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<!--  
+The ng-model directive provides CSS classes for HTML elements, 
+depending on their status:
+//////////////
+The ng-model directive adds/removes the following classes, according to the status of the form field:
+
+ng-empty
+ng-not-empty
+ng-touched
+ng-untouched
+ng-valid
+ng-invalid
+ng-dirty
+ng-pending
+ng-pristine
+-->
+<style>
+input.ng-invalid {
+	background-color: red;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body>
+
+	<!-- you can only have one ng-app -->
+	<div ng-app="myApp" ng-controller="myCtrl">
+
+		<!-- Two-Way Binding -->
+		<div>
+			Name: <input ng-model="name">
+  			<h1>You entered: {{name}}</h1>
+		</div>
+	
+		<div>
+			<!-- 
+			The ng-model directive can provide type validation for 
+			application data (number, e-mail, required): 
+			-->
+			<form name="myForm">
+  				Email: <input type="email" name="myAddress" ng-model="text">
+  				<span ng-show="myForm.myAddress.$error.email">
+  					Not a valid e-mail address
+  				</span>
+  				<p>Enter your e-mail address in the input field. 
+				   AngularJS will display an errormessage if the 
+				   address is not an e-mail.
+				</p>
+			</form>
+		
+			<!-- 
+			The ng-model directive can provide status for application 
+			data (valid, dirty, touched, error): 
+			-->
+			<h1>Status</h1>
+  			{{myForm.myAddress.$valid}}
+  			{{myForm.myAddress.$dirty}}
+  			{{myForm.myAddress.$touched}}
+  		</div>
+  		
+  		<div>
+  			<h1 ng-click="changeName()">{{firstname}}</h1>
+  			<p>Click on the header to run the "changeName" function.</p>
+  		</div>
+  		
+	</div>
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script src="personController.js"></script>
+</body>
+
+</html>
