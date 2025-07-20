@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+/*
+:nth-child(n
+n can be a number/index, a keyword (odd or even), or a formula (like an + b).)
+*/
+table, th, td {
+	border: 1px solid red;
+	border-collapse: collapse;
+}
+
+table tr:nth-child(odd) {
+	background-color: #f1f1f1;
+}
+
+table tr:nth-child(even) {
+	background-color: #ffffff;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+
+		<div>
+			<table>
+				<tr ng-repeat="x in names">
+					<td>{{ x.name }}</td>
+					<td>{{ x.country }}</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div>
+			<p>Display with orderBy country Filter</p>
+			<table>
+  				<tr ng-repeat="x in names | orderBy : 'country'">
+    				<td>{{ x.name }}</td>
+    				<td>{{ x.country }}</td>
+  				</tr>
+			</table>
+		</div>
+		
+		<div>
+			<p>Display with uppercase Filter</p>
+			<table>
+  				<tr ng-repeat="x in names">
+    				<td>{{ x.name | uppercase }}</td>
+    				<td>{{ x.country | uppercase }}</td>
+  				</tr>
+			</table>
+		</div>
+		
+		<div>
+			<p>Display the Table Index ($index)</p>
+			<table>
+  				<tr ng-repeat="x in names">
+    				<td>{{ $index }}</td>
+    				<td>{{ x.name }}</td>
+    				<td>{{ x.country }}</td>
+  				</tr>
+			</table>
+		</div>
+		
+		<!--
+		i think $odd and $even works with $index row
+		-->
+		<div>
+			<p>Using $even and $odd</p>
+			<table>
+  				<tr ng-repeat="x in names">
+  				    <td ng-if="$odd" style="background-color:red">{{ $index }}</td>
+  				    <td ng-if="$even">{{ $index }}</td>
+    				<td ng-if="$odd" style="background-color:red">{{ x.name }}</td>
+    				<td ng-if="$even">{{ x.name }}</td>
+    				<td ng-if="$odd" style="background-color:red">{{ x.country }}</td>
+    				<td ng-if="$even">{{ x.country }}</td>
+  				</tr>
+			</table>
+		</div>
+
+	</div>
+	<!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	var app = angular.module('myApp', []);
+
+	app.controller('myCtrl', 
+		function($scope) {
+
+			$scope.names = [
+				{name:'Jani',country:'Norway'},
+				{name:'Hege',country:'Sweden'},
+				{name:'Kai',country:'Denmark'}
+			];
+
+  		}
+  	);
+
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
