@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+
+		<!--  
+		If you want to create a dropdown list, based on an object or 
+		an array in AngularJS, you should use the ng-options directive:
+		-->
+		<div>
+			<select ng-model="selectedName" ng-options="x for x in names">
+			</select>
+			<p>selected {{ selectedName }}</p>
+		</div>
+
+		<!-- 
+		ng-options vs ng-repeat You can also use the ng-repeat 
+		directive to make the same dropdown list: 
+		-->
+		<div>
+			<select ng-model="selectedName2">
+  				<option ng-repeat="x in names" value="{{x}}">{{x}}</option>
+			</select>
+			<p>selected {{ selectedName2 }}</p>
+		</div>
+		
+		<div>
+			<select ng-model="selectedCar">
+  				<option ng-repeat="x in cars" value="{{x.model}}">{{x.model}}</option>
+			</select>
+			<h1>You selected: {{selectedCar}}</h1>
+		</div>
+		
+		<!--  
+		When using the value as an object, use ng-value insead of value:
+		-->
+		<div>
+			<select ng-model="selectedCar2">
+  				<option ng-repeat="x in cars" ng-value="{{x}}">{{x.model}}</option>
+			</select>
+			<h1>You selected a {{selectedCar2.color}} {{selectedCar2.model}}</h1>
+		</div>
+		
+		<!-- Using ng-options: -->
+		<div>
+			<select ng-model="selectedCar3" ng-options="x.model for x in cars">
+			</select>
+			<h1>You selected: {{selectedCar3.model}}</h1>
+			<p>Its color is: {{selectedCar3.color}}</p>
+		</div>
+		
+		<!-- 
+		The Data Source as an Object 
+		Using an object as the data source, 
+		x represents the key, 
+		and y represents the value:
+		-->
+		<div>
+			<select ng-model="selectedCar4" ng-options="x for (x, y) in cars2">
+			</select>
+			<h1>You selected: {{selectedCar4}}</h1>
+		</div>
+		
+		<div>
+			<select ng-model="selectedCar5" ng-options="x for (x, y) in cars">
+			</select>
+			<h1>You selected: {{selectedCar5.brand}}</h1>
+			<h2>Model: {{selectedCar5.model}}</h2>
+			<h3>Color: {{selectedCar5.color}}</h3>
+		</div>
+		
+		<!--  
+		The options in the dropdown list does not have to be the key in a 
+		key-value pair, it can also be the value, or a property of the 
+		value object:
+		-->
+		<div>
+			<select ng-model="selectedCar6" ng-options="y.brand for (x, y) in cars">
+			</select>
+			<h1>You selected: {{selectedCar6.brand}}</h1>
+			<h2>Model: {{selectedCar6.model}}</h2>
+			<h3>Color: {{selectedCar6.color}}</h3>
+		</div>
+		
+	</div> <!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	var app = angular.module('myApp', []);
+
+	app.controller('myCtrl', 
+		function($scope) {
+
+			$scope.names = ["Emil", "Tobias", "Linus"];
+			
+			$scope.cars = [
+  				{model : "Ford Mustang", color : "red"},
+  				{model : "Fiat 500", color : "white"},
+  				{model : "Volvo XC90", color : "black"}
+			];
+			
+			$scope.cars2 = {
+  				car01 : "Ford",
+  				car02 : "Fiat",
+  				car03 : "Volvo"
+			};
+			
+			/* 
+			i dont think this is array 
+			is somekind of set or map obj...
+			*/
+			$scope.cars = {
+        		car01 : {brand : "Ford", model : "Mustang", color : "red"},
+        		car02 : {brand : "Fiat", model : "500", color : "white"},
+        		car03 : {brand : "Volvo", model : "XC90", color : "black"}
+    		};
+			
+  		}
+  	);
+
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
