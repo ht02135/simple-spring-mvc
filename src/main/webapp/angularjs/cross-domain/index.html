@@ -30,9 +30,23 @@ div {
 			<div ng-include="'https://tryit.w3schools.com/angular_include.php'"></div>
 		</div>
 	
+		<!-- 
+		add self to $sceDelegateProvider.resourceUrlWhitelist if want to embed  
+		odd that this is not default functionality to be able to embed file from same origin
+		-->
 		<div>
 			<p>angular_include.php</p>
-			<div ng-include="'./angular_include.php'"></div>
+			<div ng-include="'angular_include.php'"></div>
+		</div>
+		
+		<!-- 
+		add self to $sceDelegateProvider.resourceUrlWhitelist if want to embed  
+		odd that this is not default functionality to be able to embed file from same origin
+		-->
+		<div>
+		<div>
+		    <p>myTable.htm</p>
+			<div ng-include="'myTable.htm'"></div>
 		</div>
 		
 	</div> <!--  ng-controller -->
@@ -42,7 +56,10 @@ div {
 	<script>
 	var app = angular.module('myApp', []);
 
-	app.controller('myCtrl', function($scope) {
+	app.controller('myCtrl', function($scope, $http) {
+		$http.get("customers.php").then(function (response) {
+        	$scope.names = response.data.records;
+    	});
 	});
 	
 	app.config(function($sceDelegateProvider) {
