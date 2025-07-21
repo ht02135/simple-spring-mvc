@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+
+		<!--
+		The ng-disabled directive binds the application data 
+		mySwitch to the HTML button's disabled attribute. 
+		-->
+		<div>
+			<p><input type="checkbox" ng-model="mySwitch"/>Button</p>
+			<!-- put it in p, so is one line thing -->
+			<p><button ng-disabled="mySwitch">Click Me!</button></p>
+			<p>{{ mySwitch }}</p>
+		</div>
+		
+		<div>
+			<p><button ng-disabled="true">ng-disabled=true</button></p>
+			<p><button ng-disabled="false">ng-disabled=false</button></p>
+		</div>
+		
+		<!--
+		The ng-show directive shows or hides an HTML element. 
+		-->
+		<div>
+			<p ng-show="true">I am visible.</p>
+			<p ng-show="false">I am not visible.</p>
+		</div>
+		
+		<!-- The ng-hide Directive -->
+		<div>
+			<p ng-hide="true">I am not visible.</p>
+			<p ng-hide="false">I am visible.</p>
+		</div>
+		
+	</div> <!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	var app = angular.module('myApp', []);
+
+	app.controller('myCtrl', 
+		function($scope) {
+
+		/*
+		dont do ng-init="mySwitch=true", do this instead...
+		///////////////
+		translate ng-init = pointless diminishing return feature which 
+		property better left off forgetten...
+		*/
+		$scope.mySwitch=true
+			
+  		}
+  	);
+
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
