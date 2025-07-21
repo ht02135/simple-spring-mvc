@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+/*
+The following classes are added to, or removed from, input fields:
+ng-untouched The field has not been touched yet
+ng-touched The field has been touched
+ng-pristine The field has not been  modified yet
+ng-dirty The field has been modified
+ng-valid The field content is valid
+ng-invalid The field content is not valid
+ng-valid-key One key for each validation. Example: ng-valid-required, useful when there are more than one thing that must be validated
+ng-invalid-key Example: ng-invalid-required
+//////////////
+The following classes are added to, or removed from, forms:
+
+ng-pristine No fields has not been modified yet
+ng-dirty One or more fields has been modified
+ng-valid The form content is valid
+ng-invalid The form content is not valid
+ng-valid-key One key for each validation. Example: ng-valid-required, useful when there are more than one thing that must be validated
+ng-invalid-key Example: ng-invalid-required
+*/
+input.ng-invalid {
+    background-color:red;
+}
+input.ng-valid {
+    background-color:green;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+	
+		<!--
+		Use the HTML5 attribute required to specify that the input field 
+		must be filled out: 
+		-->
+		<div>
+			<p>attribute required to specify that the input field must be filled out</p>
+			<form name="myForm">
+				<input name="myInput" ng-model="myInput" required>
+			</form>
+			<p>The input's valid state is:</p>
+			<!-- you need to reference name to get the element and then $valid -->
+			<h1>myForm.myInput.$valid={{myForm.myInput.$valid}}</h1>
+		</div>
+		
+		<!-- 
+		Use the HTML5 type email to specify that the value must be an e-mail: 
+		interesting observation.  in gran scheme of thing...
+		-->
+		<div>
+			<p>email to specify that the value must be an e-mail</p>
+			<form name="myForm2">
+				<input type="email" name="myInput2" ng-model="myInput2">
+			</form>
+			<p>The input's valid state is:</p>
+			<!-- you need to reference name to get the element and then $valid -->
+			<h1>myForm2.myInput2.$valid={{myForm2.myInput2.$valid}}</h1>
+		</div>
+		
+		<!-- 
+		Input fields have the following states:
+		$untouched The field has not been touched yet
+		$touched The field has been touched
+		$pristine The field has not been modified yet
+		$dirty The field has been modified
+		$invalid The field content is not valid
+		$valid The field content is valid
+		//////////////////
+		Forms have the following states:
+		$pristine No fields have been modified yet
+		$dirty One or more have been modified
+		$invalid The form content is not valid
+		$valid The form content is valid
+		$submitted The form is submitted
+		-->
+		<div>
+			<p>
+				We use the ng-show directive to only show the error message 
+				if the field has been touched AND is empty.
+			</p>
+			
+			<p>Try leaving the first input field blank:</p>
+			<form name="myForm3">
+				<p>
+					<span>Name: </span>
+					<input name="myName3" ng-model="myName3" required>
+					<!--  use of state example -->
+					<span ng-show="myForm3.myName3.$touched && myForm3.myName3.$invalid">
+						The name is required.
+					</span>
+				</p>
+				<p>
+					<span>Address: </span>
+					<span><input name="myAddress" ng-model="myAddress" required></span>
+				</p>
+			</form>
+		</div>
+
+		<div>
+			<p>
+				The input field requires content, and will therefore 
+				become green when you write in it.
+			</p>
+			<form name="myForm4">
+				<input name="myName4" ng-model="myName4" required>
+			</form>
+		</div>
+		
+		<!-- Custom Validation -->
+		<div>
+			<p>Custom Validation</p>
+			<form name="myForm5">
+				<input name="myInput5" ng-model="myInput5" required my-validation-directive>
+			</form>
+			<p>The input's valid state is:</p>
+			<h1>{{myForm5.myInput5.$valid}}</h1>
+		</div>
+		
+		<!-- Validation Example -->
+		<div>
+			<h2>Validation Example</h2>
+			<form name="myForm6" novalidate>
+				<p>
+					<span>Username: </span>
+					<input type="text" name="user" ng-model="user" required>
+					<span style="color:red" ng-show="myForm6.user.$dirty && myForm6.user.$invalid">
+						<span ng-show="myForm6.user.$error.required">Username is required.</span>
+					</span>
+				</p>
+				<p>
+					<span>Email: </span>
+					<input type="email" name="email" ng-model="email" required>
+					<span style="color:red" ng-show="myForm6.email.$dirty && myForm6.email.$invalid">
+						<span ng-show="myForm6.email.$error.required">Email is required.</span>
+						<span ng-show="myForm6.email.$error.email">Invalid email address.</span>
+					</span>
+				</p>
+				<p>
+					<input type="submit" 
+					       ng-disabled="myForm6.user.$dirty && myForm.user.$invalid || 
+					                    myForm6.email.$dirty && myForm.email.$invalid">
+				</p>
+			</form>
+		</div>
+		
+	</div> <!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	var app = angular.module('myApp', []);
+
+	app.controller('myCtrl', function($scope) {
+		$scope.user = 'John Doe';
+    	$scope.email = 'john.doe@gmail.com';
+	});
+  	
+	app.directive('myValidationDirective', function() {
+    	return {
+        	require: 'ngModel',
+        	link: function(scope, element, attribute, controller) {
+            	function myValidation(value) {
+                	if (value.indexOf("e") > -1) {
+                		/*
+                		i absolutely not sure what this is, but what a heck oh well...
+                		*/
+                    	controller.$setValidity('charE', true);
+                    	console.log("value="+value);
+                	} else {
+                    	controller.$setValidity('charE', false);
+                	}
+                	return value;
+            	}
+            	controller.$parsers.push(myValidation);
+        	}
+    	};
+	});
+
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
