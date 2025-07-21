@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+	
+		<!-- angular.lowercase() -->
+		<div>
+			<p>{{ x1 }}</p>
+  			<p><span>angular.lowercase() x2=</span>{{ x2 }}</p>
+  			<p><span>angular.uppercase() x3=</span>{{ x3 }}</p>
+  			<p><span>angular.isString() x4=</span>{{ x4 }}</p>
+  			<p><span>angular.isNumber() x5=</span>{{ x5 }}</p>
+		</div>
+
+		
+	</div> <!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	var app = angular.module('myApp', []);
+
+	app.controller('myCtrl', function($scope) {
+
+  		$scope.x1 = "JOHN";
+  		$scope.x2 = angular.lowercase($scope.x1);
+  		$scope.x3 = angular.uppercase($scope.x1);
+  		$scope.x4 = angular.isString($scope.x1);
+  		$scope.x5 = angular.isNumber($scope.x1);
+	});
+
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
