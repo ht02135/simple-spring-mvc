@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+<script type="text/javascript" src="../../libs/angular-route-1.6.9.js"></script>
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+	
+		<!--  
+		If you want to navigate to different pages in your application, 
+		but you also want the application to be a SPA (Single Page 
+		Application), with no page reloading, you can use the 
+		ngRoute module.
+		The ngRoute module routes your application to different pages 
+		without reloading the entire application.
+		-->
+		<div>
+			<p><a href="#/!">Main</a></p>
+			<p>
+				<a href="#!red">Red</a>
+				<a href="#!green">Green</a>
+				<a href="#!blue">Blue</a>
+			</p>
+			<!-- 
+			You can also use the template property, which allows 
+			you to write HTML directly in the property value, and not 
+			refer to a page.
+			-->
+			<p>
+				<a href="#!banana">Banana</a>
+				<a href="#!tomato">Tomato</a>
+				<a href="#!otherwise">otherwise</a>
+			</p>
+			<div ng-view></div>
+		</div>
+	
+	</div> <!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	/*  you must add the ngRoute as a dependency in the application module: */
+	var app = angular.module("myApp", ["ngRoute"]);
+
+	app.config(function($routeProvider) {
+		$routeProvider
+			.when("/", {
+				templateUrl : "main.htm"
+			})
+    		.when("/red", {
+        		templateUrl : "red.htm",
+        		controller : "redCtrl"
+    		})
+    		.when("/green", {
+        		templateUrl : "green.htm",
+        		controller : "greenCtrl"
+    		})
+    		.when("/blue", {
+        		templateUrl : "blue.htm",
+        		controller : "blueCtrl"
+    		})
+    		.when("/banana", {
+    			template : "<h1>Banana</h1><p>Bananas contain around 75% water.</p>"
+  			})
+  			.when("/tomato", {
+    			template : "<h1>Tomato</h1><p>Tomatoes contain around 95% water.</p>"
+  			})
+  			.otherwise({
+    			template : "<h1>None</h1><p>Nothing has been selected</p>"
+  			});
+  			
+  			/*
+  			You can also use the otherwise method, which is the 
+  			default route when none of the others get a match.
+  			*/
+	});
+
+	app.controller('myCtrl', function($scope) {
+		$scope.msg = "I love main";
+	});
+	
+	app.controller('redCtrl', function($scope) {
+		$scope.msg = "I love red";
+	});
+	
+	app.controller('greenCtrl', function($scope) {
+		$scope.msg = "I love green";
+	});
+	
+	app.controller('blueCtrl', function($scope) {
+		$scope.msg = "I love blue";
+	});
+	
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
