@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<title>The jQuery Example</title>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+div {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+</style>
+
+<script type="text/javascript" src="../../libs/angular-1.6.9.min.js"></script>
+<!-- 
+<script type="text/javascript" src="../../libs/angular-route-1.6.9.js"></script>
+ -->
+</head>
+
+<body ng-app="myShoppingList">
+
+	<div ng-controller="myCtrl">
+
+		<!--  
+		1>In the controller, make a function named removeItem, which takes the 
+		index of the item you want to remove, as a parameter.
+		2>In the HTML, make a <span> element for each item, and give them an 
+		ng-click directive which calls the removeItem function with the current $index.
+		-->
+		<div>
+			<p>So far we have made an HTML list based on the items of an
+				array.</p>
+			<ul>
+				<li ng-repeat="x in products">
+					<p>
+						<span>{{x}}</span> <a href='' ng-click="removeItemHandler($index)">Remove
+							Item</a>
+					</p>
+				</li>
+			</ul>
+		</div>
+
+		<!-- 
+		1>In the HTML, add a text field, and bind it to the application with the 
+		ng-model directive.
+		2>In the controller, make a function named addItem, and use the value of 
+		the addMe input field to add an item to the products array.
+		3>Add a button, and give it an ng-click directive that will run the 
+		addItem function when the button is clicked.
+		-->
+		<div>
+			<p>
+				<input ng-model="itemToBeAdd">
+			</p>
+			<p>
+				<button ng-click="addItemHandler()">Add</button>
+			</p>
+		</div>
+		
+		<!--
+		1>The application has some errors, like if you try to add the 
+		same item twice, the application crashes. Also, it should not be 
+		allowed to add empty items.
+		2>We will fix that by checking the value before adding new items.
+		3>In the HTML, we will add a container for error messages, and 
+		write an error message when someone tries to add an existing item.  
+		-->
+		<p>{{errortext}}</p>
+
+	</div>
+	<!--  ng-controller -->
+
+	<!--  ///////////////////////////////////////////// -->
+
+	<script>
+	/*
+	var app = angular.module("myShoppingList", ["ngRoute"]);
+	app.config(function($routeProvider) {
+	
+	});
+	*/
+	var app = angular.module("myShoppingList", []);
+
+	app.controller('myCtrl', function($scope) {
+		
+		$scope.products = ["Milk", "Bread", "Cheese"];
+		
+		$scope.addItemHandler = function () {
+        	$scope.errortext = "";
+        	if (!$scope.itemToBeAdd) {return;}        
+        	if ($scope.products.indexOf($scope.itemToBeAdd) == -1) {
+            	$scope.products.push($scope.itemToBeAdd);
+        	} else {
+            	$scope.errortext = "The item is already in your shopping list.";
+        	}
+    	}   
+    	
+    	$scope.removeItemHandler = function (x) {
+        	$scope.products.splice(x, 1);
+    	}
+	});
+	
+	</script>
+</body>
+<!-- ng-app -->
+
+</html>
