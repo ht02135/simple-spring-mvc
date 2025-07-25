@@ -1,4 +1,22 @@
 
+//////////////
+
+this explain what opswork do.  which many tutorial on internet EPIC FAIL explaination...
+
+i gave some thought about opswork
+
+1>cloudformation does aws provision such as setup vpc, public/private subnet, internet gateway (include routing), nat gateway (include routing), vpc, public/private security group (including routing)
+
+2>but who setup java, tomcat, upload war?  of course those can be done manually?  but i think the so call opsworks=config application part refer to this part
+
+https://docs.aws.amazon.com/opsworks/latest/userguide/create-custom.html
+
+For example, if you store applications in one of the standard repositories, you can use the built-in deploy recipes to handle much of the work of installing the applications on the layer's instances.
+
+The following walkthrough describes how to implement a custom layer that supports a Tomcat application server. The layer is based on a custom cookbook named Tomcat, which includes recipes to handle package installation, deployment, and so on.
+
+////////////////////
+
 In many cases CloudFormation is used with OpsWorks; where CloudFormation is used to provision the infrastructure and OpsWorks to configure the resources created. OpsWorks (via Chef or Puppet) provides a richer set of abilities when it comes to configuring the application stack then the simple shell scripting offered by CloudFormation. So, generally CloudFormation is used to deploy AWS resources, and OpsWorks is used to do the detailed configuration of the application(s)/operating system(s).
 
 In some ways one can say that CloudFormation is focused more with a collection of AWS infrastructure resources rather than the application itself; but as you have alluded to some things can be done by both services interchangeably.
