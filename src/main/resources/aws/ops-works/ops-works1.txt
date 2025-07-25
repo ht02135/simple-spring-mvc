@@ -7,7 +7,7 @@ i gave some thought about opswork
 
 1>cloudformation does aws provision such as setup vpc, public/private subnet, internet gateway (include routing), nat gateway (include routing), vpc, public/private security group (including routing)
 
-2>but who setup java, tomcat, upload war?  of course those can be done manually?  but i think the so call opsworks=config application part refer to this part
+2>but who setup java, tomcat, upload war?  of course those can be done manually?  but i think the so call opsworks=config application part refer to this part for example setup 'java in ec2, tomcat in ec2, upload war to tomcat'
 
 https://docs.aws.amazon.com/opsworks/latest/userguide/create-custom.html
 
