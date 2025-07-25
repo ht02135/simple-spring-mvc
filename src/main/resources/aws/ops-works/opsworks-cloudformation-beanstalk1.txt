@@ -1,0 +1,22 @@
+
+https://www.techtarget.com/searchaws/tip/When-to-use-AWS-OpsWorks-vs-CloudFormation-or-Elastic-Beanstalk
+When to use AWS OpsWorks vs. CloudFormation or Elastic Beanstalk
+
+opsworks-cloudformation-beanstalk1.txt
+
+//////////////
+
+Use CloudFormation to deploy AWS resources
+AWS CloudFormation is a declarative tool best used to deploy infrastructure required for simple applications, such as a website that requires few updates or when the whole infrastructure instance can be replaced for each update. The declaration takes the form of a CloudFormation template -- a text file that describes what AWS resources to deploy for infrastructure and applications. CloudFormation reads the template and deploys the described infrastructure. 
+
+OpsWorks vs. CloudFormation: Manage EC2 configuration
+With AWS OpsWorks, developers can deploy Puppet or Chef to manage declarative configurations within EC2 instances. Like CloudFormation, you can use OpsWorks to deploy AWS resources. However, OpsWorks automates the initial deployment of applications, as well as the ongoing changes to the operating system and application infrastructure.
+
+You should use OpsWorks in place of CloudFormation if you need to deploy an application that requires updates to its EC2 instances. If your application uses a lot of AWS resources and services, including EC2, use a combination of CloudFormation and OpsWorks.
+
+use CloudFormation to deploy all of the AWS resources for your application, and use OpsWorks to do the detailed configuration of the operating systems and infrastructure.
+
+/////////////////////
+
+this url is to the point of most useless point i ever seen in the net...  too abstract without concrete example...  F
+

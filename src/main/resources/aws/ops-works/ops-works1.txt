@@ -1,0 +1,38 @@
+
+In many cases CloudFormation is used with OpsWorks; where CloudFormation is used to provision the infrastructure and OpsWorks to configure the resources created. OpsWorks (via Chef or Puppet) provides a richer set of abilities when it comes to configuring the application stack then the simple shell scripting offered by CloudFormation. So, generally CloudFormation is used to deploy AWS resources, and OpsWorks is used to do the detailed configuration of the application(s)/operating system(s).
+
+In some ways one can say that CloudFormation is focused more with a collection of AWS infrastructure resources rather than the application itself; but as you have alluded to some things can be done by both services interchangeably.
+
+///////////////
+/////////////////
+
+https://www.techtarget.com/searchaws/tip/When-to-use-AWS-OpsWorks-vs-CloudFormation-or-Elastic-Beanstalk
+When to use AWS OpsWorks vs. CloudFormation or Elastic Beanstalk
+
+opsworks-cloudformation-beanstalk1.txt
+
+///////////////
+
+https://www.cloudysave.com/aws/what-is-the-difference-between-opsworks-and-cloudformation/
+What is the difference between OpsWorks and CloudFormation?
+
+opsworks-cloudformation1.txt
+
+///////////////
+
+https://stelligent.com/2016/06/24/automating-and-orchestrating-opsworks-in-cloudformation-and-codepipeline/
+Automating and Orchestrating OpsWorks in CloudFormation and CodePipeline
+
+automate-opswork-cloudformation-codepipeline1.txt
+
+/////////////////
+/////////////////
+
+The best way I found to explain it is:
+
+OpsWork (chef) for the software configuration.
+Cloudformation for the hardware configuration.
+
+/////////////////////
+
+

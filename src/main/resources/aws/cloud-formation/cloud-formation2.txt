@@ -3,3 +3,69 @@ https://towardsthecloud.com/blog/deploy-cloudformation-template
 
 /////////////////
 
+How to deploy a CloudFormation template on AWS
+First, you log in to the AWS Console and go to the search bar on the top left corner of the site, and type "CloudFormation". This will bring you to the CloudFormation service in the console.
+
+Press the orange "Create stack" button to start the CloudFormation deploy process.
+
+////////////////
+
+1. Specify template
+A CloudFormation stack is based on a template defined in either YAML or JSON format. In this template, you specify the AWS resources that you wish to deploy and create on AWS.
+
+In this case, we go for the most common method, which is uploading our own template. sample2.json
+
+2. Specify stack details
+In the specify stack details step, you fill in the name of your CloudFormation stack. A Stack name can include letters (A-Z and a-z), numbers (0-9), and dashes (-).
+
+Specify the CloudFormation stack details such as names and parameters
+
+Then you fill in the parameters of the template. Parameters allow you to input custom values for the properties of your AWS resources. This makes it possible to build reusable CloudFormation templates.
+
+stack-name=ec2-instance-with-sg
+instance-type=t2.small
+
+3. Configure stack options
+The configure stack options step allows you to add permissions and metadata to your stack.
+
+Configure the AWS CloudFormation stack options such as tags and IAM roles
+
+You have the ability to tag your CloudFormation stack (up to 50 tags). Tagging stacks becomes helpful when you have to manage multiple stacks on an AWS account.
+
+Next to that, you can configure an IAM role for CloudFormation to explicitly define how it can create, modify or delete resources on your behalf.
+
+This way you have better control over what CloudFormation can and can't do within the boundaries of this CloudFormation stack.
+
+You also have two options on what CloudFormation should do when a stack deployment fails. You can choose to "Roll back all stack resources" which is the default option or you can "Preserver successfully provisioned resources".
+
+Further down below, you'll find the "Advanced options" section. Here you can configure a stack policy, which is a JSON document that defines which AWS resources you want to protect from unintentional updates during a stack update.
+
+It's also possible to add notifications to the CloudFormation stack by adding an SNS topic ARN. This is a useful feature if you want to get notified on stack updates in Slack for example.
+
+4. Review
+The last step of the CloudFormation template deployment is the review section in which you can verify all the details that you filled in the previous 3 steps.
+
+Scroll to the bottom and click "Create stack" to start the CloudFormation template deploy in AWS.
+
+The CloudFormation template is deployed
+Now that you initiated the "Create stack" process, the CloudFormation template is being deployed, as you can see in the stack events tab of the "ec2-instance-with-sg" stack.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+
+https://www.cloudysave.com/aws/what-is-the-difference-between-opsworks-and-cloudformation/
+What is the difference between OpsWorks and CloudFormation?
+
+opsworks-cloudformation1.txt
+
+///////////////
+
+What is AWS OpsWorks?
+OpsWorks from AWS is classified as a “Server Configuration and Automation” tool. AWS OpsWorks helps users to create and manage their application databases and load balancers with the help of Chef and Puppet.
+
+In addition, users can create customized recipes using Chef to install software packs and perform tasks that can be scripted. OpsWorks from AWS is designed to scale user applications with the help of automated time-based or load-based scaling. It helps to maintain the quality of applications by identifying failed instances and replacing them promptly.
+
+With AWS OpsWorks users finally have complete control over deployments and automation of every component of app development.
+
+//////////////////
+
+What is AWS CloudFormation?
+CloudFormation from AWS is classified as an “Infrastructure Build” tool. AWS CloudFormation is designed to allow users to create and manage a variety of AWS resources.
+
+CloudFormation provides users with sample templates and even provides an option to create customized templates for describing AWS resources, along with run-time parameters and related dependencies, which are needed to run your application.
+
+////////////////////
+
+What are the main differences between AWS OpsWorks and AWS CloudFormation?
+
+According to Amazon, its AWS OpsWorks is meant for:
+
+Configuring and Managing – OpsWorks is a configuration management service that allows managing instances of Puppet and Chef. It does this by automating the server’s configuration, deployment and management of all EC2 instances and on-premise computing environments.
+Chef Automate – Lets users create AWS-related Chef servers and use the Chef DK and other tools to manage them efficiently.
+Puppet Enterprise – Let users use Puppet to automate the way nodes are configured, deployed and managed. Works for on-premise devices and EC2 instances.
+OpsWorks Stacks – Let users create stacks that help to manage cloud resources in layers or specialized groups. A layer consists of a number of EC2 instances that are designed for a specific purpose. Layers require Chef recipes to handle tasks, such as deploying apps, installing packs on instances and running scripts.
+On the other hand, the AWS CloudFormation tool is designed for:
+
+Collecting and Provisioning – CloudFormation provides businesses and developers an efficient way to make a collection of relevant AWS resources and provision them in a well-organized and effective manner. This type of service is also called “Infrastructure as Code”.
+Organizing Infrastructure – This tool is focused more on AWS infrastructure than the user applications. It provides two concepts, Template which is a YAML or JSON-format, a text file with a description of every AWS resource and configuration which users need to deploy for running applications successfully. The Stack concept is a set of AWS resources that are made and managed as s single unit when a template is instanced by AWS CloudFormation.
+Restoring Template Versions – CloudFormation lets users get enhanced template version controls. This roll-back feature is extremely useful for restoring templates at such times when users attempt to update their stack but the deployment fails midway for some reason. AWS CloudFormation automatically restores the changes to their previous working state.
+Creating and Managing Beanstalk Apps – CloudFormation is compatible with Elastic Beanstalk application environments, which allows users to create and manage applications hosted on AWS Elastic Beanstalk, and also lets you store the application data with an RDS database.
+
+///////////////
+
+Overall, AWS OpsWorks is more focused on organizing and configuring software and not on how and what AWS resources are secured. On the other hand, AWS CloudFormation is focused on providing users with an easy way to create a list of AWS resources and distribute them in the best way possible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
