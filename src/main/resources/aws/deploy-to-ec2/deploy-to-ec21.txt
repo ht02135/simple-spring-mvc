@@ -1,0 +1,224 @@
+
+https://dev.to/markbdsouza/deploying-a-java-springboot-app-to-an-aws-amazon-linux-2-ec2-instance-1m1c
+
+/////////////
+
+1>Create your AWS EC2 Instance (Virtual Machine)
+
+Once logged in, type EC2 in the AWS services search bar and open it up. The EC2 Service basically lets us create and access new virtual machines in just a few seconds
+
+To create a new instance, on the left panel, click on Instances>Instances. This will show you the instances you have on your account. Click on "Launch instances" on the main page to start creating your new instance
+
+2>or the AMI(Amazon Machine Image - basically the OS and configuration of the instance we will use) choose the default Amazon Linux 2 AMI and click Select.
+
+The t2.micro is part of the Free tier, select and click Next.
+
+3>Keep clicking Next until Step 6. Configure Security Groups
+
+Security group decides who can access your instance. By default the SSH 22 will help us connect to the instance from our system. You can change the source to Anywhere if not set.
+
+hung: make sure add 8080 to group security
+
+we can access port 8080
+
+Type: Custom TCP Rule
+Protocol: TCP
+Port Range: 8080
+Source: Anywhere
+
+Once done, click on Review and Launch
+
+4>Connect to and configure your Amazon Linux 2 EC2 Instance
+Connect to your EC2 Instance
+
+Using the pem file, we will now SSH into our instance. What you will need
+
+Location and name of the key pair created My path is : C:\Users\madsouza\Desktop\AWS\HelloWorldKeyPair.pem
+Public IP address of the Instance You can get this from your AWS EC2 Dashboard by clicking on your EC2 Instance
+
+Using the .pem file, we will now SSH into the created EC2 Instance
+Run the below command to ssh into your ec2 instance.
+
+ssh -i C:\Users\madsouza\Desktop\AWS\HelloWorldKeyPair.pem ec2-user@13.233.111.77
+
+hung: unless i am mistaken, i think you can connect to ec2 instane via aws console...  but i think connect via ssh via dos is probably better, because you can copy and past paste from pc.  if you do direct connect via amazon console, then you will need to type it out ===> PAIN IN THE ASS...
+
+5>Install Java
+By default java is not installed on the Amazon Linux 2 AMI. You can check this by doing -
+
+java -version
+
+tomcat needs java, that is why we need to install it..
+
+Now, to install java 8 onto the machine, go ahead and hit -
+
+sudo yum install java-1.8.0
+
+In just another second or two, java is installed on your EC2 Instance
+java -version again would give you the java version installed
+
+To install Java 11 instead of 8 use the command -
+
+sudo amazon-linux-extras install java-openjdk11
+
+6>install tomcat
+
+Create user and group for tomcat
+Now before installing tomcat, lets create a new group and user -
+
+sudo groupadd --system tomcat 
+sudo useradd -d /usr/share/tomcat -r -s /bin/false -g tomcat tomcat
+
+To confirm -
+
+[ec2-user@ip-172-31-44-151 ~]$ getent passwd tomcat
+tomcat:x:995:993::/usr/share/tomcat:/bin/false
+[ec2-user@ip-172-31-44-151 ~]$ getent group tomcat
+tomcat:x:993:
+
+Install and Start Apache Tomcat 9
+At the time of writing this post, tomcat9 is at v9.0.41. Download the latest version using wget command -
+
+export VER="9.0.41"
+wget https://archive.apache.org/dist/tomcat/tomcat-9/v${VER}/bin/apache-tomcat-${VER}.tar.gz
+
+Now extract the file -
+
+sudo tar xvf apache-tomcat-${VER}.tar.gz -C /usr/share/
+
+We will create a link to the folder to make it easier -
+
+sudo ln -s /usr/share/apache-tomcat-$VER/ /usr/share/tomcat
+
+7>Now we need to provide access to the tomcat user that we created -
+
+sudo chown -R tomcat:tomcat /usr/share/tomcat
+sudo chown -R tomcat:tomcat /usr/share/apache-tomcat-$VER/ 
+
+You can confirm what has been done by navigating to the folder and displaying the files -
+
+cd  /usr/share
+ls -lrt
+
+8>Now create a Tomcat Systemd service -
+
+sudo tee /etc/systemd/system/tomcat.service<<EOF
+[Unit]
+Description=Tomcat Server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment='JAVA_OPTS=-Djava.awt.headless=true'
+Environment=CATALINA_HOME=/usr/share/tomcat
+Environment=CATALINA_BASE=/usr/share/tomcat
+Environment=CATALINA_PID=/usr/share/tomcat/temp/tomcat.pid
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M'
+ExecStart=/usr/share/tomcat/bin/catalina.sh start
+ExecStop=/usr/share/tomcat/bin/catalina.sh stop
+
+[Install]
+WantedBy=multi-user.target
+EOF
+Now time to enable & start up our tomcat service -
+
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl enable tomcat
+Check the status of your tomcat server anytime with the below command -
+
+[ec2-user@ip-172-31-44-151 share]$ systemctl status tomcat
+● tomcat.service - Tomcat Server
+   Loaded: loaded (/etc/systemd/system/tomcat.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2020-12-27 13:50:01 UTC; 16s ago
+ Main PID: 5903 (java)
+   CGroup: /system.slice/tomcat.service
+           └─5903 /usr/lib/jvm/jre/bin/java -Djava.util.logging.config.file=/usr/share/tomcat/conf/logging.properties...
+
+Dec 27 13:50:01 ip-172-31-44-151.ap-south-1.compute.internal systemd[1]: Starting Tomcat Server...
+Dec 27 13:50:01 ip-172-31-44-151.ap-south-1.compute.internal systemd[1]: Started Tomcat Server.
+Other useful commands to stop and restart tomcat are -
+
+sudo systemctl stop tomcat
+sudo systemctl restart tomcat
+
+9>Confirm from the GUI that tomcat is running
+Tomcat by default runs on port 8080. So now go on to your AWS EC2 Instance Summary Screen and get your Public IPv4 DNS
+
+For me it is http://ec2-13-233-111-77.ap-south-1.compute.amazonaws.com/
+To access your tomcat UI add :8080 to the url
+http://ec2-13-233-111-77.ap-south-1.compute.amazonaws.com:8080/
+You should see it loaded successfully
+
+10>Create Tomcat Admin User
+Now we need to configure tomcat for an admin user so we can upload our WAR File.
+
+sudo vim /usr/share/tomcat/conf/tomcat-users.xml
+
+paste the below few lines and change the password.
+
+<role rolename="admin-gui"/>
+<role rolename="manager-gui"/>
+<user username="admin" password="TomcatP@sSw0rD" fullName="Administrator" roles="admin-gui,manager-gui"/>
+
+hung: PAIN IN ASS to edit in linus.  probably find the way to edit whatever file in DOS and then scp it???
+
+11.Update webapps manager
+We additionally need to make a small change to the below file otherwise you might see a 403/401 error navigating to the tomcat webapps admin page.
+
+sudo su
+vi /usr/share/tomcat/webapps/manager/META-INF/context.xml
+Press the key i to enter Insert mode. Then comment out the valve tag in the xml.
+To comment it out change the below line.
+
+<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+to
+
+<!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+         
+12>Update minimum size of the WAR file (OPTIONAL)
+If your WAR size is above 50 MB or you foresee it getting over 50MB, you would need to make a minor change to update the minimum size.
+
+sudo su
+vi /usr/share/tomcat/webapps/manager/WEB-INF/web.xml
+Press i to get into INSERT mode and update the below section -
+
+ <multipart-config>
+      <!-- 50MB max -->
+      <max-file-size>52428800</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+to -
+
+ <multipart-config>
+      <!-- 250MB max -->
+      <max-file-size>262144000</max-file-size>
+      <max-request-size>262144000</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+    
+13>Upload WAR File
+Scroll down to the 'WAR file to deploy' section and upload your .war file. This can be found under the Target folder of your project.
+
+est your application
+By clicking on the application loaded or appending the WAR file name to the end of the address, you would be able to
+http://ec2-13-233-111-77.ap-south-1.compute.amazonaws.com:8080/hello-world-0.0.1-SNAPSHOT/
+
+
+
+
+
+
+
+
+
+
+
+

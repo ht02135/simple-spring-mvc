@@ -1,0 +1,32 @@
+
+CloudFormation, on the other hand, doesn't automatically do anything. It's simply a way to define all the resources needed for deployment in a huge JSON/YAML file. So a CloudFormation template might actually create two Elastic Beanstalk environments (production and staging), a couple of ElasticCache clusters, a DynamoDB table, and then the proper DNS in Route53. I then upload this template to AWS, walk away, and 45 minutes later everything is ready and waiting. Since it's just a plain-text JSON/YAML file, I can stick it in my source control which provides a great way to version my application deployments. It also ensures that I have a repeatable, "known good" configuration that I can quickly deploy in a different region.
+
+//////////////
+
+AWS CloudFormation: "Template-Driven Provisioning"
+AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion.
+
+CloudFormation (CFn) is a lightweight, low-level abstraction over existing AWS APIs. Using a static JSON/YAML template document, you declare a set of Resources (such as an EC2 instance or an S3 bucket) that correspond to CRUD operations on the AWS APIs.
+
+When you create a CloudFormation stack, CloudFormation calls the corresponding APIs to create the associated Resources, and when you delete a stack, CloudFormation calls the corresponding APIs to delete them. Most (but not all) AWS APIs are supported.
+
+///////////////
+
+In many cases CloudFormation is used with OpsWorks; where CloudFormation is used to provision the infrastructure and OpsWorks to configure the resources created. OpsWorks (via Chef or Puppet) provides a richer set of abilities when it comes to configuring the application stack then the simple shell scripting offered by CloudFormation. So, generally CloudFormation is used to deploy AWS resources, and OpsWorks is used to do the detailed configuration of the application(s)/operating system(s).
+
+////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

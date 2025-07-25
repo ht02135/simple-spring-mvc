@@ -1,0 +1,57 @@
+
+https://medium.com/@piyushag2305/deploying-a-spring-boot-application-on-aws-elastic-beanstalk-war-packaging-21ee8d0eae18
+
+///////////
+
+AWS Elastic Beanstalk: "Web Apps Made Easy"
+AWS Elastic Beanstalk is an easy-to-use service for deploying and scaling web applications and services developed with Java, .NET, PHP, Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Passenger, and IIS.
+
+You can simply upload your code and Elastic Beanstalk automatically handles the deployment, from capacity provisioning, load balancing, auto-scaling to application health monitoring.
+
+Elastic Beanstalk (EB) is a higher-level, managed 'platform as a service' (PaaS) for hosting web applications, similar in scope to Heroku. Rather than deal with low-level AWS resources directly, EB provides a fully-managed platform where you create an application environment using a web interface, select which platform your application uses, create and upload a source bundle, and EB handles the rest.
+
+Using EB, you get all sorts of built-in features for monitoring your application environment and deploying new versions of your application.
+
+Under the hood, EB uses CloudFormation to create and manage the application's various AWS resources. You can customize and extend the default EB environment by adding CloudFormation Resources to an EB configuration file deployed with your application.
+
+/////////////////
+
+Creating an Elastic Beanstalk Application
+
+1>Go to Create New Application and on the page give your application a name and optionally you can also add a Description.
+
+2>Then in the newly created application, go to Create a new environment
+Choose Web Server Environment
+
+In the Domain field, you can give any custom domain to your application and check whether it’s available or not or you can leave it blank and Elastic Beanstalk will automatically generate an URL for you
+
+3>Then on the following section:
+First select Managed Platform.
+In the platform drop-down select Tomcat.
+For Platform branch, you can select Tomcat 8.5 with Java 8 running on 64Bit Amazon Linux.
+In Platform version, select 3.3.9 (Recommended) or any latest version if available.
+
+4>You need to upload your war file in Upload your code section. Once it get uploaded completely, just select Create Environment and just wait
+
+5>By default, Apache Tomcat on Spring Boot uses port 8080 while Elastic Beanstalk uses port 5000
+so either you can change the port for Java to 5000 by using
+
+server.port=5000
+or more preferably you can change the port in your Elastic Beanstalk environment to 5000
+
+by going to Configuration
+Then inside the Software section, go to Edit:
+On the bottom section inside Environment properties,
+In Name enter SERVER_PORT
+In Value enter 5000
+and click on Apply. This will restart the environment and may take around a minute before the heath status is again transitioned to OK.
+
+To test your Rest API just copy that URL and append your end-point to it. For the sample Hello World project discussed above, the URL will be:
+
+elastic_beanstalk.your_aws_region.elasticbeanstalk.com/hello
+
+
+
+
+
+
