@@ -9,6 +9,8 @@ i gave some thought about opswork
 
 2>but who setup java, tomcat, upload war?  of course those can be done manually?  but i think the so call opsworks=config application part refer to this part for example setup 'java in ec2, tomcat in ec2, upload war to tomcat'
 
+translate into : pretty much rest of configuration not done by cloudformation (just provision aws resources via template) need ALL be done opsworks then...  pretty obvious right??
+
 https://docs.aws.amazon.com/opsworks/latest/userguide/create-custom.html
 
 For example, if you store applications in one of the standard repositories, you can use the built-in deploy recipes to handle much of the work of installing the applications on the layer's instances.
