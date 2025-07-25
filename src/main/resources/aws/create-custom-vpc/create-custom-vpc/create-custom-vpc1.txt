@@ -8,10 +8,20 @@ AWS VPC Creation - Step by Step
 1>click creates vpc button.
 Give the name for VPC and add IPv4 CIDR. You can use the 10.0.0.0/16 CIDR range.
 
+------------
+
+/*
+Public Subnet - If a subnet’s traffic is routed to an internet gateway, the subnet is known as a public subnet.
+
+Private Subnet - If a subnet doesn’t have any route to the internet gateway, the subnet is known as a private subnet.
+*/
+
 2>Create Two Subnets. Firstly create a public subnet. You can use the 10.0.1.0/24 CIDR range for the public subnet
 
 3>Now the same interface, click add new subnet button for private subnet creation.
 Add IPv4 CIDR as 10.0.2.0/24. After that give the subnet name and select the availability zone.
+
+------------
 
 4>Now create an internet gateway for public subnet internet access. In VPC Console select Internet Gateway and create internet gateway. Give the name of Internet Gateway and hit create button.
 
@@ -22,6 +32,17 @@ Next, select the previously created VPC and click attach internet gateway button
 ------------
 
 this part is rout table part
+/*
+Route Table
+
+A route table contains a set of rules called routes which determine where traffic has to be directed. The route table is also used to add Internet Gateway to the subnet. You can have multiple route tables in a VPC.
+
+You can create two types of route tables inside VPC -
+
+Public Route Table - It is associated with a public subnet that has a route that sends all traffic to the internet gateway.
+
+Private Route Table - It is associated with a private subnet which has no access to the internet.
+*/
 
 6>Next, Go to the route table and create a route table for the public subnet. give the name for the route table and select the previously created VPC. The next click creates the route table button.
 
@@ -58,6 +79,14 @@ ssh –A ubuntu@{{Bastion-IP-address or DNS}}
 Connect to the private instances from the bastion host (Agent Forwarding).
 ssh ec2-user@{{InstanceIP or DNS}}
 
+---------------
+
+/*
+NAT Gateway (Network Address Translation)
+
+A NAT Gateway enables instances in a private subnet to connect to the internet or other AWS services. But it prevents the public internet from initiating a connection with those instances such as Database servers. To create a NAT Gateway we must specify the public subnet in which the NAT Gateway should live. And also we must specify an Elastic IP address to associate with the NAT Gateway when you create it.
+*/
+
 14>configure NAT for private subnet
 
 Inside the private ec2 terminal "ping google.com" it's not given any response because it doesn't connect internet.
@@ -72,6 +101,18 @@ Wait a few minutes for Nat Gateway up and running.
 16>Next, add subnet association. Select private subnet and click save association button.
 
 Finally, try to "ping google.com" inside a private subnet terminal. You can see the following output.
+
+--------------
+
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+
+
+
+
+
 
 
 

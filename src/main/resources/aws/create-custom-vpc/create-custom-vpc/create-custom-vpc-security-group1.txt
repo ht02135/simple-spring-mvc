@@ -1,0 +1,152 @@
+
+https://ashadali.medium.com/custom-security-group-inbound-outbound-rule-731f2c01fd25
+Custom Security Group Inbound Outbound Rule
+
+create-custom-vpc-security-group1.txt
+
+///////////////////
+
+Comparison: Default vs. Custom Security Group
+Default Security Group:
+
+Inbound rules: By default, the default security group allows inbound traffic from other instances associated with the same security group.
+Outbound rules: Allows all outbound traffic, just like in your custom configuration.
+Use Case: The default security group is useful when you need basic communication between instances within the same group but is generally less secure for more complex environments.
+Custom Security Group:
+
+Inbound rules: In your case, it’s completely locked down by default, ensuring no external traffic can reach the associated resources.
+Outbound rules: Default to allowing all traffic out.
+Use Case: This setup is ideal for resources that don’t require inbound access from the outside but still need to communicate out (e.g., for patch updates, reaching other AWS services, etc.).
+
+///////////////////
+
+Step 1: Creating a Custom Security Group
+Security Groups act as virtual firewalls that control the incoming and outgoing traffic to AWS resources. By default, AWS provides a “default” security group, but in most cases, you’ll want to create custom security groups tailored to your specific needs.
+
+Go to the AWS Management Console:
+Navigate to EC2 (or any other service you’re working with that uses Security Groups).
+On the left-hand menu, under Network & Security, click Security Groups.
+Click on ‘Create Security Group’:
+
+You’ll be taken to a form where you can define the details of your new custom security group.
+Fill in the Basic Information:
+
+Security Group Name: Give your security group a meaningful name, like custom-security-group (in your case, you named it custom security group).
+
+//////////////////
+
+Step 2: Understanding Inbound and Outbound Rules
+Once the basic setup is done, the most crucial step is configuring inbound and outbound rules. These rules control how traffic flows in and out of the resources associated with the security group.
+
+Inbound Rules:
+These rules define the types of traffic allowed into your resource. For instance, if you’re hosting a web server, you’ll want to allow HTTP or HTTPS traffic.
+
+Outbound Rules:
+These rules determine what traffic is allowed to leave your resource. Outbound rules allow your instances to communicate with other resources or the internet.
+
+//////////////////
+//////////////////
+//////////////////
+
+url on top has no example about out/in rule ==> EPIC FAIL HARDER
+to supplement https://docs.dremio.com/cloud/help-support/appendix/aws-resources/create-security-group/
+
+////////////////////
+
+To create a security group:
+
+Go to the AWS Management Console and sign in with your credentials.
+
+Navigate to Services > Networking & Content Delivery > VPC.
+
+Select Security groups from the side navigation bar.
+
+Click the Create security group button in the top right.
+
+On the Create security group page, set the following:
+
+a. Enter a Security group name and a Description to identify the policy (for example, dremio-SG and Outbound access to Dremio). These cannot be changed again once the group is created.
+
+b. For VPC, select your created VPC.
+
+c. Keep all other default settings.
+
+Click the Create security group button.
+
+////////////////////////
+
+Editing Inbound and Outbound Rules for the Security Group
+
+1>nbound Rules
+You need to edit the inbound rules to allow communication between Dremio Cloud engine nodes. All engine nodes are within your AWS VPC. There is no inbound communication needed from Dremio into your VPC.
+
+To edit inbound rules:
+
+Find the security group you created in the previous step (for example dremio-SG) and select the Edit inbound rules button in the bottom left.
+On the Edit inbound rules page, click the Add rule button and set the following:
+
+a. For Type, select Custom TCP.
+b. For Port range, enter 45678.  <-- EPIC FAIL EXAMPLE? why not stick with default 80 for web??  can we EPIC FAIL HARDER?
+c. For Source, select Custom. If your security group (for example dremio-SG) is not pre-populated, select it from the dropdown.
+
+odd i thought should be following for PUBLIC security group.  above is EPIC FAIL TOO>>>>
+protocol=tcp
+port range=80
+source=0.0.0.0/0
+
+If you're setting up a PrivateLink configuration, complete steps 3 and on. Otherwise, skip to step 7.
+
+Click Add rule again.
+
+a. For Type, select Custom TCP or HTTPS.
+b. For Port range, enter 443.  <-- fair for PRIVATE security group
+c. Select the same Source as the first rule.
+Click Save rules.
+
+protocol=TCP
+port range=ALL
+source=0.0.0.0/0
+
+////////////////////////
+
+Outbound Rules
+Edit outbound rules to allow Dremio Cloud engines in your VPC outbound access to connect to S3 and other sources.
+
+To edit outbound rules:
+
+Find the security group you created (for example dremio-SG) and click the Outbound rules tab.
+Click the Edit outbound rules button in the bottom left.
+
+On the Edit outbound rules page, click the Add rule button and 
+
+set the following: <-- EPIC FAIL EXAMPLE? missing port range?
+a. For Type, select All TCP. 
+b. For the Destination, select Custom and then 0.0.0.0/0 from the dropdown.
+
+protocol=ALL
+port range=ALL
+destination=0.0.0.0/0
+
+Click Save rules.
+
+//////////////////
+//////////////////
+//////////////////
+
+more supplement
+https://medium.com/@mudasirhaji/provision-vpc-security-groups-ec2-instance-and-many-more-using-terraform-6efef2aad719
+Provision VPC, Security-groups, EC2 Instance, and many more using Terraform
+
+
+
+
+
+
+
+
+
+
+
+
+
+

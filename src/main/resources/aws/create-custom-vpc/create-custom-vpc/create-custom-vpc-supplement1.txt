@@ -1,0 +1,125 @@
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+
+additional supplement
+
+https://medium.com/@mahesh22/create-your-own-custom-virtual-private-cloud-vpc-in-aws-42400fe62266
+Create your own Custom Virtual Private Cloud (VPC) in AWS
+
+VPC Security
+
+To secure VPC we have 2 Amazon VPC firewall options that can be used to secure your VPC:
+
+Security Groups - Security groups are a set of firewall rules that controls the traffic for your instance. In security groups the only action that can be carried out is allow. You cannot create a rule to deny. You can have a single security group associated with multiple instances.
+Network Access Control Lists (NACL) - An optional layer of security for your VPC that acts as a firewall for controlling traffic in and out of one or more subnets. You might set up network ACLs with rules similar to your security groups in order to add an additional layer of security to your VPC. The default Network ACL is configured to allow all traffic to flow in and out of the subnets to which it is associated.
+
+/////////////////////////
+
+You can provide multiple layers of security, including security groups and network access control lists, to help control access to Amazon EC2 instances in each subnet.
+
+NACL is used at subnet level, whereas Security groups are used at instance level. 
+
+NACL is stateless (this means any change applied to an incoming rule will not be applied to the outgoing rule), and Security groups are stateful (which means any changes which are applied to an incoming rule is automatically applied to a rule which is outgoing)
+
+///////////////////////////
+
+Step 4 - Creating Route Tables
+
+a) On the VPC Dashboard, click Route tables on the left pane.
+
+b) Now click on Create route table.
+
+c) Provide the Name for the Route table (Public-RT) and select the VPC in which you want to create the route and click on Create route table.
+
+d) Now do the same thing for (Private-RT) and click on Create route table.
+
+e) Now you should have 2 route tables with you 1 for Public subnet and 1 for Private subnet (but there are no subnets associated yet).
+
+f) To attach the subnet to the route table select the route table which you want to attach the subnet to and click on Subnet associations in the below tab and then click on Edit subnet associations.
+
+g) Now select the 2 public subnets and click on Save associations to add the subnets to the route table.
+
+h) Now repeat the same steps for Private-RT and this time select the Private subnets and click on Save associations.
+
+i) After associating the subnets to the respective route tables you should be able to see 2 subnets association in each of the subnets.
+
+///////////////////
+
+Step 5 - Creating a NAT Gateway
+
+a) On the VPC Dashboard, click NAT gateways on the left pane.
+
+b) Now click on Create NAT gateway.
+
+c) Provide a Name for the NAT Gateway (Mumbai-NAT), and while choosing Subnet always select Public subnet (NAT Gateway always connects from public subnet to private route table)
+
+d) Connectivity type you can leave it as it is (Public), for Elastic IP allocation ID it will not show any option in the drop-down list as we haven’t created any Elastic IP till now, so click on Allocate Elastic IP to create a new Elastic IP and assign it to NAT Gateway.
+
+e) Once the Elastic IP is allocated it will automatically fill the drop-down list, if not select the IP from the drop-down list and click on Create NAT gateway.
+
+f) Once you click on Create NAT gateway it will take few minutes (2 to 5 minutes) to change the State of NAT Gateway from Pending to Available.
+
+///////////////////
+
+Step 6 - Connecting routes to Internet Gateway & NAT Gateway
+
+a) On the VPC Dashboard, click Route tables on the left pane.
+
+b) Now select the Public-RT and on below tab select Routes and click on Edit routes.
+
+c) Now click on Add route to add a new route connection to public subnet.
+
+d) For Destination type 0.0.0.0/0 (which means all IPv4 addresses) and for Target select Internet gateway and then click on the Internet gateway (Mumbai-IGW) which we created before and click on Save changes.
+
+e) After successful updation we should be able to see the route for Internet gateway in the Public-RT Route tab.
+
+f) The Public instance will now be able to access the Internet.
+
+g) Now follow the same steps for Private-RT (select the Route table and on below tab select Route and click on Edit routes)
+
+h) Now click on Add route to add a new route connection to private subnet.
+
+i) For Destination type 0.0.0.0/0 (which means all IPv4 addresses) and for Target select NAT Gateway and then click on the NAT gateway (Mumbai-NAT-GW) which we created before and click on Save changes.
+
+j) Now our Private instance will be able to access the Internet.
+
+k) After clicking save changes check in the route if you are able to see the route for NAT Gateway in the Private-RT Route tab.
+
+///////////////////////
+
+Step 7 - Testing if the VPC works
+
+a) To test we will launch 2 instances one in Public subnet and another in Private subnet.
+
+b) Once VPC and its resources are created successfully we can see them in Network settings of EC2 menu.
+
+c) So now we can select own VPC to launch an EC2.
+
+d) I have launched 2 instances both in different subnet.
+
+e) The first one is Web_Server which resides in the Public Subnet and has a Public IP to connect to it.
+
+f) The second one is Database_Server which resides in the Private Subnet and has only a Private IP to connect to it (which can done through connecting to Web_Server first & then connect to Database_Server)
+
+g) Now when i connect to the Database_Server and run the command ping -c 3 google.com it returns me an output of 100% success that is because we have used NAT gateway to connect to the Internet.
+
+//////////////////////
+
+Step 8 - Enabling DNS host-names for EC2 Instances
+
+a) Sometimes instead of IP addresses, DNS host-names are used so AWS provides DNS host-names for resources (which was missing in our EC2 dashboard), to enable them navigate to Your VPCs in the VPC Dashboard
+
+b) Select the VPC for which you want to enable DNS host-names and click on Actions then select Edit VPC settings.
+
+c) Now in DNS settings click on the Enable DNS host-names check box and click on Save.
+
+d) Now if you check the EC2 instance it will be having a DNS host-name.
+
+Zoom image will be displayed
+
+/////////////////////
+
+
+
