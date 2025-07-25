@@ -72,7 +72,7 @@ function AppViewModel() {
 			These bindings differ in how they deal with a value of null or undefined:
 			1>in case of with binding, it will not show null
 			2>in case of using binding, it pop Uncaught ReferenceError in console.
-			translate why would anyone use using bindin? pretty EPIC FAIL binding...
+			translate why would anyone use using bindin? pretty MESS binding...
 			*/
 	    	{ text: null },
 	        { text: account + ' Building some cool apps.' },

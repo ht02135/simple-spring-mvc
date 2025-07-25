@@ -3,10 +3,10 @@ https://www.geeksforgeeks.org/system-design/software-design-patterns/
 https://www.tutorialspoint.com/design_pattern/abstract_factory_pattern.htm
 
 tutorialspoint >>>> geeksforgeeks
-1>geeksforgeeks factory method was epic fail.  why extra client wrap factory
+1>geeksforgeeks factory method was MESS.  why extra client wrap factory
 method is beyond me.  
 2>tutorialspoint is better
-3>i think geeksforgeeks get wrong on abstract factory method too....  epic fail
+3>i think geeksforgeeks get wrong on abstract factory method too....  MESS
 
 ////////////////////
 

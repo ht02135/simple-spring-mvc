@@ -48,7 +48,7 @@ These rules determine what traffic is allowed to leave your resource. Outbound r
 //////////////////
 //////////////////
 
-url on top has no example about out/in rule ==> EPIC FAIL HARDER
+url on top has no example about out/in rule ==> MESS
 to supplement https://docs.dremio.com/cloud/help-support/appendix/aws-resources/create-security-group/
 
 ////////////////////
@@ -86,10 +86,10 @@ Find the security group you created in the previous step (for example dremio-SG)
 On the Edit inbound rules page, click the Add rule button and set the following:
 
 a. For Type, select Custom TCP.
-b. For Port range, enter 45678.  <-- EPIC FAIL EXAMPLE? why not stick with default 80 for web??  can we EPIC FAIL HARDER?
+b. For Port range, enter 45678.  <-- MESS EXAMPLE? why not stick with default 80 for web??  can we MESS HARDER?
 c. For Source, select Custom. If your security group (for example dremio-SG) is not pre-populated, select it from the dropdown.
 
-odd i thought should be following for PUBLIC security group.  above is EPIC FAIL TOO>>>>
+odd i thought should be following for PUBLIC security group.  above is MESS TOO>>>>
 protocol=tcp
 port range=80
 source=0.0.0.0/0
@@ -119,7 +119,7 @@ Click the Edit outbound rules button in the bottom left.
 
 On the Edit outbound rules page, click the Add rule button and 
 
-set the following: <-- EPIC FAIL EXAMPLE? missing port range?
+set the following: <-- MESS EXAMPLE? missing port range?
 a. For Type, select All TCP. 
 b. For the Destination, select Custom and then 0.0.0.0/0 from the dropdown.
 
@@ -133,7 +133,7 @@ Click Save rules.
 //////////////////
 //////////////////
 
-more supplement on configure security group and NACL...  sigh, too many EPIC FAIL tutorial on top url...
+more supplement on configure security group and NACL...  sigh, too many MESS tutorial on top url...
 
 https://repost.aws/knowledge-center/connect-http-https-ec2
 

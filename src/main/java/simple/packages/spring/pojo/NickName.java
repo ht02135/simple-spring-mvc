@@ -35,7 +35,7 @@ public class NickName implements Serializable {
 	5>then you need fallback option annotation on param construct.  this class 
 	dont need it, just show example...
 	////////////////////////
-	odd this didnt work EPIC FAILED???  forced me to do field annotation.,.
+	odd this didnt work MESS???  forced me to do field annotation.,.
 	AVOID construct annotation overrated crap... stick with field annotation....
 	*/
 	@JsonCreator

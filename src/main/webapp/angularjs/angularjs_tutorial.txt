@@ -12,8 +12,7 @@ the bottom.
 
 ////////////////
 
-reminder to myself, angularjs is pretty shitty in eclipse because it epic
-fail recognize angular expression in html css style...  so doing this
+reminder to myself, angularjs is pretty shitty in eclipse because it MESS recognize angular expression in html css style...  so doing this
 in notepad, so i dont have to look at eye sore error...
 
 we can simplying open workplace folder in notepad++ to get file browsing
@@ -23,7 +22,7 @@ ability
 
 reminder to myself
 1>intellj is shitty without good search functionality
-2>vscode another shitshow without direct save or save all buttons, epic fail
+2>vscode another shitshow without direct save or save all buttons, MESS
 
 disable shitty html >> validation on script and style
 necessary evil so i dont get trolled by eclipse css style angular expression...
