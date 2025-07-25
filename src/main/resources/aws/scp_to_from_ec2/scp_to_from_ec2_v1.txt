@@ -1,0 +1,32 @@
+
+https://www.srcecde.me/posts/2021/02/copy-file-directory-to-from-ec2-using-scp-secure-copy/
+
+///////////////
+
+To copy the file from local machine to EC2 instance:
+Open local terminal
+scp -i identity_file.pem source_file.extention username@public_ipv4_dns:/remote_path
+
+Ex: scp -i access.pem ~/Documents/temp_file.txt ubuntu@0.0.0.0:/home/ubuntu/destination_dir
+
+scp: Secure copy protocol
+-i: Identity file
+source_file.extension: The file that you want to copy
+username: Username of the remote system (ubuntu for Ubuntu AMI & ec2-user for Linux AMI)
+public_ipv4_dns: DNS/IPv4 address of an instance
+remote_path: Destination path
+
+///////////////
+
+To copy the file from EC2 instance to local machine:
+Open local terminal
+scp -i identity_file.pem username@public_ipv4_dns:/remote_path/source_file.extension ~/destination_local_path
+
+Ex: scp -i access.pem ubuntu@0.0.0.0:/home/ubuntu/remote_path/temp.txt ~/Documents/destination_dir
+
+//////////////////
+
+
+
+
+
