@@ -133,15 +133,62 @@ Click Save rules.
 //////////////////
 //////////////////
 
-more supplement
-https://medium.com/@mudasirhaji/provision-vpc-security-groups-ec2-instance-and-many-more-using-terraform-6efef2aad719
-Provision VPC, Security-groups, EC2 Instance, and many more using Terraform
+more supplement on configure security group and NACL...  sigh, too many EPIC FAIL tutorial on top url...
 
+https://repost.aws/knowledge-center/connect-http-https-ec2
 
+I host a website on an EC2 instance. How do I allow my users to connect on HTTP (80) or HTTPS (443)?
 
+Resolution
+To allow traffic on port 80 and 443, you must configure the associated security group and network access control list (network ACL).
 
+I host my website on an Amazon Elastic Compute Cloud (Amazon EC2) instance. I want users to connect to my website on HTTP (port 80) or HTTPS (port 443).
 
+Resolution
+To allow traffic on port 80 and 443, you must configure the associated security group and network access control list (network ACL).
 
+Security group rules
+For HTTP traffic, add an inbound rule on port 80 from the source address 0.0.0.0/0.
+
+For HTTPS traffic, add an inbound rule on port 443 from the source address 0.0.0.0/0.
+
+These inbound rules allow traffic from IPv4 addresses. To allow IPv6 traffic, add inbound rules on the same ports from the source address ::/0. For more information on creating or modifying security groups, see Control traffic to your AWS resources using security groups.
+
+Security groups are stateful, so the return traffic from the instance to users is allowed automatically. You don't need to modify the security group's outbound rules.
+
+Inbound rules
+
+Type	Protocol	Port Range	Source
+HTTP (80)	TCP (6)	80	0.0.0.0/0
+HTTP (80)	TCP (6)	80	::/0
+HTTPS (443)	TCP (6)	443	0.0.0.0/0
+HTTPS (443)	TCP (6)	443	::/0
+
+///////////////////////
+
+Network ACL
+The default network ACL allows all inbound and outbound IPv4 traffic. If your users connect over IPv6 and your Amazon Virtual Private Cloud (Amazon VPC) has an associated IPv6 CIDR block, then your default network ACL also automatically adds rules allowing all inbound and outbound IPv6 traffic. However, if you use a custom network ACL with more restrictive rules, then you must explicitly allow traffic on port 80 and 443.
+
+Network ACLs are stateless, so you must add both inbound and outbound rules to allow the connection to your website. For more information on modifying network ACL rules, see Control subnet traffic with network access control lists.
+
+Inbound rules
+
+Rule #	Type	Protocol	Port Range	Source	Allow/Deny
+100	HTTP (80)	TCP (6)	80	0.0.0.0/0	ALLOW
+101	HTTPS (443)	TCP (6)	443	0.0.0.0/0	ALLOW
+102	HTTP (80)	TCP (6)	80	::/0	ALLOW
+103	HTTPS (443)	TCP (6)	443	::/0	ALLOW
+*	ALL Traffic	ALL	ALL	::/0	DENY
+*	ALL Traffic	ALL	ALL	0.0.0.0/0	DENY
+Outbound rules
+
+Rule #	Type	Protocol	Port Range	Destination	Allow/Deny
+100	Custom TCP Rule	TCP (6)	1024-65535	0.0.0.0/0	ALLOW
+101	Custom TCP Rule	TCP (6)	1024-65535	::/0	ALLOW
+*	ALL Traffic	ALL	ALL	::/0	DENY
+*	ALL Traffic	ALL	ALL	0.0.0.0/0	DENY
+
+//////////////////
 
 
 
