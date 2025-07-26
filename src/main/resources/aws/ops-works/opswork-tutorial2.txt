@@ -1,0 +1,102 @@
+
+https://www.whizlabs.com/blog/aws-opsworks/
+How to use AWS OpsWorks?
+
+////////////////////
+
+What is Opsworks?
+AWS OpsWorks is a configuration management service that helps you configure and operate applications in a cloud enterprise by using Chef. AWS OpsWorks Stacks and AWS OpsWorks for Chef Automate let you use Chef cook books and solutions for configuration management.
+
+-----------
+
+What are AWS Opsworks stacks?
+AWS OpsWorks Stacks, the original service, provides a simple and flexible way to create and manage stacks and applications. AWS OpsWorks Stacks lets you deploy and monitor applications in your stacks. You can create stacks that help you manage cloud resources in specialized groups called layers.
+
+A layer represents a set of EC2 instances that serve a particular purpose, such as serving applications or hosting a database server. Layers depend on Chef recipes to handle tasks such as installing packages on instances, deploying apps, and running scripts.
+
+-----------
+
+What are AWS Opsworks layers?
+Every stack contains one or more layers, each of which represents a stack component, such as a load balancer or a set of application servers.
+
+-----------
+
+As you work with OpsWorks layers, the following should be adhered to
+
+Each layer in a stack must have at least one instance and can optionally have multiple instances.
+Each instance in a stack must be a member of at least one layer, except for registered instances.
+
+-----------
+
+AWS OpsWorks Stacks provides three ways to manage the number of server instances.
+
+24/7 instancesare started manually and run until they are manually stopped.
+Time-based instancesare automatically started and stopped by AWS OpsWorks Stacks on a user-specified schedule.
+Load-based instancesare automatically started and stopped by AWS OpsWorks Stacks when they cross a threshold for a user-specified load metric such as CPU or memory utilization.
+
+//////////////////////////
+//////////////////////////
+
+Creating an Opswork stack
+
+Step 1: Log into the aws console. Go to the Management Tools section->OpsWorks.
+
+Step 2: Click on Go to OpsWorks stacks
+
+Step 3: Click on ‘Add your first stack’
+
+Step 4: Choose the sample stack, choose the operating system you desired and click on ‘Create stack’
+
+Step 5: Click on ‘Explore the sample stack’ in the next screen.
+
+You will then see the details of the stack in the next screen.
+
+To start the instance for the stack, got to the Instances section.
+
+For the nodejs-server1 , click on the start button to start the instance.
+
+Once the instance in online, you should be able to see the status of the server in the online state.
+
+Now if you go to the Public IP, and open it in the web browser you should get the following page
+
+----------------------
+
+Step 6: If you want to assign an Elastic IP to your stack, then go to the Layers section.
+
+Click on the Network section
+
+You can turn on Elastic IP from here
+
+Final Points to Remember about Opswork
+AWS OpsWorks is a configuration management service that helps you configure and operate applications in a cloud enterprise by using Chef.
+AWS OpsWorks Stacks, the original service, provides a simple and flexible way to create and manage stacks and applications
+Each layer in a stack must have at least one instance and can optionally have multiple instances.
+Each instance in a stack must be a member of at least one layer, except for registered instances
+For updating instances in stacks – Create and start new instances to replace your current online instances. Then delete the current instances. The new instances will have the latest set of security patches installed during setup. On Linux-based instances in Chef 11.10 or older stacks, run the Update Dependencies stack command, which installs the current set of security patches and other updates on the specified instances.
+
+--------------------
+
+this tutorial is also C passing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
