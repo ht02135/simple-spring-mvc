@@ -1,0 +1,6 @@
+
+https://spacelift.io/blog/what-is-aws-cloudformation
+What is AWS CloudFormation? Key Concepts & Tutorial
+
+/////////////////
+
