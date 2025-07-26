@@ -1,0 +1,168 @@
+
+https://asmed.com/amazon-aws-opsworks-tutorial/
+Amazon AWS OpsWorks Tutorial
+
+opswork-tutorial1.txt
+
+//////////////
+
+this explain what opswork do.  which many tutorial on internet MESS explaination...
+
+i gave some thought about opswork
+
+1>cloudformation does aws provision such as setup vpc, public/private subnet, internet gateway (include routing), nat gateway (include routing), vpc, public/private security group (including routing)
+
+2>but who setup java, tomcat, upload war?  of course those can be done manually?  but i think the so call opsworks=config application part refer to this part for example setup 'java in ec2, tomcat in ec2, upload war to tomcat'
+
+translate into : pretty much rest of configuration not done by cloudformation (just provision aws resources via template) need ALL be done opsworks then...  pretty obvious right??
+
+https://docs.aws.amazon.com/opsworks/latest/userguide/create-custom.html
+
+For example, if you store applications in one of the standard repositories, you can use the built-in deploy recipes to handle much of the work of installing the applications on the layer's instances.
+
+The following walkthrough describes how to implement a custom layer that supports a Tomcat application server. The layer is based on a custom cookbook named Tomcat, which includes recipes to handle package installation, deployment, and so on.
+
+////////////////////
+
+AWS OpsWorks is a configuration management service that provides managed instances of Chef  . OpsWorks lets you use Chef to automate how servers are configured, deployed, and managed across your Amazon EC2 instances or on-premises compute environments.
+
+'provides managed instances of Chef' very confusing english?  i think should be 'manages instances of chef' no?
+
+It has these parts :
+
+Chef : Chef turns infrastructure into codes , With Chef you can automate how you build ,deploy and manage your infrastructure
+
+Stack – Stack is a group of resources such as EC2 instance, ELB , RDS instance
+
+Layer – Layer exits (bad english? exists right?) within a stack and consist of things like Database layer, Application Layer
+
+/////////////////////
+
+We will see it in the Lab.
+
+We need 1 or more layers in the stack.
+An instance must be assigned to at least 1 layer
+Preconfigured layer include :
+Application layer
+Load Balance layer
+Database layer
+Cashing layer
+
+////////////////////////
+
+Step 1) Go to Amazon Console and go to OpsWorks
+
+Step 2) Go to region that you did not use it like Germany, as you see on EC2, there is no instance and we have only one default security group
+
+Step 3) Create an Stack, here we will use the Chef 11 stack
+
+Step 4) call it ASMWebPHPStack and leave all as default
+Think of stack as production Stack; Test Stack, developer stack
+
+---------------------------
+
+Step 5) Now I will add a layer in here
+
+Step 6) Pick Application PHP server =layer Type
+
+Step 7) what above layer do; it will create an EC2 instance that will have Apache Webserver on it with all yum update on it
+
+Step 8) now inside the Layer add an EC2 instance and called asmwebserver1, pick t2.micro and pick the AZ =eu-centeral-1a
+
+Step 9) Start the instance, right now installing the instance and pre-configuring Apache Server and doing all the updates for us ( it will take some time) Remember if we go back to OpsWorks and these are Chef 11 stack ( pre define chef recipe)
+
+Step 10) Lets back to Opsworks and click on Instance, and still booting
+
+-------------------
+
+Step 11) go on the Left and get an (App) Application from Repository
+
+An app represents code stored in a repository that you want to install on application server instances. When you deploy the app, OpsWorks downloads the code from the repository to the specified server instances.
+
+Step 12) give the name ASMApp1
+
+Step 13) put inside Git with this address , leave the rest as default value
+https://github.com/aws-samples/opsworks-demo-php-simple-app
+
+Step 14) Now click add App
+
+-------------------
+
+Step 15) Now go back to instance on the left and see if it is complete
+
+Step 16) If I click on the Ip address, you will see not fund; since the Apache Web server is running but we need go to App and deploy it
+
+Step 17) It take about 2 mins to deploy , after it is finish when you go back to my instance and click the IP address I will see it is working and it shows at bottom got the name of instance
+
+Simple PHP App
+Congratulations!
+
+Your PHP application is now running on the host “asmwebserver1” in your own dedicated environment in the AWS Cloud.
+
+This host is running PHP version 5.3.29.
+
+Step 18) Remember we do not need to SSH and just use the .php file.
+
+-------------------
+
+Step 19) Now we will add another layer for ELB , but before we do add this layer ; we will go back to EC2 and left we will create an ELB and called it OpsWorkELB , but we do not add any instance to here .
+
+Pick the security group called “
+AWS-OpsWorks-PHP-App-Server”
+
+and change to index.php and change the :
+Interval =10 sec
+Healthy threshold=3
+
+Step 20) after it finished; when you go to Instance Tab , make sure you do not have any instance added here
+
+Step 21) Now I go back to OpsWorks and try add the ELB layer to it
+
+-------------------
+
+Step 22) you can add a new layer in another way ; go back to PHP app Sevrer ( layer) then you will see a Tab called network ; here we can add the ELB layer ; as we see this is another way of doing this .
+
+Lets read the notes:
+
+Note: After you attach an ELB to a layer, OpsWorks removes any currently registered instances and then manages the load balancer for you. If you subsequently use the ELB console or API to modify the configuration, the changes will not be permanent
+
+-------------------
+
+Step 23) Now if you go back to layer ; you will See the ELB layer has been added but health is not good yet; it takes time ; now after a min ; it will be healthy and now if you click on long DNS name ; it will show the same Web page as before.
+
+Step 24) Now if I go back to EC2  then on left click on ELB; on the instance TAB ; I will see the name of Instance (asmwebserver1) in here , remember we did not add anything in here before.
+
+Step 25) If you go back to OpsWorks and click on the instance; you will see you have two other kinds
+
+24 hours ( default Instance )
+Time-based
+Load-based ( used with auto-scaling)
+
+-------------------
+
+Step 26) Now I will go under instance inside Opsworks and add another instance and let’s called it
+
+asmwebserver2
+t2.micro
+eu-centeral-1b
+
+Step 27) now click on Start ; then we will see if I go to long DNS name (https://opsworkelb-1369249705.eu-central-1.elb.amazonaws.com/)
+
+and keep refreshing ; I will see both the name :
+asmwebserver1
+asmwebserver2
+
+Step 28 ) After about 2 mins ,  Now if I go back to EC2 and click on ELB , I will see the new instance has been added under the instance tab and it is in-service
+
+------------------------
+
+hmn, this tutorial is C passing...
+
+
+
+
+
+
+
+
+
