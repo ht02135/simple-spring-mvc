@@ -1,0 +1,67 @@
+
+https://dev.to/oladipupoabeeb/aws-route-table-association-security-group-38l7
+AWS: Route Table Association & Security Group
+
+//////////////
+
+i could be mistaken, but i think there is 2 concept
+1>subnet has route table tab and NACL
+
+Network ACL works as a firewall protecting a subnet of a VPC (a VPC can involve multiple subnets).
+
+Route Table manages traffic flow among subnets of a VPC ( When you create a new VPC, a route table named as 'main route table' is created by default).
+
+2>but security group has in/out rule (key is 1>is route table, 2>is rule)
+
+////////////////////////
+
+AWS ROUTE TABLE ASSOCIATION
+AWS Route Table Association is the process of connecting a subnet in a Virtual Private Cloud (VPC) to a route table. A route table contains a set of rules called routes that are used to determine where network traffic is directed. When a subnet is associated with a route table, the routes in that table determine where the traffic to and from the subnet is routed.
+
+/* AWS ROUTE TABLE ASSOCIATION */
+resource "aws_route_table_association" "main_assoc" {
+  subnet_id      = aws_subnet.main_publlc_subnet.id
+  route_table_id = aws_route_table.main_route_table.id
+}
+Once a subnet is associated with a route table, the routes in that table determine where traffic is directed to and from the subnet. You can associate a subnet with only one route table at a time, and a route table can be associated with multiple subnets.
+
+////////////////////////
+
+AWS SECURITY GROUP
+An AWS Security Group acts as a virtual firewall that controls inbound and outbound traffic for one or more Amazon Elastic Compute Cloud (EC2) instances. It acts as a filter that allows certain traffic to enter or leave the EC2 instances while blocking all other traffic.
+
+Each security group has a set of inbound and outbound rules that define the type of traffic that is allowed to enter or leave the associated EC2 instances. You can configure the rules to allow traffic based on the protocol, port number, and IP address range.
+
+resource "aws_security_group" "main_security" {
+  name        = "main_security"
+  description = "Allow Main inbound Traffic"
+  vpc_id      = aws_vpc.main_vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+The ingress block is used to define the inbound rules while the egress block is used to define the outbound rules. This is not a secure configuration and should not be used in a production environment. In production, it is important to limit the traffic allowed by a security group to only the necessary protocols, ports, and IP addresses.
+
+//////////////////
+
+
+
+
+
+
+
+
+
+
+
+

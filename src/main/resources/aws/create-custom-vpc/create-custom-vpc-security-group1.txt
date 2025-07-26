@@ -145,7 +145,22 @@ To allow traffic on port 80 and 443, you must configure the associated security 
 I host my website on an Amazon Elastic Compute Cloud (Amazon EC2) instance. I want users to connect to my website on HTTP (port 80) or HTTPS (port 443).
 
 Resolution
-To allow traffic on port 80 and 443, you must configure the associated security group and network access control list (network ACL).
+To allow traffic on port 80 and 443, you must configure the associated security group and network access control list.  
+
+------------------
+unless i am mistaken, subnet has
+1>route table tab
+2>NACL
+
+A Network Access Control List (Network ACL, or NACL) is a firewall for a subnet.
+All traffic entering or exiting a subnet is checked against the NACL rules to determine whether the traffic is allowed in/out of the subnet.
+
+Network ACL works as a firewall protecting a subnet of a VPC (a VPC can involve multiple subnets).
+
+A Route Table is used to direct traffic in/out of a subnet. It contains a number of CIDRs (IP address ranges) and where to direct the appropriate traffic.
+
+Route Table manages traffic flow among subnets of a VPC ( When you create a new VPC, a route table named as 'main route table' is created by default).
+------------------
 
 Security group rules
 For HTTP traffic, add an inbound rule on port 80 from the source address 0.0.0.0/0.
