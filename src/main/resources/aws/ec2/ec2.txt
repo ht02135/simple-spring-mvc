@@ -94,7 +94,9 @@ Name the instance and make sure that select the AMI and Instance type (t2.micro)
 Dropdown and select the VPC we created for this demo. Make sure you selected public subnet.
 
 DONE
-this tutorial is B+ compare to other C tutorial...
+this is C+ tutorial...  i am surpise he didnt mention about 
+1>NACL for public/private subnet
+2>setting security group for ec2
 
 
 
