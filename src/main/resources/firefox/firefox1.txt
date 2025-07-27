@@ -11,3 +11,23 @@ Instructions for disabling automatic sorting currently:
     Tap on the Firefox logo 5 times to enable developer settings.
     Back out to the main settings menu, scroll down to Secret Settings, and tap on that.
     Find the 'Enable Compose Bookmarks' toggle and turn it off.
+    
+//////////////////////
+
+seriously i think firefox UI people is extinct or brain dead
+
+https://support.mozilla.org/en-US/kb/use-firefox-sidebar-access-bookmarks-history-synced
+adding sidebar button to firefox toolbar should be default.  so user can quickly click sidebar and quickly browser which bookmark to hit.  and sidebar can be visible until user think he done with clicking bookmarks and then close...
+
+Add the Sidebar button to your controls
+
+    Click the menu button Fx89menuButton, then click More tools and select Customize Toolbar… A panel will open with all the controls you can add to Firefox.
+    Drag and drop the Sidebar button to your menu or toolbar. It's your choice! 
+
+//////////////////
+
+at least one sanity thing is they still kept ublock origin.
+had chrome not removed ublock origin, i will not have consider firefox 2nd chance...
+
+//////////////////
+
