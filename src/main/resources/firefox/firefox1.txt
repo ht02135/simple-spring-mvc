@@ -1,0 +1,13 @@
+one of stupidest feature on firefox is sorting bookmarkt.  
+no idea which idiot think was good idea to implement it and
+to kick up a notch turned on by default
+
+here is how to turn of that ANNOYING EPIC FAIL
+
+Instructions for disabling automatic sorting currently:
+
+    Open settings.
+    Tap on About Firefox.
+    Tap on the Firefox logo 5 times to enable developer settings.
+    Back out to the main settings menu, scroll down to Secret Settings, and tap on that.
+    Find the 'Enable Compose Bookmarks' toggle and turn it off.
