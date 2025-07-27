@@ -1,6 +1,105 @@
 
-https://dev.to/aws-builders/web-application-deployment-on-aws-31a7
-Web Application Deployment on AWS
+https://medium.com/@fawazcp/create-an-ec2-instance-using-custom-vpc-f8c7310c063
+Create an EC2 Instance using Custom VPC
 
 ////////////////
+
+VPC
+AWS VPC stands for Amazon Web Services Virtual Private Cloud. It is a virtual network that you can create within your AWS account. A VPC allows you to control your network environment, including IP address ranges, subnets, and routing tables. 
+
+Subnet
+A subnet is a range of IP addresses in your VPC (Virtual Private Cloud) that you can use to deploy your resources. A subnet is a logical subdivision of an IP network
+
+A subnet can be public or private. A public subnet is one that has a direct route to the internet, and resources in this subnet can be accessed from the public internet. A private subnet, on the other hand, does not have a direct route to the internet, and its resources can only be accessed through a NAT (Network Address Translation) instance or a VPN (Virtual Private Network) connection.
+
+Each subnet has its own route table, and you can control the flow of traffic between subnets using security groups and network access control lists (ACLs)
+
+Route Table
+A route table is a set of rules, called routes, that are used to determine where network traffic is directed in a VPC. Each subnet in a VPC must be associated with a route table, and a route table can be associated with multiple subnets
+
+//////////////////
+
+1>Create a custom VPC using the AWS management console
+Login to your AWS account and search VPC and follow the below steps;
+
+2> Create subnets
+If you don’t know how to calculate CIDR then open the subnet calculator or click here. Enter your VPC CIDR and select a number of subnets based on the requirement. I selected No. of subnets as 16.
+
+got to https://www.site24x7.com/tools/ipv4-subnetcalculator.html
+select Number of Subnets = 16 for this tutorial (normally default vpc has 2 or 4)
+
+by default
+Network Address Block | Subnet Mask | No. of Hosts/Subnet | Number of Subnets |
+10.0.0.0/8            | 255.0.0.0/8 | 16777216            | 1                 |
+
+Host Address Range       | Broadcast Address | Wildcard Mask | CIDR Notation |
+10.0.0.1 - 10.15.255.254 | 10.15.255.255     | 0.15.255.255  | 10.0.0.0/12   |
+
+but i think he changed
+Network Address Block = 10.0.0.0/16 <-- see below why this is used...
+Number of Subnets = 16
+CIDR Notation = became = 10.0.0.0/20
+
+Subnet ID	Subnet Address	Host Address Range	Broadcast Address
+1	10.0.0.0	10.0.0.1 - 10.0.15.254	10.0.15.255  <-- use this for public subnet
+2	10.0.16.0	10.0.16.1 - 10.0.31.254	10.0.31.255  <-- use this for private subnet
+
+https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html
+When you create a VPC, we recommend that you specify a CIDR block from the private IPv4 address ranges as specified
+Example CIDR block 10.0.0.0/16 
+
+Choose the first subnet address and give CIDR notation /20 as you see below. I named this subnet as public which doesn’t mean that this subnet is public. You will see how to configure this as a public subnet in this demo.
+
+Subnet ID	Subnet Address	Host Address Range	Broadcast Address
+1	10.0.0.0	10.0.0.1 - 10.0.15.254	10.0.15.255  <-- use this for public subnet
+2	10.0.16.0	10.0.16.1 - 10.0.31.254	10.0.31.255  <-- use this for private subnet
+
+public subnet IPv4 CIDR block (Choose the first subnet address and give CIDR notation /20)
+10.0.0.0/20
+
+private subnet IPv4 CIDR block
+10.0.16.0/20
+
+Now we have created 2 subnets and named them public and private. By default the subnet we create is private. Let’s see how we can configure our public subnet to make it public. Before that, we need to create IGW and attach IGW to the VPC.
+
+----------------
+
+3>Create IGW
+
+4>Now let’s create a Route table
+create public RT
+
+4b>By default, every subnet we create is associated with the main route table. First, we can create a public route table and we can associate the public subnet with this route. Let’s see how we create;
+
+Open the route table we created → Subnet association → Edit subnet association
+We have associated our public subnet with Public RT.
+
+4c>by default, public RT has main route
+
+we need to add new 'igw-xyz' target
+Now we can see our public route table has 2 targets.
+
+Destination | Target | Status | Propagate |
+0.0.0.0/16  | local  | Active | No        |   <-- default main route
+0.0.0.0/0  | igw-xyz | Active | No        |  <-- connect to igw
+
+5>Create Private RT and associate with private subnet
+
+6>Enable auto-assign public IPv4 for public subnet
+
+7> Create an EC2 machine using a public subnet.
+
+Name the instance and make sure that select the AMI and Instance type (t2.micro) are comes under the free tier.
+
+Dropdown and select the VPC we created for this demo. Make sure you selected public subnet.
+
+DONE
+this tutorial is B+ compare to other C tutorial...
+
+
+
+
+
+
+
 
