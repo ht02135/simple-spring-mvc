@@ -1,8 +1,96 @@
 
-https://docs.docker.com/desktop/setup/install/linux/
+https://docs.docker.com/desktop/features/wsl/
+
+//////////////
 
 https://docker-curriculum.com/
 
+To see whether your Linux distribution is set to WSL 1 or WSL 2, use the command: wsl -l -v.
+
+C:\Users\ht021>wsl -l -v
+  NAME      STATE           VERSION
+* Ubuntu    Stopped         2
+
 ///////////////
+
+Download and install the latest version of Docker Desktop for Windows.
+https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe
+
+2>Follow the usual installation instructions to install Docker Desktop
+
+Start Docker Desktop from the Windows Start menu.
+
+Navigate to Settings.
+
+From the General tab, select Use WSL 2 based engine..
+
+If you have installed Docker Desktop on a system that supports WSL 2, this option is turned on by default.
+
+Select Apply.
+
+////////////////////////
+
+continue with
+https://docker-curriculum.com/
+
+Once you are done installing Docker, test your Docker installation by running the following:
+$ docker run hello-world
+
+PS C:\Users\ht021> wsl
+ht021@lenovohung:/mnt/c/Users/ht021$ docker run --help
+Usage:  docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+ht021@lenovohung:/mnt/c/Users/ht021$
+C:\worksplace\sts\simple-spring-mvc\src\main\resources\docker
+cd /mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker
+
+/////////////////////////
+
+In this section, we are going to run a Busybox container on our system and get a taste of the docker run command.
+
+To get started, let's run the following in our terminal:
+$ docker pull busybox
+note : need docker credential...
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+busybox      latest    f85340bf132a   10 months ago   6.55MB
+
+Docker Run
+Great! Let's now run a Docker container based on this image. To do that we are going to use the almighty docker run command.
+
+$ docker run busybox
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker run busybox
+
+When you call run, the Docker client finds the image (busybox in this case), loads up the container and then runs a command in that container. When we run docker run busybox, we didn't provide a command, so the container booted up, ran an empty command and then exited
+
+Let's try something more exciting.
+
+$ docker run busybox echo "hello from busybox"
+hello from busybox
+
+Nice - finally we see some output. In this case, the Docker client dutifully ran the echo command in our busybox container and then exited it. 
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker run busybox echo "hello from busybox"
+hello from busybox
+
+The docker ps command shows you all containers that are currently running.
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+-------------------
+busybox
+
+It's a just lightweight linux filesystem image for me. I'm using it for educational proposes without building a fully linux instance.
+---------------------
+
+
+
+
+
+
+
+
+
 
         

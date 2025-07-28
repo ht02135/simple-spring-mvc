@@ -1,0 +1,120 @@
+
+https://medium.com/bina-nusantara-it-division/tutorial-for-docker-on-windows-c9af1162f0f2
+
+///////////////
+
+1>First, pull the nginx images to local , you can do it via command prompt with command below
+Docker pull nginx
+    
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker pull nginx
+latest: Pulling from library/nginx
+140da4f89dcb: Pull complete
+59e22667830b: Pull complete
+1d9f51194194: Pull complete
+4b1e45a9989f: Pull complete
+96e47e70491e: Pull complete
+2ef442a3816e: Pull complete
+f30ffbee4c54: Pull complete
+Digest: sha256:84ec966e61a8c7846f509da7eb081c55c1d56817448728924a87ab32f12a72fb
+Status: Downloaded newer image for nginx:latest
+docker.io/library/nginx:latest
+
+2>create
+C:\worksplace\sts\simple-spring-mvc\src\main\resources\docker\index.html
+--------------
+<!doctype html>
+<html>
+<head>
+<title>The jQuery Example</title>
+</head>
+<body>
+	<h2>Hello from Nginx container</h2>
+</body>
+</html>
+-------------- 
+
+3>create C:\worksplace\sts\simple-spring-mvc\src\main\resources\docker\DockerFile
+A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Docker can build images automatically by reading the instructions from a dockerfile.
+
+The default filename is dockerfile
+
+Copy command below as our Dockerfile command
+-------------- 
+FROM nginx:latest
+COPY ./index.html /usr/share/nginx/html/index.html
+-------------- 
+
+This command is simply copy and index.html from to the Docker container. You start building our custom image by using a base image. On line 1, you can see we do this using the FROM command. This will pull the nginx:latest image to our local machine and then build our custom image on top of it.
+
+Next, we COPY our index.html file into the /usr/share/nginx/html directory inside the container overwriting the default index.html file provided by nginx:latest image.
+
+After you finish all preparation, you can run this command to build our image
+
+docker build -t <image name>  <-- this failed, what a joke, those tutorial tested their command?
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ ls
+DockerFile  docker1.txt  docker2.txt  index.html
+docker build -t "nginx-hello-world" <-- this failed, what a joke, those tutorial tested their command?
+ERROR: docker: 'docker buildx build' requires 1 argument <-- got this
+
+Tagging a Docker image
+docker build . -t ht02135/nginx-hello-world
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker build . -t ht02135/nginx-hello-world
+[+] Building 0.1s (1/1) FINISHED                                                                           
+ERROR: failed to build: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+
+The default filename is dockerfile
+docker build . -f ./dockerfile -t ht02135/nginx-hello-world
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker images
+REPOSITORY                  TAG       IMAGE ID       CREATED              SIZE
+ht02135/nginx-hello-world   latest    35bd7072f094   About a minute ago   279MB
+nginx                       latest    84ec966e61a8   13 days ago          279MB
+busybox                     latest    f85340bf132a   10 months ago        6.55MB
+
+use this tutorial instead
+https://stackify.com/docker-build-a-beginners-guide-to-building-docker-images/
+------------------
+ou run a Docker image by using the docker run API. The command is as follows:
+
+$ docker run -p80:3000 yourusername/example-node-app
+
+The command is pretty simple. We supplied -p argument to specify what port on the host machine to map the port the app is listening on in the container. Now you can access your app from your browser on https://localhost.
+
+To run the container in a detached mode, you can supply argument -d:
+
+$ docker run -d -p80:3000 yourusername/example-node-app
+
+Docker detached mode
+
+Detached mode, shown by the option --detach or -d, means that a Docker container runs in the background of your terminal. It does not receive input or display output.
+
+$ docker run -d -p80:3000 ht02135/nginx-hello-world
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker run -d -p80:3000 ht02135/nginx-hello-world
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker ps
+CONTAINER ID   IMAGE                       COMMAND                  CREATED              STATUS              PORTS                                     NAMES
+a29bd4a57d79   ht02135/nginx-hello-world   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:80->3000/tcp, [::]:80->3000/tcp   quizzical_pike
+------------------
+    
+////////////////////
+
+this tutorial is F with too many info that is just wrong.  i had to poke around to get it to
+work...
+
+/////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+

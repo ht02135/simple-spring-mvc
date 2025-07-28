@@ -1,0 +1,128 @@
+
+https://www.geeksforgeeks.org/devops/docker-instruction-commands/
+
+////////////////
+
+1>$ docker pull <image_name>
+
+2>$ docker ps [options..]
+    -a flag:  shows us all the containers, stopped or running.
+    -l flag: shows us the latest container.
+    -q flag: shows only the Id of the containers. 
+
+3>$ docker run <image_name>
+To give name of container
+$ docker run --name <container_name> <image_name>
+
+4>$ docker stop <container_ID>
+
+5>$ docker start <container_ID>
+
+To delete a container
+6>$ docker rm {options} <container_name or ID>
+
+7>To delete the image in docker. You can delete the images which are useless from the docker local storage so you can free up the space
+
+docker rmi <image ID/ image name>
+
+8>Lists all the pulled images which are present in our system.
+
+$ docker images
+
+9>The docker build command is used to build the docker images with the help of Dockerfile.
+
+docker build -t image_name:tag .
+
+10>While running the containers in Docker you may face some errors and containers fails to start. You can restart the containers to resolve the containers by using the following commands.
+
+docker restart container_name_or_id
+
+///////////////////
+///////////////////
+
+instance running
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker ps
+CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+a29bd4a57d79   ht02135/nginx-hello-world   "/docker-entrypoint.…"   27 minutes ago   Up 27 minutes   0.0.0.0:80->3000/tcp, [::]:80->3000/tcp   quizzical_pike
+
+docker images
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker images
+REPOSITORY                  TAG       IMAGE ID       CREATED          SIZE
+ht02135/nginx-hello-world   latest    35bd7072f094   40 minutes ago   279MB
+nginx                       latest    84ec966e61a8   13 days ago      279MB
+busybox                     latest    f85340bf132a   10 months ago    6.55MB
+
+docker rm {options} <container_name or ID>
+docker rm a29bd4a57d79   <== a29bd4a57d79   ht02135/nginx-hello-world
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker rm a29bd4a57d79
+Error response from daemon: cannot remove container "a29bd4a57d79": container is running: stop the container before removing or force remove
+
+docker stop <container_ID>
+docker stop a29bd4a57d79
+docker rm a29bd4a57d79
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker stop a29bd4a57d79
+a29bd4a57d79
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker rm a29bd4a57d79
+a29bd4a57d79
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+///////////////////
+///////////////////
+
+docker images
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker images
+REPOSITORY                  TAG       IMAGE ID       CREATED          SIZE
+ht02135/nginx-hello-world   latest    35bd7072f094   44 minutes ago   279MB
+nginx                       latest    84ec966e61a8   13 days ago      279MB
+busybox                     latest    f85340bf132a   10 months ago    6.55MB
+
+docker rmi ht02135/nginx-hello-world
+docker rmi nginx
+docker rmi busybox
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker rmi ht02135/nginx-hello-world
+Error response from daemon: conflict: unable to delete ht02135/nginx-hello-world:latest (must be forced) - container 0a9d7fcc2f2b is using its referenced image 35bd7072f094
+
+docker image rm --force ht02135/nginx-hello-world
+docker image rm --force nginx
+docker image rm --force busybox
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker image rm --force ht02135/nginx-hello-world
+Untagged: ht02135/nginx-hello-world:latest
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker image rm --force nginx
+Untagged: nginx:latest
+Deleted: sha256:84ec966e61a8c7846f509da7eb081c55c1d56817448728924a87ab32f12a72fb
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker image rm --force busybox
+Untagged: busybox:latest
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+<none>       <none>    35bd7072f094   48 minutes ago   279MB
+<none>       <none>    f85340bf132a   10 months ago    6.55MB
+
+docker image rm --force 35bd7072f094
+docker image rm --force f85340bf132a
+
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker image rm --force 35bd7072f094
+Deleted: sha256:35bd7072f0942be738dc66298d40d04fb018cc6e932bbc3a08b07c74534331c3
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker image rm --force f85340bf132a
+Deleted: sha256:f85340bf132ae937d2c2a763b8335c9bab35d6e8293f70f606b9c6178d84f42b
+ht021@lenovohung:/mnt/c/worksplace/sts/simple-spring-mvc/src/main/resources/docker$ docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+///////////////////
+///////////////////
+
+Remove all containers and after all images to win some space !
+
+$ docker rm $(docker ps -all -q)
+$ docker rmi $(docker image ls -q)
+
+
+
+
+
+
