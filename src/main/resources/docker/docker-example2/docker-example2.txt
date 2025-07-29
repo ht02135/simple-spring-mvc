@@ -2,3 +2,148 @@
 https://stackify.com/docker-build-a-beginners-guide-to-building-docker-images/
 
 //////////////
+
+Docker containers are runtime instances of Docker images, whether running or stopped. In fact, one of the major differences between Docker containers and images is that containers have a writable layer and it’s the container that runs your software. You can think of a Docker image as the blueprint of a Docker container.
+
+When you create a Docker container, you’re adding a writable layer on top of the Docker image. You can run many Docker containers from the same Docker image. You can see a Docker container as a runtime instance of a Docker image.
+
+Express generator is a CLI tool used for scaffolding Express applications. After that, we’ll go through the process of using Docker build to create a Docker image from the source code.
+
+https://expressjs.com/en/starter/generator.html
+
+//////////////////
+
+We start by installing the express generator as follows:
+
+$ npm install express-generator -g
+
+Next, we scaffold our application using the following command:
+
+$ express docker-app
+
+Now we install package dependencies:
+
+$ npm install
+
+Start the application with the command below:
+
+$ npm start
+
+If you point your browser to http://localhost:3000, you should see the application default page, with the text “Welcome to Express.”
+
+/////////////////
+
+Dockerfile
+
+Mind you, the application is still running on your machine, and you don’t have a Docker image yet. Of course, there are no magic wands you can wave at your app and turn it into a Docker container all of a sudden. You’ve got to write a Dockerfile and build an image out of it.
+
+Docker’s official docs define Dockerfile as “a text document that contains all the commands a user could call on the command line to assemble an image.” Now that you know what a Dockerfile is, it’s time to write one.
+
+Docker Instructions
+Dockerfile Instruction	Explanation
+1>FROM	
+We use “FROM” to specify the base image we want to start from.
+
+2>RUN	
+RUN is used to run commands during the image build process.
+
+3>ENV	
+Sets environment variables within the image, making them accessible both during the build process and while the container is running. If you only need to define build-time variables, you should utilize the ARG instruction.
+
+4>COPY	
+The COPY command is used to copy a file or folder from the host system into the docker image.
+
+5>EXPOSE	
+Used to specify the port you want the docker image to listen to at runtime.
+
+6>ADD	
+An advanced form of COPY instruction. You can copy files from the host system into the docker image. You can also use it to copy files from a URL into a destination in the docker image. In fact, you can use it to copy a tarball from the host system and automatically have it extracted into a destination in the docker image.
+
+7>WORKDIR	
+It’s used to set the current working directory.
+
+8>VOLUME	
+It is used to create or mount the volume to the Docker container
+
+9>USER	
+Sets the user name and UID when running the container. You can use this instruction to set a non-root user of the container.
+
+10>LABEL	
+Specify metadata information of Docker image
+
+11>ARG	
+Defines build-time variables using key-value pairs. However, these ARG variables will not be accessible when the container is running. To maintain a variable within a running container, use  
+
+12>ENV 
+instruction instead.
+
+13>CMD	
+Executes a command within a running container. Only one CMD instruction is allowed, and if multiple are present, only the last one takes effect.
+ENTRYPOINT	Specifies the commands that will execute when the Docker container starts. If you don’t specify any ENTRYPOINT, it defaults to “/bin/sh -c”.
+
+///////////////////////
+
+1>Creating a Dockerfile
+$ touch dockerfile
+
+2>The Base Image
+Dockerfile usually starts from a base image.
+
+We add the base image to Dockerfile using the FROM command, followed by the base image name:
+FROM node:18-alpine
+
+3>Copying source code
+Let’s instruct Docker to copy our source during Docker build:
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+First, we set the working directory using WORKDIR. We then copy files using the COPY command. The first argument is the source path, and the second is the destination path on the image file system. We copy package.json and install our project dependencies using npm install. This will create the node_modules directory that we once ignored in .dockerignore.
+
+4>Exposing a port
+Exposing port 3000 informs Docker which port the container is listening on at runtime. Let’s modify the Docker file and expose the port 3000.
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+
+5>Docker CMD
+The CMD command tells Docker how to run the application we packaged in the image. The CMD follows the format CMD [“command”, “argument1”, “argument2”].
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+
+6>Building Docker images
+With Dockerfile written, you can build the image using the following command:
+$ docker build .
+
+We can see the image we just built using the command docker images.
+$ docker images
+
+7>When you have many images, it becomes difficult to know which image is what. Docker provides a way to tag your images with friendly names of your choosing. This is known as tagging. Let’s proceed to tag the Docker image we just built. Run the command below:
+
+$ docker build . -t yourusername/example-node-app
+
+8>You run a Docker image by using the docker run API. The command is as follows:
+
+$ docker run -p80:3000 yourusername/example-node-app
+
+9>to run the container in a detached mode, you can supply argument -d:
+
+$ docker run -d -p80:3000 yourusername/example-node-app
+
+
+
+
+
+
+
+
