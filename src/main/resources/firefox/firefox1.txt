@@ -1,6 +1,4 @@
-one of stupidest feature on firefox is sorting bookmarkt.  
-no idea which idiot think was good idea to implement it and
-to kick up a notch turned on by default
+one of bad feature on firefox is sorting bookmarkt.  
 
 here is how to turn of that ANNOYING EPIC FAIL
 
@@ -13,8 +11,6 @@ Instructions for disabling automatic sorting currently:
     Find the 'Enable Compose Bookmarks' toggle and turn it off.
     
 //////////////////////
-
-seriously i think firefox UI people is extinct or brain dead
 
 https://support.mozilla.org/en-US/kb/use-firefox-sidebar-access-bookmarks-history-synced
 adding sidebar button to firefox toolbar should be default.  so user can quickly click sidebar and quickly browser which bookmark to hit.  and sidebar can be visible until user think he done with clicking bookmarks and then close...
