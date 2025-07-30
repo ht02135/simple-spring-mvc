@@ -1,0 +1,89 @@
+
+https://www.baeldung.com/docker-deploy-java-war
+Deploying a Java War in a Docker Container
+
+////////////////////
+
+WAR (Web Application Archive) is a zipped archive file that packages all the web application-related files and their directory structure.
+
+To make things simple, deploying a WAR file on Tomcat is nothing but copying that WAR file into the deployment directory of the Tomcat server. The deployment directory in Linux is $CATALINA_HOME/webapps. $CATALINA_HOME denotes the installation directory of the Tomcat server.
+
+After this, we need to restart the Tomcat server, which will extract the WAR file inside the deployment directory.
+
+Let’s assume that we have a WAR file for our application, ROOT.war, which we need to deploy to the Tomcat server.
+
+To achieve our goal, we need to first create a Dockerfile. This Dockerfile will include all the dependencies necessary to run our application.
+
+Further, we’ll create a Docker image using this Dockerfile followed by the step to launch the Docker container.
+
+/////////////////
+
+We’ll use the latest Docker image of Tomcat as the base image for our Dockerfile. The advantage of using this image is that all the necessary dependencies/packages are pre-installed. For instance, if we use the latest Ubuntu/CentOS Docker images, then we need to install Java, Tomcat, and other required packages manually.
+
+Since all the required packages are already installed, all we need to do is copy the WAR file, ROOT.war, to the deployment directory of the Tomcat server. That’s it!
+
+-----------------
+$ ls
+Dockerfile  ROOT.war
+$ cat Dockerfile 
+FROM tomcat
+
+COPY ROOT.war /usr/local/tomcat/webapps/
+-----------------
+
+3.2. Build the Docker Image
+
+Let’s now create the Docker image using the Dockerfile that we just created:
+-----------------
+$ pwd
+/baeldung
+$ ls
+Dockerfile  ROOT.war
+$ docker build -t myapp .
+Sending build context to Docker daemon  19.97kB
+Step 1/2 : FROM tomcat
+ ---> 710ec5c56683
+Step 2/2 : COPY ROOT.war /usr/local/tomcat/webapps/
+ ---> Using cache
+ ---> 8b132ab37a0e
+Successfully built 8b132ab37a0e
+Successfully tagged myapp:latest
+-----------------
+
+Run Docker Container
+
+So far, we’ve created a Dockerfile and built a Docker image out of it. Let’s now run the Docker container:
+
+$ docker run -itd -p 8080:8080 --name my_application_container myapp
+e90c61fdb4ac85b198903e4d744f7b0f3c18c9499ed6e2bbe2f39da0211d42c0
+$ docker ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+e90c61fdb4ac        myapp               "catalina.sh run"   6 seconds ago       Up 5 seconds        0.0.0.0:8080->8080/tcp   my_application_container
+
+Verify the Setup
+http://localhost:8080
+
+////////////////////////
+
+1>type wsl
+
+WSL2 requires two features to be enabled: "Virtual Machine Platform" (a subset of Hyper-V) "Windows Subsystem for Linux"
+
+2>do following if 1> run into issue
+
+This problem occurs when your Virtual Machine Platform and Windows Hypervisor Platform is not enabled.
+
+To solve this problem, go to Control Panel > Programs > Programs and Features, then click on Turn Windows features on or off or you can search for windows features in control panel search bar.
+
+note: oh no ldplayer does not like those feature turn on...
+
+
+
+
+
+
+
+
+
+
+
