@@ -112,6 +112,8 @@ nacl = feels like duplicated effort for diminishing return...  which in investme
 
 but 2nd thought, if it hit nacl before hit security group, then it can save security group from dealing with request that can be knockoff in nacl? may be that is why for perf purpose. other than perf purpose i dont see how nacl is added additional security.  it really is dminishing return...
 
+but 3rd thought, the instructor said nacl give you a default firewall in case you miss associate security group with instance, because nacl is subnet level which will apply to all instance in the subnet.  it is ok to screw up security group but nacl is your last defense...  ok if you say so :)  what about just dont mess up in first place?
+
 //////////////////////////
 //////////////////////////
 
