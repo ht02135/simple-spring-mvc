@@ -49,10 +49,4 @@ Lotus Development Corporation, Cambridge, MA 02141 (http://www.lotus.com)
         
 REFERENCE:	Available on request
   
-////////////////
 
-• Performed operation-specific responsibilities included estimating and implementing version upgrade release (Ameriprise, AXA, Erie, Guardian, Humana, Mass Mutual, New York Life, Purina, Schwab, Wells Fargo), enhancement, client-specific project, business-as-usual (BAU) project, troubleshoot issue, and bug fix requests
-
-• Performed AWS DEV/UAT/PROD ec2 (userApp/batchApp) and ecs (microservices) upgrade/enhancemnt deployment using YAML script to generate instruction script for Jenkin (To build package, deploy package to AWS ecs/ec2) and monitoring ecs/ec2 health via AWS console
-
-• Performed Jenkin, Apache Tomcat, Apache Load Balancer, Docker configuration for on-prem (Before AWS migration) UAT/PROD userApp/batchApp/microservices upgrade/enhancemnt deployment
