@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create an RDS instance, IAM role, and CloudWatch alarm
+
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+
+  MyRDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: epma-rds
+      AllocatedStorage: 20
+      DBInstanceClass: db.t2.micro
+      Engine: mysql
+      MasterUsername: admin
+      MasterUserPassword: adminpassword
+      VPCSecurityGroups:
+        - !Ref MyDBSecurityGroup
+      AvailabilityZone: us-east-1a
+      DBSubnetGroupName: !Ref MyDBSubnetGroup
+      MultiAZ: false
+
+  MyDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for RDS instance
+      VpcId: !Ref MyVPC
+
+  MyDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: epma-rds-subnet-group
+      DBSubnetGroupDescription: Subnet group for RDS instance
+      SubnetIds:
+        - !Ref MySubnet1
+        - !Ref MySubnet2
+
+  MySubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      AvailabilityZone: us-east-1a
+      CidrBlock: 10.0.0.0/24
+
+  MySubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      AvailabilityZone: us-east-1b
+      CidrBlock: 10.0.1.0/24
+
+  MyIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: epma-rds-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: rds.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: RDSAccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds:CreateDBSnapshot
+                  - rds:DeleteDBSnapshot
+                  - rds:DescribeDBSnapshots
+                  - rds:DescribeDBInstances
+                Resource: "*"
+
+  MyCloudWatchAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: RDSFreeStorageSpaceAlarm
+      ComparisonOperator: LessThanThreshold
+      EvaluationPeriods: 1
+      MetricName: FreeStorageSpace
+      Namespace: AWS/RDS
+      Period: 300
+      Statistic: Average
+      Threshold: 1000000000  # 1 GB
+      AlarmDescription: Alarm if free storage space drops below 1GB
+      AlarmActions:
+        - !Ref MySNSTopic
+
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: RDSAlarmTopic
+      TopicName: RDSAlarmTopic
+
+Outputs:
+  RDSInstanceEndpoint:
+    Description: Endpoint of the RDS instance
+    Value: !GetAtt MyRDSInstance.Endpoint.Address

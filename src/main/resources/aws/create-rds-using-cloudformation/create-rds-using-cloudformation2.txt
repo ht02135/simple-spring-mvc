@@ -1,0 +1,251 @@
+
+https://octopus.com/blog/creating-rds-instance-cloudformation
+Creating an RDS instance with CloudFormation
+
+/////////////////
+
+The template below deploys an RDS instance into a new VPC with 2 private subnets:
+create-rds-using-cloudformation2.yaml
+-------------
+Parameters:
+  Tag:
+    Type: "String"
+  DBUsername:
+    Type: "String" 
+  DBPassword:
+    Type: "String" 
+    
+Resources: 
+  VPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+      - Key: "Name"
+        Value: !Ref "Tag"
+        
+  SubnetA:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.0.0/24"
+      
+  SubnetB:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 1
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.1.0/24"
+      
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref "VPC"
+      
+  SubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupName: "subnetgroup"
+      DBSubnetGroupDescription: "Subnet Group"
+      SubnetIds:
+      - !Ref "SubnetA"
+      - !Ref "SubnetB"
+
+  InstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: "Example Security Group"
+      GroupDescription: "RDS traffic"
+      VpcId: !Ref "VPC"
+      SecurityGroupEgress:
+      - IpProtocol: "-1"
+        CidrIp: "0.0.0.0/0"
+      
+  InstanceSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: "InstanceSecurityGroup"
+    Properties:
+      GroupId: !Ref "InstanceSecurityGroup"
+      IpProtocol: "tcp"
+      FromPort: "0"
+      ToPort: "65535"
+      SourceSecurityGroupId: !Ref "InstanceSecurityGroup"
+      
+  RDSCluster:
+    Type: "AWS::RDS::DBCluster"
+    Properties:
+      DBSubnetGroupName: !Ref "SubnetGroup"
+      MasterUsername: !Ref "DBUsername"
+      MasterUserPassword: !Ref "DBPassword"
+      DatabaseName: "products"
+      Engine: "aurora"
+      EngineMode: "serverless"
+      VpcSecurityGroupIds:
+      - !Ref "InstanceSecurityGroup"
+      ScalingConfiguration:
+        AutoPause: true
+        MaxCapacity: 16
+        MinCapacity: 2
+        SecondsUntilAutoPause: 300
+
+Outputs:
+  VpcId:
+    Description: The VPC ID
+    Value: !Ref VPC
+-------------
+
+/////////////////
+
+The VPC, subnets, and route tables were described in a previous post. This template then places a number of additional resources into the VPC to support or create the RDS instance.
+
+https://octopus.com/blog/aws-vpc-private
+Create a private AWS VPC with CloudFormation
+
+The VPC is defined as a AWS::EC2::VPC resource.
+
+The CidrBlock property defines the Classless Inter-Domain Routing IP block defining the range of IP addresses available to the subnets associated with the VPC. 10.0.0.0/16
+
+-----------
+VPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+      - Key: "Name"
+        Value: !Ref "Tag"
+----------- 
+
+/////////////////
+
+Next, you define two subnets with AWS::EC2::Subnet resources.
+
+Subnets are placed in availability zones (AZs), which are isolated locations in a region. AZs have codes like us-east-1 or ap-southeast-2, which are based on the region that the AZs are located in.
+
+Rather than hard code these AZ names, you can use the Select intrinsic function to return items from the GetAZs array, which will return an available AZ for the region in which your VPC is being created.
+
+Each subnet has its own unique CIDR block.
+
+The first subnet defines the block 10.0.0.0/24, which means all resources in this subnet have IP addresses that start with 10.0.0.
+
+The second subnet defines the block 10.0.1.0/24, which means all resources in the second subnet have IP addresses starting with 10.0.1:
+
+----------- 
+  SubnetA:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.0.0/24"
+
+  SubnetB:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 1
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.1.0/24"
+----------- 
+
+/////////////////
+
+Network connectivity between subnets is defined by a route table, created by the AWS::EC2::RouteTable resource. The default route table allows connectivity between instances in each subnet, so you don’t specify any additional routes here:
+
+----------- 
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref "VPC"
+----------- 
+
+/////////////////
+
+RDS instances need at least 2 subnets to achieve high availability. These subnets are grouped together in an AWS::RDS::DBSubnetGroup resource:
+
+----------- 
+  SubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupName: "subnetgroup"
+      DBSubnetGroupDescription: "Subnet Group"
+      SubnetIds:
+      - !Ref "SubnetA"
+      - !Ref "SubnetB"
+----------- 
+
+/////////////////
+
+Network access to the RDS instance is defined in a security group, represented by an AWS::EC2::SecurityGroup resource. This security group allows all outbound traffic, but doesn’t specify any rules for inbound traffic. Inbound traffic rules are taken care of with another resource:
+
+----------- 
+  InstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: "Example Security Group"
+      GroupDescription: "RDS traffic"
+      VpcId: !Ref "VPC"
+      SecurityGroupEgress:
+      - IpProtocol: "-1"
+        CidrIp: "0.0.0.0/0"
+----------- 
+
+/////////////////
+
+To grant resources in the VPC access to the RDS instance, you create an ingress rule that grants network traffic to any resource that has been assigned the security group defined above. Allowing resources that share a security group to communicate with each other is a convenient way to group related resources without having to partition them in special CIDR blocks.
+
+Ingress rules are represented by the AWS::EC2::SecurityGroupIngress resource:
+
+----------- 
+  InstanceSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: "InstanceSecurityGroup"
+    Properties:
+      GroupId: !Ref "InstanceSecurityGroup"
+      IpProtocol: "tcp"
+      FromPort: "0"
+      ToPort: "65535"
+      SourceSecurityGroupId: !Ref "InstanceSecurityGroup"
+----------- 
+
+/////////////////
+
+You now have everything in place to deploy the RDS instance, represented by the AWS::RDS::DBCluster resource. The example below creates a serverless Aurora instance:
+
+-----------
+  RDSCluster:
+    Type: "AWS::RDS::DBCluster"
+    Properties:
+      DBSubnetGroupName: !Ref "SubnetGroup"
+      MasterUsername: !Ref "DBUsername"
+      MasterUserPassword: !Ref "DBPassword"
+      DatabaseName: "products"
+      Engine: "aurora"
+      EngineMode: "serverless"
+      VpcSecurityGroupIds:
+      - !Ref "InstanceSecurityGroup"
+      ScalingConfiguration:
+        AutoPause: true
+        MaxCapacity: 16
+        MinCapacity: 2
+        SecondsUntilAutoPause: 300
+-----------
+
+
+
+
+
+
+
+
+

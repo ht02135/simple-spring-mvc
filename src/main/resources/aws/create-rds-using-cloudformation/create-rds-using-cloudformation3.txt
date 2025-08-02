@@ -1,0 +1,220 @@
+
+https://hyp0th3rmi4.medium.com/aws-cloudformation-adventures-part1-build-your-own-vpc-d3f6d990d1fd
+AWS CloudFormation Adventures: Part1 — Build Your Own VPC
+
+ref
+https://www.infoq.com/articles/aws-vpc-cloudformation/
+https://docs.aws.amazon.com/cloudformation/
+
+templates
+https://github.com/hyp0th3rmi4/aws-cloudformation-adventures
+
+///////////////
+
+create-rds-using-cloudformation3.yaml
+
+VPC is an essential building block of your cloud infrastructure as it constitutes the foundation required to deploy many of the other services that you would need to build a cloud system: EC2 instances, RDS databases, K8s clusters and so on.
+
+A VPC is a partition of the AWS network that is allocated to you, which you can further subdivide into subnets to segregate and isolate workloads according to different networking rules.
+
+A common pattern is to define a VPC that contains at least two subnets: one public subnet and one private subnet. The former is provided access to the Internet by means of an Internet Gateway, while the latter is only accessible from within the VPC.
+
+For instance, if you are developing your web site, you are likely to put your reverse proxy and web servers such as NginX, Apache, in the public network and your application servers such as Tomcat, JBoss, together with databases such as MySQL into the private network.
+ 
+The figure also shows another important aspect. The VPC also requires a CIDR block assigned to it, which defines the address space of the resources hosted in the network. In the same manner, the subnets that are are created inside the VPC require their own CIDR blocks, which must be contained in the CIDR block of the VPC and not overlapping with each other. In Figure 1 we have chosen 10.0.0.0/16 for the entire VPC network, 10.0.0.0/24 for the public network, and 10.0.1.0/24 for the private network. This allocation will allow us to host a total of 65536 addresses in the VPC and 256 addresses into each of the two subnets.
+
+building a VPC with /16 prefix gives a good amount of flexibility and allowance for IP addresses and subnets with /24 prefix are of a reasonable size as well.
+
+//////////////////////
+
+When setting up the same type of network with real infrastructure to enable this configuration we would have used:
+
+    a gateway to provide bidirectional access to the Internet.
+    a bunch of routing tables to configure the traffic rules in each subnet.
+    a NAT box to enable outgoing Internet traffic from within the private subnet.
+    
+//////////////////////
+
+In order to access the capabilities of AWS CloudFormation via the CLI we need to type aws cloudformation <command> . By typing aws cloudformation help we can have an overview of all the possible commands that we can use to interact with AWS CloudFormation. In our case we will be focusing on the following commands:
+
+    validate-template : this command allows for validating that the template is correct in its definition.
+    create-stack : this command is used to create a stack from a template.
+    deploy : this command is used to create and deploy a stack from a template.
+    delete-stack: this command is used delete an existing stack
+    
+////////////////////// 
+
+Step 1: Defining the VPC Resource
+
+To build a VPC it is sufficient to define a resource of type: AWS::EC2::VPC
+vpc-only.yml
+
+In order to customise our VPC the Properties section specifies the CIDR block that we want to allocate to the VPC and some additional configuration parameters that control the configuration of the DNS for the VPC. In this case we want the VPC to have DNS support (i.e. EnableDnsSupport: true ) and we want to allocate automatically DNS name to each EC2 instance we deploy in the VPC (i.e. EnableDnsHostnames: true ). The last parameter we configure is the tenancy behaviour for the EC2 instances created within the VPC. We have three options: default , dedicated , and host . This parameter has only effect if we don’t specify a tenancy for the EC2 instance during launch, and its current setting is default , which triggers the default behaviour of AWS.
+
+The name of the VPC provides us with the opportunity to introduce two CloudFormation intrinsic functions: Fn::Join and Ref . These two functions are expressed in their abbreviated form !Join and !Ref that allow the inline expression of the function, without creating a YAML node.
+
+    Fn::Join is used to concatenate strings and accepts a list of strings to combine together in the order we have specified them. The first parameter is an empty string and the second parameter an array of strings.
+    Ref is used to reference an entity in the CloudFormation template, either a resource, parameter, or other runtime entity whose value we are interested. In this particular case we reference the name of the stack that is identified by AWS::StackName.
+    
+////////////////////// 
+
+Step 2: Subnets
+
+Now that we have created our VPC we want to partition it into two subnets:
+
+    a public network that will contain the Internet-facing resources
+    a private network that will contain the protected resources not directly exposed to the Internet.
+
+In our case we have decide to reserve 256 addresses for each subnet:
+
+    public subnet: 10.0.0.0/24
+    private subnet: 10.0.1.0/24
+    
+vpc-with-subnets.yml
+
+The description of a subnet is quite simple since we only have to specify the following parameters:
+
+    VpcId: specifies the VPC that contains the subnet. In our case we have identify the containing VPC by referring to the previously created VPC resource named VPC.
+    AvailabilityZone: specifies the placement of the subnet within the region where the VPC has been provisioned. In our case the VPC has been deployed in Asia Pacific (Sydney) region, and therefore we have chosen ap-southeast-2a as availability zone.
+    CidrBlock: specifies the address range associated to the subnet, which must be contained in the address range of the containing VPC.
+
+Another important parameter that we have set is the behaviour with regards to mapping public IPs when EC2 instances are created within the subnet. At present time this parameter is not very relevant, but as we would like to create instances within such network in the future we have specified that the public network should map public IP addresses for EC2 instances when such instances are created (i.e. MapPublicIpOnLaunch: true), while we have disabled the same behaviour for the private subnet (this is the default). 
+    
+////////////////////// 
+
+Step 3: Defining and Attaching the Internet Gateway
+
+Setting the MapPublicIpOnLauch: true is not sufficient to make a subnet public. As happens in the physical world we need to provide the subnet with network connectivity to the Internet. In the real world this is done by connecting to the subnet a network appliance that has connectivity to the Internet and configuring it to enable bidirectional traffic. In a very similar manner, we would need to create a virtual gateway and then attach it to the subnet.
+
+AWS CloudFormation provides two resources to implement these operations:
+
+    InternetGateway: this resource models a gateway that provides connectivity to the Internet.
+    AttachGateway: this resources models the configuration of the gateway for a given VPC.
+    
+vpc-with-gateway.yml
+
+We have added the two resources at the bottom of the file. The InternetGateway resource requires no configuration, while the AttachGateway resource is the component that holds the connectivity between the gateway and the VPC, as it requires specifying the unique identifiers of the both the VPC and the gateway to connect.
+
+It is worth noting the specification of DependsOn: VPC for the InternetGateway resource. The gateway resource needs to be created after the VPC resource, but because the mapping is held in a different resource (i.e. AttachGateway) CloudFormation is not able to resolve the correct order of creation by itself. Adding DependsOn: VPC on the InternetGateway resources forces CloudFormation to schedule the correct sequence of operations.
+
+////////////////////// 
+
+Step 4: Defining the NAT Gateway
+
+Another piece of infrastructure that we need is a NAT gateway. A NAT gateway provides network address translation capabilities for those machines that are not directly exposed to the network we need connectivity to and from. In our case we would be using a NAT gateway to provide outgoing network connectivity to the Internet for those EC2 instances that we will be deploying in the private subnet. This connectivity is useful to ensure that:
+
+In AWS there are two way in which you can enable NAT for a private subnet: using a NAT instance or a NAT gateway (more details here). In this article we will be defining a NAT gateway resource, which is the preferred approach unless special conditions apply.
+
+To configure a NAT gateway for our private subnet we need two resources:
+
+    NatGateway: this resource models the gateway itself.
+    EIP: this resource models the elastic (public) IP address that the gateway requires to be exposed to the Internet.
+    
+vpc-with-nat.yml
+
+The ElasticIPAddress resource requires the specification of theDomain property. This can have two values based on the type of infrastructure we are using:
+
+    For EC2 classic infrastructure the designated value is standard .
+    For VPC-based infrastructure the designated value is vpc (default if omitted).
+    
+he NatGateway resource requires two properties: AllocationId and SubnetId. The former provides information about the elastic IP allocation to use for the gateway and the the latter is the unique identifier of the private subnet associated to the gateway. The AllocationId property provides us with the opportunity to use another built-in function of AWS CloudFormation: Fn::GetAtt. This function is used to extract an attribute from a resource for the purpose of referencing it as property value, for instance. The function takes two parameters: the attribute to reference and the name of the resource containing the attribute. In our case we have created an EIP resource and we require the AllocationId of such resource to configure the NAT. Therefore we would require the value of the AllocationId property of ElasticIPAddress.
+
+////////////////////// 
+
+Step 5: Defining the Routing Tables
+
+The deployment and configuration of the Internet Gateway and the NAT Gateway are not sufficient to enable the connectivity of the EC2 resources, we also need to define routing tables for each of the subnet as we would do for a physical network.
+
+AWS automatically configures a default routing table in our subnet that enables the local traffic in the VPC. We can verify the existence of this table by selecting either the MyVPC-Pub-SubNet or the MyVPC-Priv-SubNet in the AWS console and inspecting the Route Table tab of the resource. Figure 2 shows the default route table for the MyVPC-Priv-SubNet.
+
+The default configuration does not enable us to enable connectivity to the public Internet as well as impose the restrictions we previously discussed for the instances deployed in both subnets. What we want is the following:
+
+    All the resources in the public network should be able to connect to the Internet and be reachable from the Internet via the InternetGateway resource.
+    All the resources in the private network should be able to connect to the Internet via the NatGateway resource.
+    All the resources in the private and public subnets should be able to connect to each other (enable local traffic as per default).
+    
+To configure this behaviour we need to be able to create routing tables, add entries to these table that specify how to route traffic, and associate the routing tables to the subnets. To facilitate these tasks AWS provides us with three different resources: RouteTable, Route, and SubnetRoutTableAssociation. We will create two routing tables: PublicRouteTable and PrivateRouteTable, with the corresponding association resources, and for each of them we will define the routes necessary to achieve the configuration discussed above.
+
+vpc-with-routing.yml
+
+////////////////////// 
+
+Step 6: Customising Our Template
+
+The real value of a template relies on being a recipe that can be used multiple times to create the multiple instances of itself. This allows the effort spent in writing the template to scale across many deployments of the VPC. To achieve this result we need to find a way to configure or customise the template when we create/deploy the stack, without editing the CloudFormation template, which is a tedious operations besides being prone to human error.
+
+Fortunately, AWS CloudFormation comes to the rescue with the ability to parameterise a stack template via the definition of parameters. The value of these parameters can then be externalised thus allowing the template to be reused across deployments unchanged. As an act of convenience, parameters may have default values and this provides us with the flexibility to specify only those parameters that require changing for a given deployment.
+
+We can define parameters for a stack by adding to the template the top level Parameters node, where for each parameter identified by its name we can define type, default value (if it does make sense) and a description. To use these parameters in the template we can use the Ref function in the following form: !Ref <ParameterName>.
+
+To make more usable our stack across deployment we have defined the following parameters: VpcCidrBlock, PublicSubnetCidrBlock, PrivateSubnetCidrBlock, PublicSubnetAZ, PrivateSubnetAZ. The gist below shows how to modify the template to include the definition of the parameters. The listing also shows the use of VpcCidrBlock to configure the VPC resource.
+
+vpc-with-parameters.yml
+
+////////////////////// 
+
+In the listing we have defined all parameters with defaults. This allows us to use the file without any other additional resources, since all parameters will be supplied with the default values. If we want to customise the configuration of the stack, we can define different value in a separate file, which we can supply during the deployment of the stack. The listing below shows the content and structure of the parameter file for our example.
+
+In the listing we have defined all parameters with defaults. This allows us to use the file without any other additional resources, since all parameters will be supplied with the default values. If we want to customise the configuration of the stack, we can define different value in a separate file, which we can supply during the deployment of the stack. The listing below shows the content and structure of the parameter file for our example.
+
+[{
+   "ParameterKey" : "VpcCidrBlock",
+   "ParamererValue" : "10.1.0.0/16"
+},{
+   "ParameterKey" : "PublicSubnetCidrBlock",
+   "ParameterValue" : "10.1.0.0/24"
+},{
+   "ParameterKey" : "PublicSubnetAZ",
+   "ParameterValue" : "ap-southeast-2b"
+},{
+   "ParameterKey" : "PrivateSubnetCidrBlock",
+   "ParameterValue" : "10.1.1.0/24"
+},{
+   "ParameterKey" : "PrivateSubnetAZ",
+   "ParameterValue" : "ap-southeast-2c"
+}]
+
+Reference: vpc-params.json
+
+In our example, we will be using the file specification and the command to deploy the updated stack is shown in the listing below.
+
+> aws cloudformation deploy \\
+      --stack-name MyVPC \\
+      --template-file vpc-with-parameters.yml \\
+      --parameter-overrides file://vpc-params.json
+Waiting for changeset to be created..
+Waiting for stack create/update to complete
+Successfully created/updated stack - MyVPC
+
+////////////////////// 
+
+Step 7: Generating Output Parameters
+
+If we use the CloudFormation template in a much larger system setup it may be useful to reference some of the values associated to the resources defined in the template. This may be necessary, for instance, to configure other resources that rely on the resources defined in the template.
+
+AWS provides the ability of exporting information from a template by defining a set of output parameters. These are named references to attributes of the resources that are defined in the template. Output parameters are defined by introducing an Output top level block, which contains a list of named parameters specified by a description and a value.
+
+vpc-with-output.yml
+
+The gist above shows the output section for our VPC, where we export the unique identifiers of the VPC, PublicSubnet, and PrivateSubnet resources.
+
+NOTE: The Ref function by default references the identifier of the named resources passed as argument, please consult the documentation of the function to understand how it applies to the different types of resources available in AWS CloudFormation, as the default attribute returned per type of resource may be different.
+
+> aws cloudformation deploy \\
+      --stack-name MyVPC \\
+      --template-file vpc-with-parameters.yml \\
+      --parameter-overrides file://vpc-params.json
+Waiting for changeset to be created..
+Waiting for stack create/update to complete
+Successfully created/updated stack - MyVPC
+
+////////////////////// 
+
+
+
+
+
+
+
+
+
