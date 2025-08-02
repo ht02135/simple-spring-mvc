@@ -29,8 +29,75 @@ Example:- Let’s suppose In the security group you have blocked all the inbound
 
 Stateless: NACL does not maintain connection details, which means it is stateless. if some traffic is allowed in the NACL Inbound Rule, the response Outbound traffic is not allowed by default unless specified in the Outbound Rules.
 
-///////////////
+//////////////////////////
+//////////////////////////
 
+route table image
+1>no port is involved
+2>only has destination and target
+3>Destination vs Target
+Destination field specifies the pattern that a request must match with its destination address (IP or CIDR range).
+Target field specifies where such a request should be routed
+
+| destination | target  | status | propagation |
+|0.0.0.0/16   | local   | Active | No          |  <-- default main route
+|0.0.0.0/0    | igw-xyz | Active | No          |  <-- connect to igw
+
+This will route any request with into-the-VPC destination to local targets in the VPC. If the pattern 10.0.0.0/16 is not met, the any-ipv4-address aka 0.0.0.0/0 will be considered and the request will be routed to the internet gateway you specified with ID your-igw-id.
+
+//////////////////////////
+//////////////////////////
+
+NACL
+port range is involved
+
+NACL inbound
+Source. [Inbound rules only] The source of the traffic (CIDR range)
+https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+6 	TCP 	Transmission Control
+
+| rule# | type        | protocol | port range | source    | allow/deny |
+| 100   | http 80     | tcp 6    | 80         | 0.0.0.0/0 | allow |
+| 200   | https 443   | tcp 6    | 443        | 0.0.0.0/0 | allow |
+| 300   | ssh 22      | tcp 6    | 22         | 0.0.0.0/0 | allow |
+| *     | all traffic | all      | all        | 0.0.0.0/0 | deny  |
+
+NACL outbound
+Destination. [Outbound rules only] The destination for the traffic (CIDR range).
+
+| rule# | type        | protocol | port range | destination  | allow/deny |
+| 100   | http 80     | tcp 6    | 80         | 0.0.0.0/0    | allow |
+| 200   | https 443   | tcp 6    | 443        | 0.0.0.0/0    | allow |
+| 300   | ssh 22      | tcp 6    | 22         | 0.0.0.0/16   | allow |
+| *     | all traffic | all      | all        | 0.0.0.0/0    | deny  |
+
+//////////////////////////
+//////////////////////////
+
+Security groups are stateful in nature. As a result, any changes applicable to an incoming rule will also be automatically applied to the outgoing rule in the same way. For example, allowing an incoming port 80 will automatically open the outgoing port 80
+
+note : i wonder if that just mean, only can edit inbound, because outbound is toss out..
+
+security group is stableful
+
+security group inbound
+
+0.0.0.0/0 is the IPv4 everything - all possible IPv4 addresses.
+::/0 is the IPv6 equivalent
+
+| type  | protocol | port range | source                  | description |
+| ssh   | tcp      | 22         | anywhere 0.0.0.0/0 ::/0 | admin access |
+| http  | tcp      | 80         | anywhere 0.0.0.0/0 ::/0 | web traffic |
+| https | tcp      | 443        | anywhere 0.0.0.0/0 ::/0 | secured web traffic |
+
+i dont seem to be able to find image with security group outbound
+note : i wonder if that just mean, only can edit inbound, because outbound is toss out. forget outbound part...
+
+another thing, i think one firewall at security group should be sufficient.  not quite
+sure what they want to achieve with nacl???
+
+//////////////////////////
+//////////////////////////
 
 
 
