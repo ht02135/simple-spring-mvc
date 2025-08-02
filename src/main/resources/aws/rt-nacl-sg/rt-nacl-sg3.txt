@@ -1,0 +1,80 @@
+
+
+https://www.tufin.com/blog/understanding-aws-route-table-practical-guide
+Understanding AWS Route Table: A Practical Guide
+
+///////////////
+
+What is a Route Table in AWS?
+known as routes, that determines where network traffic is directed. Each subnet in your AWS Virtual Private Cloud (VPC) is associated with a route table that controls the traffic flow between subnets. A route table includes details like the Route Table ID and ‘The ID’ of its associated VPC.
+
+The role of an AWS route table is to direct network traffic based on the destination IP address. Each route in the table specifies a destination (in the form of an IP address or CIDR block) and a target (like an internet gateway (IGW), network interface, or another route table). A local route is a special type of route that enables communication within the VPC.
+
+///////////////////////////
+
+AWS Route Tables and Security Groups: The Difference
+
+Security groups, managed through IAM, act as firewalls for EC2 instances, whereas route tables control the routing of network traffic.
+
+It’s critical to understand the difference between route table and Network Access Control Lists (NACL) in AWS, too. While a route table defines rules for routing network traffic, a NACL is a subnet-level firewall controlling traffic in and out of subnets.
+
+////////////////////////
+
+https://stackoverflow.com/questions/60211533/what-is-the-diference-between-network-acl-and-route-tables-in-aws
+
+A Network Access Control List (Network ACL, or NACL) is a firewall for a subnet.
+
+All traffic entering or exiting a subnet is checked against the NACL rules to determine whether the traffic is allowed in/out of the subnet.
+
+Traffic between instances within the same subnet do not pass through a NACL because the traffic is not exiting the subnet.
+
+NACL rules are executed in a defined order. The first rule that matches the traffic will determine whether the traffic is allowed or denied.
+
+Typically, NACLs are left at their default value of permitting all traffic. You should never have a need to modify a NACL unless you have a specific need, such as:
+
+-----------------
+
+A Route Table is used to direct traffic in/out of a subnet. It contains a number of CIDRs (IP address ranges) and where to direct the appropriate traffic.
+
+For example:
+
+    Traffic for the Internet (0.0.0.0/0) is usually:
+        Sent to an Internet Gateway if the Route Table is associated with a public subnet
+        Sent to a NAT Gateway if the Route Table is associated with a private subnet
+    Traffic for a Peered VPC is sent across a VPC Peering connection
+
+It literally routes the traffic to the correct destination.
+
+Want to know what makes a Public Subnet 'public'? It is the fact that the Route Table sends Internet-bound traffic to 0.0.0.0/0.
+
+Traffic is sent to the smallest CIDR range that matches the destination. So, traffic matching 10.1.0.0/16 would be directed before traffic matching 0.0.0.0/0.
+
+//////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -24,22 +24,20 @@ Network ACLs are stateless. Consequently, any changes made to an incoming rule w
 
 Unlike a Security Group, NACLs support both allow and deny rules. By deny rules, you could explicitly deny a certain IP address to establish a connection; e.g. to block a specific known malicious IP address from establishing a connection to an EC2 Instance.
 
+//////////////////////
 
+https://www.reddit.com/r/aws/comments/cab816/difference_between_security_groups_route_tables/
+Difference between Security Groups, Route Tables, and NACLs? 
 
+1>routing table is tie to load balancing...
+A route table is... well it’s a routing table that tells the network where to route traffic to if the destination isn’t within the same subnet. Same as a routing table on any host/network interface. You can route traffic to an interface or a gateway.
 
+2>next security group (stateful firewall with in/out rule)
+stateful means, if you say allow in for port 80, then you by default allow out for port 80.  it only has allow no deny...
 
+A security group applies stateful network rules to traffic directed to an instance/interface. Stateful means it keeps track of outbound connections and allows the return traffic through automatically.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+3>next nacl (stateless firewall with in/out traffic)
+stateless means, you need separate in/out traffic
+A network ACL applies to traffic heading in or out of a subnet, and the rules are stateless. This means you need to explicitly need to allow inbound and outbound traffic.
 
