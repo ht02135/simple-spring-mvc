@@ -1,0 +1,126 @@
+
+https://medium.com/nordcloud-engineering/ssm-parameter-store-for-keeping-secrets-in-a-structured-way-53a25d48166a
+SSM Parameter Store for keeping secrets in a structured way
+
+//////////////
+
+WS Systems Manager Parameter Store (SSM) provides you with a secure way to store config variables for your applications. You can access SSM via AWS API directly from within the app or just use from AWS CLI. SSM can store plaintext parameters or KMS encrypted secure strings
+
+Common use cases of SSM are storing configuration for Docker containers initialisation during the runtime, storing secrets for Lambda functions and app, and even using SSM Parameters in CloudFormation.
+
+/////////////////
+
+You can set the parameters via AWS Console or CLI:
+
+aws ssm put-paramater --name "DB_NAME" --value "myDb" 
+
+/////////////////
+
+If you want to store a secure string parameter, you add the KMS key id and set a type to SecureString . Now you parameter will be stored in an encrypted way. You will be able to read it only if your IAM policy allows.
+
+aws ssm put-parameter --name "DB_PASSWORD" --value "secret123" --type SecureString --key-id 333be3e-fb33-333e-fb33-3333f7b33f3
+
+///////////////////
+
+Getting parameters is also easy
+
+aws ssm get-parameter --name "DB_NAME" 
+
+If you want to get an encrypted one, add --with-decryption . SSM will automatically decrypt the parameter on the fly and you will get the plain text value.
+
+/////////////////////////
+
+Paths
+
+Now to the juicy nice part. Parameters can be named either by a simple string or a path. When you use path — you introduce hierarchy on your parameters
+
+Let’s say we have parameters:
+
+    /myapp/production/DB_NAME
+    /myapp/production/DB_PASSWORD
+    /myapp/production/DB_USERNAME
+
+In order to get all of them you would do:
+
+aws ssm get-parameters-by-path --with-decryption --path /myapp/production
+
+/////////////////////
+
+https://www.cloudysave.com/aws/aws-systems-manager-parameter-store/
+
+Creating Parameter Via AWS CLI
+
+    Make sure to configure AWS-CLI before getting started.
+    We can use the AWS put-parameter to create SSM parameters programmatically. The following snippet will create a simple string-based parameter.
+
+        aws ssm put-parameter \
+        --name "/cloudysave/sample_param_1" \
+        --value "Star Wars Episode VI" \
+        --type "String"
+
+/////////////////////////
+
+Now we can update the parameter created above with –override.
+
+    aws ssm put-parameter \
+        --name "/cloudysave/sample_param_1" \
+        --value "Star Wars Episode VII" \
+        --type "String" \
+        --overwrite
+
+/////////////////////////
+
+Lets you create a new secure string param using the following snippet.
+
+    aws ssm put-parameter \
+        --name "/cloudysave/sample_param_secure" \
+        --value "Jamesbond 007" \
+        --type "SecureString" \
+        --tags "Key=Watch,Value=Omega"
+
+/////////////////////////
+
+We can use get-parameter/get-parameters to fetch the parameters using cli.
+
+    aws ssm get-parameters \
+        --names /cloudysave/sample_param_1
+
+/////////////////////////
+
+If you try to fetch secure params, the outputs show this way. Make sure to use –with-decryption to decrypt the value.
+
+    aws ssm get-parameters \
+        --names /cloudysave/sample_param_secure \
+        --with-decryption
+
+/////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

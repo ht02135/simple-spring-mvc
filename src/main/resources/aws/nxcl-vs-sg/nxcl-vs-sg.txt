@@ -1,0 +1,45 @@
+
+https://digitalcloud.training/aws-security-group-vs-nacl-key-differences/
+AWS Security Group vs NACL – Key Differences
+
+///////////
+
+Security Group Key Features
+
+Security groups are tied to an instance. This can be either an EC2 instance, ECS cluster or an RDS database instance – providing routing rules and acting as a firewall for the resources contained within the security group.  With a security group, you have to purposely assign a security group to the instances – if you don’t want them to use the default security group.
+
+The default security group allows all traffic outbound by default, but no inbound traffic. 
+
+Security groups are stateful in nature. As a result, any changes applicable to an incoming rule will also be automatically applied to the outgoing rule in the same way. For example, allowing an incoming port 80 will automatically open the outgoing port 80
+
+The only rule set that can be used in security groups is the Allow rule set. 
+
+////////////////
+
+Network Access Control Lists (NACLS)
+
+Network ACLs exist on an interact at the subnet level, so any instance in the subnet with an associated NACL will automatically follow the rules of the NACL.
+
+Network ACLs are stateless. Consequently, any changes made to an incoming rule will not be reflected in an outgoing rule. For example, if you allow an incoming port 80, you would also need to apply the rule for outgoing traffic.
+
+Unlike a Security Group, NACLs support both allow and deny rules. By deny rules, you could explicitly deny a certain IP address to establish a connection; e.g. to block a specific known malicious IP address from establishing a connection to an EC2 Instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

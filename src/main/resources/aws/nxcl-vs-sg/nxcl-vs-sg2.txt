@@ -1,0 +1,50 @@
+
+https://cloudcuddler.com/difference-between-aws-security-group-and-nacl/
+Difference between AWS Security Groups and NACL
+
+////////////
+
+Security Group is a stateful firewall for the EC2 instances to control inbound and outbound traffic
+
+hung: security group is stateful firewall for ec2 with in/out rule...
+
+There are no inbound rules for the newly created security group. To allow communication from another host to your EC2 instance, you need to add them to the inbound rules of a security group.
+By default, all the outbound traffic is allowed in a newly created security group. 
+
+//////////
+
+Network Access Control List
+
+NACL is a stateless virtual firewall that works at the subnet level. Everything both Inbound and Outbound traffic is allowed in default NACL.
+
+A default NACL will be created when we create a new VPC and it allows ALL Inbound Traffic and Outbound Traffic. If we don’t associate a Subnet to a user-defined NACL then default NACL will be attached to that Subnet
+
+//////////
+
+Now the question is “What is the difference between Security Group and NACL?”
+
+Stateful: The Security Group is called a Stateful Firewall because SG maintains the state of a connection which means if an instance sends a request, the response traffic from outside is allowed back irrespective of the inbound rules and vice versa.
+
+Example:- Let’s suppose In the security group you have blocked all the inbound traffic and allowed all the outbound traffic. Now I visit a website on my ec2 instance, the response from the WebServer back to my ec2 instance will be allowed even if you have set no traffic for an inbound rule.
+
+Stateless: NACL does not maintain connection details, which means it is stateless. if some traffic is allowed in the NACL Inbound Rule, the response Outbound traffic is not allowed by default unless specified in the Outbound Rules.
+
+///////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

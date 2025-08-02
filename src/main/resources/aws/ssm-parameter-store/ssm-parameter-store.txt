@@ -1,0 +1,96 @@
+
+https://medium.tuanh.net/manage-configurations-with-aws-ssm-parameter-store-a-detailed-guide-0406597c6937
+Manage Configurations with AWS SSM Parameter Store: A Detailed Guide
+
+
+///////////////
+
+1. Introduction to AWS SSM Parameter Store
+
+AWS SSM Parameter Store is a component of AWS Systems Manager that allows you to manage application configurations and secrets securely. You can use it to store data such as database passwords, API keys, and configuration variables, which can then be retrieved dynamically in a controlled and secure manner.
+
+1.2 Why Use Parameter Store?
+
+Using Parameter Store centralizes the management of secrets and configurations, improving security and reducing the risk of misconfigurations. It also integrates seamlessly with other AWS services, making it a practical choice for AWS-centric applications.
+
+//////////////////////
+
+2.1 Step 1: Creating Parameters
+
+Parameters in SSM can be of type String, StringList, or SecureString. SecureString type is used for sensitive data like passwords and uses AWS KMS for encryption.
+
+Example: Storing a Database Password
+
+-------------------
+aws ssm put-parameter 
+  --name "/prod/db_password" 
+  --value "SecurePassword123" 
+  --type "SecureString" 
+  --key-id "alias/aws/ssm"
+-------------------
+
+.2 Step 2: Retrieving Parameters
+
+Retrieve parameters using either the AWS CLI, SDK, or directly within application code. Here’s how to retrieve the db_password stored above.
+
+Example: Retrieving the Database Password
+
+-------------------
+aws ssm get-parameter 
+  --name "/prod/db_password" 
+  --with-decryption
+-------------------
+
+///////////////////
+
+2.4 Step 4: Configuring Access Control
+
+Using AWS Identity and Access Management (IAM), you can control who can read or modify specific parameters, enhancing security by restricting access to sensitive information.
+
+Example: Creating an IAM Policy for Read-Only Access
+
+----------------
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "ssm:GetParameter",
+      "Resource": "arn:aws:ssm:REGION:ACCOUNT_ID:parameter/prod/*"
+    }
+  ]
+}
+----------------
+
+Explanation: This policy allows users to read parameters under the /prod/ path but restricts write access, ensuring secure access management.
+
+//////////////////
+
+https://medium.com/@joudwawad/aws-parameter-store-43185b34af92
+AWS Parameter Store
+
+3. Hierarchical Storage
+
+    Organizes parameters into hierarchies using names like /app/config/db-password, making it easier to manage related settings.
+    This Hierarchical storage allows you to group related resources together either by env /dev/config/db-password , or by env and service related dev/ecs/application-a-password This powerful feature allows you to organize and access your data in a more efficient way.
+    
+5. Access Control
+
+    Uses AWS Identity and Access Management (IAM) policies to restrict access to parameters.
+    
+6. Integration with AWS Services
+
+    Works with AWS Lambda, EC2, ECS, and other services for seamless configuration management.
+
+7. Automation & Notifications
+
+    Integrates with AWS CloudWatch and AWS Lambda to automate responses when parameters change.
+
+///////////////////
+  
+in broadridge, PD stored db pwd in parameter store.  we used to hit param store to grab db credential, so we use to login to db...
+  
+  
+  
+  
+  
