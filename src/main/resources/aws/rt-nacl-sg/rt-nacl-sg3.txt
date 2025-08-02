@@ -116,6 +116,8 @@ note : i wonder if that just mean, only can edit inbound, because outbound is to
 another thing, i think one firewall at security group should be sufficient.  not quite
 sure what they want to achieve with nacl???
 
+nacl = feels like duplicated effort for diminishing return...  which in investment world is NO NO NO...
+
 //////////////////////////
 //////////////////////////
 
