@@ -110,6 +110,8 @@ sure what they want to achieve with nacl???
 
 nacl = feels like duplicated effort for diminishing return...  which in investment world is NO NO NO...
 
+but 2nd thought, if it hit nacl before hit security group, then it can save security group from dealing with request that can be knockoff in nacl? may be that is why for perf purpose. other than perf purpose i dont see how nacl is added additional security.  it really is dminishing return...
+
 //////////////////////////
 //////////////////////////
 
