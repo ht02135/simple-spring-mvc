@@ -1,0 +1,41 @@
+
+https://blog.jimmyray.io/aws-cdk-where-imperative-meets-declarative-3d23fd4a4dbd
+AWS CDK — Where Imperative Meets Declarative
+
+//////////////
+
+AWS Cloud Development Kit
+
+In 2020, I found Java again when I started using the AWS Cloud Development Kit (CDK). With the AWS CDK, I found myself writing Java apps again, and enjoying it, like I did when I was working with the AWS Java SDK and even Spring Data. For me, Java was exciting again. I dusted-off my Java (and Maven) coding skills to use the AWS CDK. I could have used Python, TypeScript, JavaScript, or even C#, but my deep Java background made the choice easy.
+
+The AWS CDK enables developers to use “familiar languages” to write applications that create AWS cloud resources. The resources are actually created via AWS CloudFormation templates, and the AWS CDK apps are used to synthesize (synth), deploy, and destroy these stacks. So, one could argue that the AWS CDK uses an imperative approach to creating the artifacts (AWS CloudFormation templates) that are used for a declarative approach to deploy resources in AWS as stacks. In my opinion, this enables developers to move faster, using tools already within their reach, while still “coloring inside the lines” with declarative tools like AWS CloudFormation.
+
+///////////////////////
+
+create NewCdkProjectApp.java
+run a mvn compile to verify that my Java code will compile
+cdk synth to split out cloud formation?
+
+////////////////////////
+
+translate to hand build cloudformation via yml/json is probably counter productive (aka waste of time) than building it object oriented way via builder pattern...  after all provision of aws resource should scream builder pattern no?  so forget cloudformation via yml/json and hello cdk java.
+
+then harvest the actual cloudformation template via cdk synth
+
+////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

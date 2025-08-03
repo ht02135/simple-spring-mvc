@@ -1,0 +1,11 @@
+google cloudformer is ec2 instance running with some other resource
+
+Sadly CloudFormer is deprecated and no longer maintained by AWS. CloudFormer is actually a very old tool that is not maintained.
+
+aka cloudformer is dead...  excellent, extincted thing no need to waste time on...
+
+its replacement former2 is probably dead too...  excellent, extincted thing no need to waste time on...
+
+i think just hello cdk java now???
+
+///////////////

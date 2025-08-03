@@ -1,0 +1,19 @@
+
+https://www.luminis.eu/blog/my-journey-with-aws-cdk-and-java-what-you-need-to-know/
+My Journey with AWS CDK and Java: What You Need to Know
+
+yike 74% use typscript ending .ts file.
+TypeScript is a strongly typed programming language that builds on JavaScript
+
+//////////////
+
+I do wonder if this still holds true given the number of responses to the survey. I’ve worked with small businesses and large enterprise organizations over the last years, and I see more and more Java oriented teams move their workloads to AWS while adopting AWS CDK as their Infrastructure as Code tool. Depending on the type of service(s) being built by these teams they may or may not have any experience with either Python or Typescript and the NodeJs ecosystem, which makes sticking to Java an easy choice.
+
+////////////////////////
+
+translate to hand build cloudformation via yml/json is probably counter productive (aka waste of time) than building it object oriented way via builder pattern...  after all provision of aws resource should scream builder pattern no?  so forget cloudformation via yml/json and hello cdk java.
+
+then harvest the actual cloudformation template via cdk synth
+
+////////////////////////
+
