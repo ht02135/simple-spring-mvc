@@ -1,0 +1,94 @@
+
+Please refer to the Redis documentation at:
+https://redis.io/commands
+
+/////////////
+
+Create an ElastiCache Redis cluster using the console.
+• Connect to an ElastiCache Redis cluster using the AWS NodeJS SDK.
+• Read and Write to an ElastiCache Redis cluster using the AWS NodeJS SDK.
+
+//////////////
+
+https://docs.aws.amazon.com/code-library/latest/ug/code_example_library_by_service.html
+Code examples by service using AWS SDKs
+
+https://docs.aws.amazon.com/code-library/latest/ug/cli_2_elasticache_code_examples.html
+
+1>add-tags-to-resource
+
+The following code example shows how to use add-tags-to-resource.
+
+-------------
+aws elasticache add-tags-to-resource \
+    --resource-name "arn:aws:elasticache:us-east-1:1234567890:cluster:my-mem-cluster" \
+    --tags '{"20150202":15, "ElastiCache":"Service"}'
+-------------
+
+Output:
+-------------
+{
+    "TagList": [
+        {
+            "Value": "20150202",
+            "Key": "APIVersion"
+        },
+        {
+            "Value": "ElastiCache",
+            "Key": "Service"
+        }
+    ]
+}
+-------------
+
+/////////////////
+
+create-cache-cluster
+-------------
+aws elasticache create-cache-cluster \
+    --cache-cluster-id "cluster-test" \
+    --engine redis \
+    --cache-node-type cache.m5.large \
+    --num-cache-nodes 1
+-------------
+
+Output:
+-------------------
+{
+    "CacheCluster": {
+        "CacheClusterId": "cluster-test",
+        "ClientDownloadLandingPage": "https://console.aws.amazon.com/elasticache/home#client-download:",
+        "CacheNodeType": "cache.m5.large",
+        "Engine": "redis",
+        "EngineVersion": "5.0.5",
+        "CacheClusterStatus": "creating",
+        "NumCacheNodes": 1,
+        "PreferredMaintenanceWindow": "sat:13:00-sat:14:00",
+        "PendingModifiedValues": {},
+        "CacheSecurityGroups": [],
+        "CacheParameterGroup": {
+            "CacheParameterGroupName": "default.redis5.0",
+            "ParameterApplyStatus": "in-sync",
+            "CacheNodeIdsToReboot": []
+        },
+        "CacheSubnetGroupName": "default",
+        "AutoMinorVersionUpgrade": true,
+        "SnapshotRetentionLimit": 0,
+        "SnapshotWindow": "06:30-07:30",
+        "TransitEncryptionEnabled": false,
+        "AtRestEncryptionEnabled": false
+    }
+}
+----------------
+
+    
+
+
+
+
+
+
+
+
+
+

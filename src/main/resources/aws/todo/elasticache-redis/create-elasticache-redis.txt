@@ -1,0 +1,103 @@
+
+search elastic-cache-redis
+
+/////////////
+
+https://www.squash.io/tutorial-on-aws-elasticache-redis-implementation/
+Tutorial on AWS Elasticache Redis Implementation
+
+AWS Elasticache Redis is a fully managed in-memory data store service provided by Amazon Web Services (AWS). It is built on the popular open-source Redis in-memory database and is designed to deliver high-performance, low-latency data storage and retrieval. 
+
+hung: the end, rest of page is garbage
+
+////////////////
+
+https://www.golinuxcloud.com/amazon-elasticache-for-redis/
+
+Amazon ElastiCache overview
+
+    It is a fully managed, in-memory caching service supporting flexible, real-time use cases.
+    We can use Amazon ElastiCache for caching, which accelerates application and database performance.
+
+It is compatible with Redis and Memcached.
+
+//////////////////
+
+ElastiCache for Redis Overview
+
+If our applications currently use Redis, they can use ElastiCache for Redis with almost no modification. We simply need to know about hostnames and port numbers of the ElastiCache nodes that we have deployed. Following are some of the features offered by ElastiCache for Redis.
+
+It can integrate with other AWS services such as Amazon EC2, Amazon CloudWatch, AWS CloudTrail, and Amazon SNS.
+It manages backups, software patching, automatic failure detection, and recovery.
+
+We can use AWS Identity and Access Management to define users and permissions to control access to our ElastiCache for Redis clusters.
+We can also place our clusters in a virtual private cloud for protection.
+
+//////////////////////////
+
+1>Create ElastiCache for Redis
+
+For the Cluster engine, we will select Redis. Note that we will not enable cluster mode for now. Note that Cluster-Mode comes with the primary benefit of horizontal scaling up and down of our Redis cluster, with almost zero impact on the performance of the cluster. 
+
+We have the option to use one of three cluster configurations:
+
+    Single node
+    Cluster mode disabled
+    Cluster mode enabled
+
+Note that all nodes within a given cluster are designed to be of the same node type (in terms of underlying EC2 instance) and configuration. In our tutorial, we will do a walk-through for Redis Cluster with no replication.
+
+2>For Location, we will select Amazon Cloud which means that we will be using Amazon's cloud for ElastiCache instances.
+
+3>Redis settings
+
+    Here we will provide the name for our ElastiCache for Redis i.e. MyDemoRedis.
+    Then we will select version compatibility of the Redis engine i.e. 6.2.
+    Here the port will be 6379 which is the default port.
+    For the Parameter group, we will select default.redis6.x. Note that a Parameter group acts as a container for engine configuration values that can be applied to one or more clusters. If we have created a custom Parameter Group that we want to use, we can select it from the list, otherwise, we will proceed with the default one created for us.
+    Then we will select the Node type i.e. cache.t2.micro which is the type and the associated memory size of the nodes to be deployed.
+    For now, we will select the number of replicas to be 0. We can have the number of replicas between 0 and 5.  Zero replicas will not enable an enhanced cluster with primary/replica roles.
+
+
+4>Advanced Redis settings
+
+
+    Here we can create a new subnet group or select an existing subnet group. For now, we will create a new subnet group.
+    Then we will provide the description of the subnet group.
+    Then we will select the VPC environment where our cluster will run.
+    After that we will select Subnet ID, here we will select one with Availability zone us-east-2b. We can choose one or more subnets within the VPC. ElastiCache will select IP addresses from those subnets, and assign the IP addresses to the nodes in our cluster.
+    In Availability zones placement, we will select No preference for now. Note that it is highly recommended to select at least one of the read replicas in a different availability zone from the primary for improved fault tolerance in the unlikely event of an availability zone disruption. For clustered Redis, if No Preference is chosen, ElastiCache automatically spreads our nodes over Availability Zones. To manually select Availability Zones for each node, we will use Select Zones.
+
+5>Now let's look into the security-related settings.
+
+    Here we will select a default sg. Note that a Security Group acts like a firewall that controls network access to our clusters. We can select one or more Security Groups for our Cluster.
+    For now, we will not enable Encryption at-rest and Encryption in-transit.
+    Note that if encryption at-rest is enabled, it will enable encryption of data stored on disk. Currently, enabling encryption at rest can be done when creating a Redis cluster using Redis version 3.2.6 only or at least 4.0. If it is enabled, we will have to select an encryption key. Encryption Key can be default or Customer Managed Customer Master key.
+    If Encryption in-transit is enabled, it enables encryption of data on the wire. Currently, enabling encryption in transit can be done when creating a Redis cluster using Redis version 3.2.6 only or at least 4.0. If it is enabled, we will also have to configure access control that provides the ability to configure authenticating and authorizing access based on user groups, representing a group of users. Alternatively, Redis AUTH Default User can be used to control allowing clients to execute commands.
+
+6>
+    For Logs, we can enable Slow log and Engine Log. Note that Slow log provides Redis slow log for queries that exceed a specified execution time and Engine log provides logs for open-source Redis engine processing tasks.
+    If we select slow log or enable log then we will also have to specify Log format i.e. TEXT or JSON and Destination Type that can be CloudWatch Logs or Kinesis Firehose.
+    For Import data to cluster, we won't do anything for now as it is optional, but we can provide Path to S3 bucket which contains an external Redis RDB backup to seed our cluster.
+    In Backup, we will enable automatic backups. When the automatic backup is enabled, it allows ElastiCache to automatically create a daily backup of a replica node (non clustered Redis) or set of replicas (Clustered Redis). Non-clustered Redis can also be configured to create a backup of the primary node after the cluster is created.
+    We will specify the backup retention period to be 1. Note that it represents the number of days for which automated backups are retained before they are automatically deleted.
+    In the Backup window, we will select No preference for now. Here we can specify the daily time range during which automated backups are initiated if automated backups are enabled.
+
+
+7>
+    For the Maintenance window, we will select No preference for now. Note that the maintenance window allows us to specify the time range (UTC) during which any scheduled maintenance activities such as software patching or pending Cluster modifications that we requested would occur.
+    In the Topic for SNS notification, we will select Disable notifications. Here we can select an SNS topic from the list, or type an existing topic Amazon Resource Name (ARN).
+    We are not specifying any tags for now. Note that a single node Redis cluster is tagged at the cluster level. Adding replicas will inherit tags from the primary.
+    In the end, we will click on Create.
+
+
+
+
+
+
+
+
+
+
+
+
