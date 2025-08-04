@@ -1,0 +1,28 @@
+
+http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
+
+e announced the upcoming end-of-support for AWS SDK for JavaScript v2.
+We recommend that you migrate to AWS SDK for JavaScript v3. For dates, additional details, and information on how to migrate, please refer to the linked announcement.
+
+/////////////////////
+
+i like this version, because you can see code for different language...
+
+https://docs.aws.amazon.com/code-library/latest/ug/code_example_library_by_service.html
+Code examples by service using AWS SDKs
+
+https://docs.aws.amazon.com/code-library/latest/ug/dynamodb_code_examples.html
+Code examples for DynamoDB using AWS SDKs
+
+https://docs.aws.amazon.com/code-library/latest/ug/dynamodb_example_dynamodb_CreateTable_section.html
+dynamodb_example_dynamodb_CreateTable_section.java
+
+//////////////////////
+
+https://docs.aws.amazon.com/code-library/latest/ug/dynamodb_example_dynamodb_Scenario_GettingStartedMovies_section.html
+dynamodb_example_dynamodb_Scenario_GettingStartedMovies_section.java
+
+
+
+
+
