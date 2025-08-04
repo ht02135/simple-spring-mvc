@@ -1,0 +1,101 @@
+
+https://www.dragonflydb.io/faq/how-to-view-elasticache-data
+
+///////////////////
+
+1>    Once you have connected to your cluster, you can use the redis-cli tool to view data. For example, to view all keys in your Redis cache, run the following command:
+
+```
+redis-cli -h <your-hostname> -p <your-port> KEYS *
+
+This will return a list of all keys currently stored in your cache.
+
+////////////////////
+
+2>    To view a specific key, run the following command, replacing <key> with the name of the key you want to view:
+
+```
+redis-cli -h <your-hostname> -p <your-port> GET <key>
+```
+
+This will return the value associated with the specified key.
+
+/////////////////
+/////////////////
+/////////////////
+
+https://www.dragonflydb.io/faq/how-to-clear-elasticache
+
+Clearing a Redis Cluster
+
+To clear a Redis cluster, you can use the FLUSHALL command. This command removes all data from the cluster but does not affect the statistics. Here's an example of how to use it with the Redis CLI:
+
+redis-cli -h [cache-cluster-endpoint] FLUSHALL
+
+/////////////////
+/////////////////
+/////////////////
+
+https://costimuraru.wordpress.com/2017/11/14/delete-keys-from-aws-elasticache-redis/
+Delete KEYS from AWS Elasticache (Redis)
+
+1>1. On the EC2 instance install redis-cli
+-------------
+sudo yum install gcc
+wget http://download.redis.io/redis-stable.tar.gz
+tar xvzf redis-stable.tar.gz
+cd redis-stable
+make distclean      // ubuntu systems only
+make
+-------------
+
+2> Lookup primary endpoint of the Redis cluster in the AWS Console
+
+a. Sign in to the AWS Management Console and open the ElastiCache console at https://console.aws.amazon.com/elasticache/.
+
+b. From the navigation pane, choose Redis.
+
+c. From the list of Redis clusters, choose the box to the left of the single-node Redis (cluster mode disabled) cluster you just created (1 in the graphic).
+
+d. In the cluster’s details section, find the Primary Endpoint (2 in the graphic).
+
+e. To the right of Primary Endpoint, locate and highlight the endpoint (3 in the graphic) and copy it to your clipboard for use in Step 5.2.
+
+The form of the endpoint is in the format cluster-name.xxxxxx.node-id.region-and-az.cache.amazonaws.com:port, as shown here:
+-------------
+redis-01.l9gh21.0001.usw2.cache.amazonaws.com:6379
+-------------
+
+3>3. Suppose we want to remove all Redis Keys containing ‘mykeyword‘
+
+cd src
+-------------
+./redis-cli -h redis-01.l9gh21.0001.usw2.cache.amazonaws.com \
+-p 6379 --scan | grep mykeyword | xargs  ./redis-cli \
+-h redis-01.l9gh21.0001.usw2.cache.amazonaws.com -p 6379 DEL
+-------------
+
+4>Note that if the key contains quotes or single quotes, xargs will throw an error. To prevent that from happening we need to escape the quotes. For instance, this is how you can escape the single quotes:
+
+cd src
+./redis-cli -h redis-01.l9gh21.0001.usw2.cache.amazonaws.com \
+-p 6379 --scan | grep my'keyword | sed "s/'/\\\'/g" | xargs \
+./redis-cli -h redis-01.l9gh21.0001.usw2.cache.amazonaws.com \
+-p 6379 DEL
+
+(notice the `sed` command)
+
+/////////////////
+/////////////////
+/////////////////
+
+
+
+
+
+
+
+
+
+
+
