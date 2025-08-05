@@ -1,0 +1,17 @@
+
+https://medium.com/gigasearch/aws-elasticsearch-tutorial-your-first-cluster-21726b77320a
+AWS Elasticsearch Tutorial: Your First Cluster
+setup-elasticsearch.txt
+
+///////////////
+
+
+
+
+
+
+
+
+
+
+
