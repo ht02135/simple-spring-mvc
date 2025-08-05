@@ -1,0 +1,5 @@
+
+https://simplifyingtechcode.wordpress.com/2024/03/27/elasticsearch-rest-java-client-https-connection-with-example/
+Elasticsearch Rest Java client HTTPs Connection with Example
+
+//////////////////////

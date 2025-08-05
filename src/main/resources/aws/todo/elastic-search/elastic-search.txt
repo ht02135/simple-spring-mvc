@@ -3,3 +3,274 @@ https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch
 A Practical Introduction to Elasticsearch
 
 /////////////
+
+the goal is that you experiment with the joy of using Elasticsearch without prior knowledge in a 30-60 minute guided tutorial. Just copy-paste every single request to see the results, and try to figure out the solution to the proposed questions.
+
+Setup
+
+First of all, you need Elasticsearch. Follow the documentation instructions to download the latest version, install it and start it. Basically, you need a recent version of Java, download and install Elasticsearch for your Operating System, and finally start it with the default values - bin/elasticsearch. In this lesson we will use the latest available version at the moment, 5.5.0.
+
+/////////////////
+
+https://www.elastic.co/guide/en/elasticsearch/reference/5.5/_installation.html
+
+Elasticsearch requires at least Java 8
+
+Once we have Java set up, we can then download and run Elasticsearch. The binaries are available from www.elastic.co/downloads
+
+Let’s download the Elasticsearch 5.5.3 tar as follows:
+
+curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.3.tar.gz
+
+Then extract it as follows:
+
+tar -xvf elasticsearch-5.5.3.tar.gz
+
+It will then create a bunch of files and folders in your current directory. We then go into the bin directory as follows:
+
+cd elasticsearch-5.5.3/bin
+
+And now we are ready to start our node and single cluster:
+
+./elasticsearch
+
+//////////////////
+
+Installation example with MSI Windows Installer
+
+For Windows users, we recommend using the MSI Installer package. The package contains a graphical user interface (GUI) that guides you through the installation process.
+
+First, download the Elasticsearch 5.5.3 MSI from https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.3.msi.
+
+//////////////////
+
+Next, you need to communicate with Elasticsearch: this is done by issuing HTTP requests against the REST API. Elastic is started by default in port 9200. To access, you can use the tool that best fits your expertise: there are command-line tools (like curl for Linux), web-browser REST plugins for Chrome or Firefox, or you can just install Kibana and use the console plugin. 
+
+/////////////////////
+
+As an example, and to confirm that Elasticsearch is started, let’s do a GET against the base URL to access to the basic endpoint (no body is needed):
+
+GET localhost:9200
+
+The response should look similar to the following. Since we did not configure anything, the name of our instance will be a random 7 letters string:
+
+{
+    "name": "t9mGYu5",
+    "cluster_name": "elasticsearch",
+    "cluster_uuid": "xq-6d4QpSDa-kiNE4Ph-Cg",
+    "version": {
+        "number": "5.5.0",
+        "build_hash": "260387d",
+        "build_date": "2017-06-30T23:16:05.735Z",
+        "build_snapshot": false,
+        "lucene_version": "6.6.0"
+    },
+    "tagline": "You Know, for Search"
+}
+
+///////////////////
+
+We already have a clean Elasticsearch instance initialized and running. The first thing we are going to do is to add documents and to retrieve them. Documents in Elasticsearch are represented in JSON format.
+
+POST localhost:9200/accounts/person/1 
+{
+    "name" : "John",
+    "lastname" : "Doe",
+    "job_description" : "Systems administrator and Linux specialit"
+}
+
+The response will return information about the document creation:
+
+{
+    "_index": "accounts",
+    "_type": "person",
+    "_id": "1",
+    "_version": 1,
+    "result": "created",
+    "_shards": {
+        "total": 2,
+        "successful": 1,
+        "failed": 0
+    },
+    "created": true
+}
+
+/////////////////////
+
+Now that the document exists, we can retrieve it:
+
+GET localhost:9200/accounts/person/1 
+
+The result will contain metadata and also the full document (shown in the _source field) :
+
+{
+    "_index": "accounts",
+    "_type": "person",
+    "_id": "1",
+    "_version": 1,
+    "found": true,
+    "_source": {
+        "name": "John",
+        "lastname": "Doe",
+        "job_description": "Systems administrator and Linux specialit"
+    }
+}
+
+The keen reader already realized that we made a typo in the job description (specialit); let’s correct it by updating the document (_update):
+
+POST localhost:9200/accounts/person/1/_update
+{
+      "doc":{
+          "job_description" : "Systems administrator and Linux specialist"
+       }
+}
+
+After the operation succeeds, the document will be changed. Let´s retrieve it again and check the response:
+
+{
+    "_index": "accounts",
+    "_type": "person",
+    "_id": "1",
+    "_version": 2,
+    "found": true,
+    "_source": {
+        "name": "John",
+        "lastname": "Doe",
+        "job_description": "Systems administrator and Linux specialist"
+    }
+}
+
+/////////////////////
+
+To prepare for the next operations, let’s add an additional document with id 2:
+
+POST localhost:9200/accounts/person/2
+{
+    "name" : "John",
+    "lastname" : "Smith",
+    "job_description" : "Systems administrator"
+}
+
+So far, we did retrieve documents by id, but we did not do searches. When querying using the Rest API we can pass the query in the body of the request or directly in the URL with a specific syntax. In this section we will do searches directly in the URL in the format /_search?q=something:
+
+GET localhost:9200/_search?q=john
+
+This search will return both documents, since both of them include john:
+
+{
+    "took": 58,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+    },
+    "hits": {
+        "total": 2,
+        "max_score": 0.2876821,
+        "hits": [
+            {
+                "_index": "accounts",
+                "_type": "person",
+                "_id": "2",
+                "_score": 0.2876821,
+                "_source": {
+                    "name": "John",
+                    "lastname": "Smith",
+                    "job_description": "Systems administrator"
+                }
+            },
+            {
+                "_index": "accounts",
+                "_type": "person",
+                "_id": "1",
+                "_score": 0.28582606,
+                "_source": {
+                    "name": "John",
+                    "lastname": "Doe",
+                    "job_description": "Systems administrator and Linux specialist"
+                }
+            }
+        ]
+    }
+}
+
+////////////////////
+
+example
+
+1>GET localhost:9200/_search?q=smith
+This search will return one containing smith.
+
+2>GET localhost:9200/_search?q=job_description:john
+we are restricting the search only to the field job_description that is john
+
+////////////////////
+
+we will delete a document, and then the entire index. After deleting the document, try to retrieve or find it in searches.
+DELETE localhost:9200/accounts/person/1
+
+Finally, we can delete the full index.
+DELETE localhost:9200/accounts
+
+//////////////////////
+
+Let’s get all this data into Elasticsearch. Since the body of this request is fairly big (more than 200,000 lines), it is recommended to do this via a tool that allows to load the body of a request from a file - for instance, using curl:
+
+curl -XPOST "localhost:9200/shakespeare/_bulk?pretty" --data-binary @shakespeare.json
+
+///////////////////////////
+
+Once the data is loaded, we can start doing some searches. In the previous section we did the searches passing the query in the URL. In this section, we will introduce the Query DSL which specifies a JSON format to be used in the body of search requests to define the queries. Depending on the type of operation, queries can be issued using both GET and POST verbs. Let’s start with the simplest one: getting all of the documents. To do this, we specify in the body a query key, and for the value the match_all query.
+
+--------------
+GET localhost:9200/shakespeare/_search
+{
+    "query": {
+            "match_all": {}
+    }
+}
+--------------
+
+The result will show 10 documents
+
+/////////////////////
+
+We can refine this search, and select also the scenes in which Demetrius is the speaker:
+
+POST localhost:9200/shakespeare/scene/_search/
+{
+    "query":{
+        "bool": {
+            "must" : [
+                {
+                    "match" : {
+                        "play_name" : "Antony"
+                    }
+                },
+                {
+                    "match" : {
+                        "speaker" : "Demetrius"
+                    }
+                }
+            ]
+        }
+    }
+}
+
+///////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

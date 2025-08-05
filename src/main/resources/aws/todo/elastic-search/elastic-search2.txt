@@ -1,0 +1,122 @@
+
+https://www.whizlabs.com/blog/aws-elasticsearch-tutorial/
+AWS Elasticsearch Tutorial
+
+////////////////
+
+Creating a Domain within Amazon Elasticsearch Service
+
+Amazon ES (Elasticsearch) Domain is synonymous with the Elasticsearch cluster. Domains are represented as the clusters that come with settings, instance counts, storage resources, and instance types that are specified by you. Go ahead and create your Amazon Elasticsearch Service domain from the dedicated console
+
+/////////////////////
+
+The steps to create the Amazon Elasticsearch Service domain are:
+
+    Visit the official website of AWS services, and choose ‘Sign in to Console.’ 
+    Select the ‘Analytics’ tab and choose the option ‘Elasticsearch Service.’ 
+    Now, go ahead and choose the tab, ‘Create a new domain.’ 
+    Now, choose the type of deployment that you wish to prefer by selecting the tab ‘Development and Testing.’ 
+    Choose the latest Elasticsearch version and click on ‘Next.’ 
+    Give a name to your’ domain.’ 
+    You can ignore the ‘custom endpoint’ setting.
+    Move ahead to the ‘Data Nodes’ section and select instance type as ‘t3.small.elasticsearch’ with a default value for one node.
+    Rest all of the settings are not essential as of now, and choose Next. 
+    Preferably use a public access domain by selecting ‘Public Access’ under ‘Network Configuration.’ 
+    For implementing access control, you can choose the ‘Create master user’ option and add the user name & password. 
+    You will then encounter SAML and Amazon Cognito authentication, which you can ignore for now. 
+    Under the ‘Domain Access Policy,’ you need to select ‘Allow Open Access to the Domain.’ (For this tutorial, the access control is handed over to fined-grained control and not the access policy, for which it is public access domain)
+    The encryption settings should be kept at default, and then click on ‘Next.’
+    Ignore the tag’s settings and click on ‘Next.’ 
+    Now, confirm the configuration of the domain and select ‘Confirm.’ Wait for 10 to 15 minutes as the domain initializes. It might take a bit longer time, depending upon the selected configurations. 
+    Once the domain is created, take note of its endpoint.
+
+///////////////////
+
+Uploading Data to Amazon Elasticsearch Service for Indexing Purpose
+
+After you have created your domain, you can now upload data onto it, with the help of most programming languages or preferably command line. You can use any of the HTTP tools embedded within the Amazon ES Service. For instance, you can use curl, Postman, or dev console
+
+///////////////////
+
+Putting the Document into Index
+
+You need to run a specified command for adding a single document to the created Amazon ES Service domain. Irrespective of which HTTP tool you use, you need to make the HTTP call for creating an index within a new document. The sample HTTP call is:
+
+PUT /vegetables/_doc/1
+{
+“name”:”carrot”,
+“color”:”orange”
+}
+
+After calling, the endpoint creates the Index and puts a single document into the Index ID 1. The Index in this example has been given the name ‘vegetables.’ 
+
+The _doc part within this example of index creation call represents the document type. It is preferred that you create an index for each type of document. But, it is possible only if you create an ID for the documents within Amazon Elasticsearch Service.
+
+//////////////////
+
+
+    Creating Auto-generated IDs
+
+For creating the Amazon Elasticsearch Service ID for your documents, you need to use the command POST instead of PUT.
+
+POST /veggies/_doc
+{
+“name”:”beet”,
+“color”:”red”,
+“classification”:”root”
+}
+
+Under this call, you are creating an index with the name ‘veggies’ and adds the document onto it. It also creates an ID for the document that will eradicate the necessity of adding any specific number ID to the call. It is because you are already creating a document with the system-generated ID, for which you are not requested to give one.
+
+////////////////////
+
+
+    Updating Document with POST
+
+When you are using the command HTTP POST with an identifier, you can seek an update for the existing document. First, choose an ID and create a document. Let’s take the example of ID number 42.
+
+POST /veggies/_doc/42
+{
+“name”:”sugar-beet”,
+“color”:”red”,
+“classification”:”bark”
+}
+
+Once the document is created, use the ID to then update the document, with the next call:
+
+POST /veggies/_doc/42
+{
+“name”:”sugar-beet”,
+“color”:”red”,
+“classification”:”root”
+}
+
+Now, the command entered into the call will update the document with the newest value of classification entered by the use. In the case of this example, the classification value is ‘root.’
+
+////////////////
+
+Searching Documents from the Command Line
+
+Searching is yet another important event within the implementation of Elasticsearch. You will be using the Elasticsearch search API for carrying the lookout for documents within the service
+
+If you use the command line, domain name as ‘movies,’ the curl HTTP tool, and the search document as ‘mars,’ then you will have to enter this call:
+
+curl -XGET -u ‘master-user:master-user-password’ ‘domain-endpoint/movies/_search?q=mars&pretty=true’
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
