@@ -3,3 +3,206 @@ https://simplifyingtechcode.wordpress.com/2024/03/27/elasticsearch-rest-java-cli
 Elasticsearch Rest Java client HTTPs Connection with Example
 
 //////////////////////
+
+Maven Setup
+
+To start with, we need to add appropriate Maven dependencies to our project. We will add the following dependency to our pom.xml file:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+	
+<dependencies>
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <version>8.10.2</version>
+        </dependency>
+        <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+ 
+    </dependencies>
+ 
+    <build>
+        <plugins>
+ 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
+        </plugins>
+ 
+    </build>
+    
+////////
+
+Starting Kibana
+
+Install Kibana as per earlier video link. Goto setup file bin directory in cmd and type kibana hit enter
+
+By default kibana will run on port 5601, go to any browser and open this URl to see kibana
+
+http://localhost:5601/app/dev_tools#/console
+
+Kibana is primarily used for visualizing and exploring data stored in Elasticsearch, a search and analytics engine. It offers a user-friendly interface to create dashboards, charts, and graphs to gain insights from data
+
+/////////////
+
+Creating certificate
+
+Traverse to Elasticsearch config/certs directory
+	
+cd C:\Tools\elasticsearch-8.10.2\config\certs
+	
+keytool -import -file http_ca.crt -keystore truststore.p12 -storepass password -noprompt -storetype pkcs12
+
+///////////////////
+
+Making a connection
+
+We will make a method to establish the connection with the Elasticsearch Database. Here is the code to make a connection:
+
+First create simple Java class and add following connection in main method ,
+
+which is responsible to make connection with ElasticSearch from Java client.
+
+String path = "C:\\Tools\\elasticsearch-8.10.2\\config\\certs\\truststore.p12";
+        File certFile = new File(path);
+         
+        //SSLContext --  secure socket protocolimplementation which acts as a factory 
+        //SSLContextBuilder -- Java Security Standard Algorithm Names Specification
+        SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(certFile, "password".toCharArray()).build();
+ 
+        //Abstract credentials provider that maintains a collection of usercredentials
+        BasicCredentialsProvider credsProv = new BasicCredentialsProvider(); 
+        credsProv.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("elastic","NlfGhKDDy=36FpvM*o0l"));
+         
+        //Client that connects to an Elasticsearch
+        RestClient restClient = RestClient
+            .builder(new HttpHost("localhost", 9200, "https")) 
+            .setHttpClientConfigCallback(hc -> hc
+                .setSSLContext(sslContext) 
+                .setDefaultCredentialsProvider(credsProv)
+            )
+            .build();
+ 
+        // Create the transport and the API client
+        //A transport layer that implements Elasticsearch specificities
+        ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+        ElasticsearchClient client = new ElasticsearchClient(transport);
+         
+        //to check Elastic server health and connection status
+        HealthResponse healthResponse = client.cluster().health();
+        System.out.printf("Elasticsearch status is: [%s]", healthResponse.status());
+        
+//////////
+
+Create Employee PoJo
+
+public class Employee {
+ 
+    private Integer emplId;
+ 
+    private String name;
+ 
+    private String dept;
+//Implement getters setters
+}
+
+////////////////
+
+Create Index from Java Rest client
+
+CreateIndexRequest.Builder createIndexBuilder = new CreateIndexRequest.Builder();
+        createIndexBuilder.index("simplifying_tech_idx");
+        CreateIndexRequest createIndexRequest = createIndexBuilder.build();
+ 
+        ElasticsearchIndicesClient indices = client.indices();
+        CreateIndexResponse createIndexResponse = indices.create(createIndexRequest);
+ 
+        System.out.println("Index Created Successfully: "+createIndexResponse.acknowledged());
+        
+///////////////
+
+Indexing/Creating Documents
+
+We want to add data to Elastic to make them searchable. For this purpose, we’ll use the .index() method on the ElasticseachClient
+
+mployee employee = new Employee();
+        employee.setEmplId(101);
+        employee.setName("John Doe");
+        employee.setDept("Electronics");
+ 
+        IndexRequest.Builder<Employee> indexReqBuilder = new IndexRequest.Builder<>();
+ 
+        indexReqBuilder.index("simplifying_tech_idx");
+        indexReqBuilder.id(employee.getEmplId().toString());
+        indexReqBuilder.document(employee);
+        IndexRequest<Employee> indexRequest = indexReqBuilder.build();
+ 
+        IndexResponse response = client.index(indexRequest);
+ 
+        System.out.println("Indexed with version " + response.version());
+        
+/////////////////
+
+Querying Indexed Documents
+
+GetRequest.Builder getRequestBuilder = new GetRequest.Builder();
+        getRequestBuilder.index("simplifying_tech_idx");
+        getRequestBuilder.id("101");
+ 
+        GetRequest getRequest = getRequestBuilder.build();
+ 
+        GetResponse<Employee> getResponse = client.get(getRequest, Employee.class);
+ 
+        Employee employee = getResponse.source();
+ 
+        System.out.println(employee.getEmplId());
+        System.out.println(employee.getName());
+        System.out.println(employee.getDept());
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
