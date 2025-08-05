@@ -1,0 +1,133 @@
+
+https://aws.amazon.com/blogs/database/integrate-your-spring-boot-application-with-amazon-elasticache/
+Integrate your Spring Boot application with Amazon ElastiCache
+
+//////////////////////////////
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+For configurable values, the Spring Framework application.properties file is updated. In the following example, the endpoint address of a Serverless ElastiCache cache is provided, with all cached entries configured to have a Time-to-Live (TTL) of 10 minutes:
+
+spring.data.redis.host=cache1-XXXXX.serverless.euw2.cache.amazonaws.com
+spring.cache.redis.time-to-live=10m
+
+All Valkey or Redis OSS serverless caches have in-transit encryption enabled. To configure Spring Framework to use in-transit encryption, we add a configuration value to the application.properties file:
+
+spring.data.redis.ssl.enabled=true
+
+///////////////////
+
+Prerequisites
+
+You will build and run the demo application on an Amazon Elastic Compute Cloud (Amazon EC2) Linux instance, running Linux from AWS. To create an EC2 instance and connect to it using Session Manager, a capability of AWS Systems Manager, refer to Connect to an Amazon EC2 instance by using Session Manager. After you create the instance, note the following information:
+
+    The IDs of the subnets for the virtual private cloud (VPC) your EC2 instance lives in
+    The ID of the security group assigned to the instance
+    The ID of the EC2 instance
+
+To build the application, you must have the following prerequisites:
+
+    Java 17 – To install the Java Development Kit (JDK) 17, run sudo yum install -y java-17-amazon-corretto-devel on your EC2 instance
+    Maven – To install Apache Maven, run sudo yum install -y apache-maven on your EC2 instance
+
+To run the demo application, you also need an ElastiCache cache. We will create this in the next section of this post.
+
+///////////////////
+
+Create ElastiCache Serverless cache
+
+We use the ElastiCache Serverless option because it allows you to create a cache in under a minute and instantly scale capacity based on application traffic patterns. We begin with the Redis OSS engine, then later upgrade to Valkey to demonstrate that Valkey is a drop-in replacement for Redis OSS with no alterations to the application parameters or code. The demo application will not require any additional changes if you choose to use a self-designed ElastiCache cluster instead of serverless.
+
+To create a serverless cache using the AWS CLI run the following command in AWS CloudShell, replacing <your VPC subnet IDs> with a comma separated list of the subnet IDs for the VPC containing your EC2 instance created earlier:
+
+aws elasticache create-serverless-cache \
+--serverless-cache-name spring-boot-demo \
+--engine redis \
+--subnet-ids <your VPC subnet IDs>
+
+///////////////////
+
+Obtain and note the endpoint address for the cache:
+
+aws elasticache describe-serverless-caches \
+--serverless-cache-name spring-boot-demo \
+--query "ServerlessCaches[0].Endpoint.Address"
+
+////////////////////////
+
+The cache will have a security group. Obtain and note this security group ID:
+
+aws elasticache describe-serverless-caches \
+--serverless-cache-name spring-boot-demo \
+--query "ServerlessCaches[0].SecurityGroupIds"
+
+///////////////////////
+
+Your EC2 instance and ElastiCache cache exist in the same VPC. To allow access to the cache from the EC2 instance, you must permit this in the associated ElastiCache security group. To do this, add a rule to the ElastiCache security group permitting access to port 6379 from the EC2 instance security group:
+
+aws ec2 authorize-security-group-ingress \
+    --group-id <elasticache security group> \
+    --protocol tcp \
+    --port 6379 \
+    --source-group <ec2 instance security group>
+    
+///////////////////////
+
+Download and run the demo application
+
+On your EC2 instance, run the following commands:
+
+git clone https://github.com/aws-samples/amazon-elasticache-samples.git 
+cd blogs/spring-boot-demo
+
+Using your preferred editor on the Linux instance, update the src/main/resources/application.properties file to include the endpoint address for the spring-boot-demo cache. For example:
+
+spring.data.redis.host=spring-boot-demo-XXXXX.serverless.euw2.cache.amazonaws.com
+
+Now run the demo application with the following command:
+
+mvn spring-boot:run
+
+//////////////////
+
+then skip the rest of it....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,71 @@
+
+https://redisson.pro/blog/redis-java-client-for-aws-elasticache.html
+Redis Java client for AWS ElastiCache
+
+////////////
+
+ The goal of Amazon ElastiCache is to improve the performance of web applications by shortening the querying and retrieval process with in-memory caching, rather than using slower databases on disk.
+
+Amazon ElastiCache is capable of working with two caching systems: Redis and Memcache. Redis is an open-source software project that implements an in-memory data store, which can be used as a key-value database, cache, or message broker.
+
+The AWS Redis service, known as Amazon ElastiCache for Redis, aims to combine the best of both technologies: the ease of use, security, and scalability of AWS cloud computing, together with the speed and versatility of Redis.
+
+Because Amazon ElastiCache is totally compatible with Redis APIs and data formats, users can easily move their self-managed Redis workloads onto Amazon ElastiCache, without making any changes to the codebase. 
+
+/////////////
+
+The Benefits of Redisson with Amazon ElastiCache
+
+Many developers would like to include Redis in their projects using the Java programming language. Unfortunately, Redis doesn't come with support for Java included.
+
+To bridge this gap, you can make use of a third-party Redis Java client such as Redisson.
+
+Redisson is a Redis client library that seamlessly integrates Redis with Java. All of the familiar Java data structures and collections - from Lists and Maps to Queues and Semaphores--are included in Redisson.
+
+Below is some example code that shows how simple it can be to start using Redis with Java thanks to Redisson: 
+
+///////////////
+
+package redis.demo;
+
+import org.redisson.Redisson;
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
+
+public class Application 
+{
+    public static void main( String[] args )
+    {
+        // AWS Elasticache Replicated config
+
+        Config config = new Config();
+        config.useReplicatedServers()
+              .addNodeAddress("redis://test-dev.amazonaws.com:6379");
+
+        // AWS Elasticache Cluster config
+
+        Config config = new Config();
+        config.useClusterServers()
+              .addNodeAddress("redis://test-dev.amazonaws.com:6379");
+
+        
+        RedissonClient redisson = Redisson.create(config);
+        
+        // perform operations
+        
+        RBucket bucket = redisson.getBucket("simpleObject");
+        bucket.set("This is object value");
+
+        RMap map = redisson.getMap("simpleMap");
+        map.put("mapKey", "This is map value");
+        
+        String objectValue = bucket.get();
+        System.out.println("stored object value: " + objectValue);
+
+        String mapValue = map.get("mapKey");
+        System.out.println("stored map value: " + mapValue);
+
+        redisson.shutdown();
+    }
+}
+

@@ -1,0 +1,143 @@
+
+https://medium.com/@tharindudulshanfdo/optimizing-spring-boot-applications-with-redis-caching-35eabadae012
+Optimizing Spring Boot Applications with Redis Caching
+
+////////////
+
+What is Redis?
+
+Redis (Remote Dictionary Server) is an open-source, in-memory key-value data store that supports a variety of data structures like strings, lists, sets, hashes, and more. It’s highly performant due to its in-memory architecture, which makes it an excellent choice for caching and session management in modern applications.
+
+//////////////
+
+1>1. Add Dependencies
+
+To get started, add the following dependencies in your pom.xml (for Maven) or build.gradle (for Gradle) file:
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+////////////////
+
+2. Install Redis
+
+You can install Redis on your machine, or if you’re working in a cloud environment, you can use managed services like AWS ElastiCache or Redis Enterprise Cloud.
+
+For local development, you can install Redis using the following command:
+
+sudo apt-get install redis-server
+
+Start Redis using:
+
+redis-server
+
+You can confirm that Redis is running by typing:
+
+redis-cli ping
+
+It should return PONG if Redis is running correctly.
+
+///////////////
+
+3>3. Configure Redis in Spring Boot
+
+Spring Boot makes it easy to configure Redis. All you need to do is provide Redis connection details in the application.properties or application.yml file.
+
+# application.properties
+spring.redis.host=localhost
+spring.redis.port=6379
+spring.cache.type=redis
+spring.redis.password=yourpassword <==If your Redis instance requires authentication
+
+#application.yml
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    type: redis
+
+///////////////
+
+4>4. Enable Caching in Spring Boot
+
+Next, you need to enable caching in your Spring Boot application. This can be done by adding the @EnableCaching annotation in your main application class.
+
+@SpringBootApplication
+@EnableCaching
+public class RedisCacheApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisCacheApplication.class, args);
+    }
+}
+
+///////////////
+
+5>5. Implement Caching
+
+To apply caching to a method, simply use the @Cacheable annotation. Let’s say you have a service class that fetches user data:
+
+@Service
+public class UserService {
+
+    @Cacheable(value = "userCache", key = "#userId")
+    public User getUserById(Long userId) {
+        // Simulate a database call
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+    }
+}
+
+    @Cacheable: Caches the method's return value using the given cache name (userCache in this case).
+    key: Specifies the key under which the value will be stored. By default, all method arguments are considered part of the key.
+
+When the getUserById method is called, it will first check the cache. The data is cached and returned if it is present; if not, it retrieves the data from the database and saves it in the cache.
+
+///////////////
+
+6. Cache Eviction and Updating
+
+You should update or invalidate the cache whenever the underlying data changes. Spring provides the @CachePut and @CacheEvict annotations for this purpose.
+
+    @CachePut: Updates the values in the cache with a new value.
+    @CacheEvict: eliminates a record from the cache.
+
+Here’s an example:
+
+@Service
+public class UserService {
+
+    @CacheEvict(value = "userCache", key = "#userId")
+    public void deleteUserById(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    @CachePut(value = "userCache", key = "#user.id")
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+}
+
+    In deleteUserById, the cache entry for the given userId is removed.
+    In updateUser, the cache entry is updated with the new user data.
+    
+///////////////
+
+7>7. Customizing Cache Expiration
+
+Redis lets you specify the time-to-live (TTL) for entries that are cached. You can set the TTL in your cache manager using Spring Boot.
+
+@Configuration
+public class RedisCacheConfig {
+
+    @Bean
+    public RedisCacheConfiguration cacheConfiguration() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10)) // Set TTL to 10 minutes
+                .disableCachingNullValues();
+    }
+}
+
+Cache values will be automatically deleted after ten minutes thanks to this configuration.
+
