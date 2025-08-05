@@ -1,0 +1,209 @@
+
+https://www.baeldung.com/elasticsearch-java
+Guide to Elasticsearch in Java
+
+//////////////////////
+
+2. Setup
+
+For the sake of simplicity, we’ll use a docker image for our Elasticsearch instance with no authentication responding on port 9200. Alternatively, make sure to configure the Java client correctly, especially if Elasticsearch requires authentication.
+
+We start by firing up our Elasticsearch instance:
+
+docker run -d --name elastic-test -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+
+//////////////////
+
+By default, Elasticsearch listens on the 9200 port for upcoming HTTP queries. We can verify that it is successfully launched by opening the http://localhost:9200/ URL in your favorite browser:
+
+{
+  "name" : "739190191b07",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "_tUFwsigQW2FKhm_9yLiFQ",
+  "version" : {
+    "number" : "8.7.2",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "f229ed3f893a515d590d0f39b05f68913e2d9b53",
+    "build_date" : "2023-04-27T04:33:42.127815583Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.6.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+/////////////////////
+
+3. Maven Configuration
+
+Now that we have our primary Elasticsearch cluster up and running, let’s jump straight to the Java client.
+
+First of all, we need to add Elasticsearch and Jackson library in our pom.xml file:
+
+<dependency>
+    <groupId>org.elasticsearch</groupId>
+    <artifactId>elasticsearch</artifactId>
+    <version>8.9.0</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.16.0</version>
+</dependency>
+
+///////////////////
+
+4. Elasticsearch Java Client
+
+Let’s setup the Elasticsearch Java Client inside our project:
+
+RestClient restClient = RestClient
+  .builder(HttpHost.create("http://localhost:9200"))
+  .build();
+ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+ElasticsearchClient client = new ElasticsearchClient(transport);
+
+//////////////////
+
+4.1. Indexing Documents
+
+First, we want to add data to Elastic to make them searchable. For this purpose, we’ll use the .index() method on the ElasticseachClient:
+
+Person person = new Person(20, "Mark Doe", new Date(1471466076564L));
+IndexResponse response = client.index(i -> i
+  .index("person")
+  .id(person.getFullName())
+  .document(person));
+
+Above, we are instantiating a simple Java object that we’ll save in the index named person. Further, we don’t have to convert the Java object to its JSON representation, as the client will use the JacksonJsonpMapper to do that for us.
+
+We can further check the returned IndexReponse that the object was correctly ingested by Elastic:
+
+log.info("Indexed with version: {}", response.version());
+assertEquals(Result.Created, response.result());
+assertEquals("person", response.index());
+assertEquals("Mark Doe", response.id());
+
+////////////////////
+
+Also, we could send the JSON string directly to Elastic in the same manner:
+
+String jsonString = "{\"age\":10,\"dateOfBirth\":1471466076564,\"fullName\":\"John Doe\"}";
+StringReader stringReader = new StringReader(jsonString);
+IndexResponse response = client.index(i -> i
+  .index("person")
+  .id("John Doe")
+  .withJson(stringReader));
+
+We need to convert the JSON string to a StringReader or InputStream object to use with the .withJson() method.
+
+//////////////////
+
+4.2. Querying Indexed Documents
+
+As soon as we have some indexed documents inside Elastic, we can proceed and search them using the .search() method:
+
+String searchText = "John";
+SearchResponse<Person> searchResponse = client.search(s -> s
+  .index("person")
+  .query(q -> q
+    .match(t -> t
+      .field("fullName")
+      .query(searchText))), Person.class);
+
+List<Hit<Person>> hits = searchResponse.hits().hits();
+assertEquals(1, hits.size());
+assertEquals("John Doe", hits.get(0).source().getFullName());
+
+The .search() method’s result is a SearchResponse which contains Hits. We can obtain the hits by first obtaining the HitsMetadata from the SearchResponse object and then calling the .hits() method again to get a List of all the Person objects matching the search request.
+
+////////////////////////
+
+We can enhance the request by adding additional parameters to customize the query concatenating query builders:
+
+SearchResponse<Person> searchResponse = client.search(s -> s
+  .index("person")
+  .query(q -> q
+    .match(t -> t
+      .field("fullName").query(searchText)))
+  .query(q -> q
+    .range(range -> range
+      .field("age").from("1").to("10"))),Person.class);
+      
+//////////
+
+4.3. Retrieving and Deleting Individual Documents by Id
+
+Given an id of an individual document, we want to get it first and then delete it. For instance, we use the .get() to retrieve documents:
+
+String documentId = "John Doe";
+GetResponse<Person> getResponse = client.get(s -> s
+  .index("person")
+  .id(documentId), Person.class);
+Person source = getResponse.source();
+assertEquals("John Doe", source.getFullName());
+
+Then, we use the .delete() method to delete a document from an index:
+
+String documentId = "Mark Doe";
+DeleteResponse response = client.delete(i -> i
+  .index("person")
+  .id(documentId));
+assertEquals(Result.Deleted, response.result());
+assertEquals("Mark Doe", response.id());
+
+The syntax is straightforward, and you must specify the index alongside the object’s id.
+
+//////////////////////
+
+5. Examples of Complex Search Queries
+
+The Elasticsearch Java Client Library is very flexible and offers a variety of query builders to find search for specific entries in the cluster. When using the .search() method to look for documents, we can use RangeQuery to match documents having field’s value within a specific range:
+
+Query ageQuery = RangeQuery.of(r -> r.field("age").from("5").to("15"))._toQuery();
+SearchResponse<Person> response1 = client.search(s -> s.query(q -> q.bool(b -> b
+  .must(ageQuery))), Person.class);
+response1.hits().hits().forEach(hit -> log.info("Response 1: {}", hit.source()));
+
+The .matchQuery() method returns all documents that match the provided field’s value:
+
+Query fullNameQuery = MatchQuery.of(m -> m.field("fullName").query("John"))._toQuery();
+SearchResponse<Person> response2 = client.search(s -> s.query(q -> q.bool(b -> b
+  .must(fullNameQuery))), Person.class);
+response2.hits().hits().forEach(hit -> log.info("Response 2: {}", hit.source()));
+
+We can also use regex and wildcards in our queries:
+
+Query doeContainsQuery = SimpleQueryStringQuery.of(q -> q.query("*Doe"))._toQuery();
+SearchResponse<Person> response3 = client.search(s -> s.query(q -> q.bool(b -> b
+  .must(doeContainsQuery))), Person.class);
+response3.hits().hits().forEach(hit -> log.info("Response 3: {}", hit.source()));
+
+Even though we can use wildcards and regex in our queries, we must consider each request’s performance and memory consumption. Additionally, the response time may worsen if making heavy use of wildcards.
+
+Moreover, if you are more familiar with the Lucene queries syntax, you can use the SimpleQueryStringQuery builder to customize search queries:
+
+Query simpleStringQuery = SimpleQueryStringQuery.of(q -> q.query("+John -Doe OR Janette"))._toQuery();
+SearchResponse<Person> response4 = client.search(s -> s.query(q -> q.bool(b -> b
+  .must(simpleStringQuery))), Person.class);
+response4.hits().hits().forEach(hit -> log.info("Response 4: {}", hit.source()));
+
+Also, we can use Lucene’s Query Parser syntax to build simple yet powerful queries. For instance, here’re some basic operators that can be used alongside the AND/OR/NOT operators to build search queries:
+
+    The required operator (+): requires that a specific piece of text exists somewhere in the fields of a document.
+    The prohibit operator (–): excludes all documents that contain a keyword declared after the (–) symbol.
+
+
+
+
+
+
+
+
+
+
+
+
+
