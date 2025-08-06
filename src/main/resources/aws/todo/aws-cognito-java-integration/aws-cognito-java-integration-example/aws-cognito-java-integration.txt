@@ -492,6 +492,7 @@ Don't forget to confirm manually the user account from the AWS Cognito. You can 
 
 ///////////////////
 
+hung: important part of cognito is in CognitoService.java
 
 
 

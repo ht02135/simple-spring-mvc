@@ -1,0 +1,6 @@
+
+https://dev.to/onepoint/integrating-aws-cognito-as-an-identity-provider-with-spring-boot-terraform-441c
+Integrating AWS Cognito as an Identity Provider with Spring Boot & Terraform 
+
+//////////////////////
+
