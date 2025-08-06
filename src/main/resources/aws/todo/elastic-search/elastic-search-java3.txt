@@ -1,7 +1,0 @@
-
-https://www.geeksforgeeks.org/advance-java/elasticsearch-in-java-applications/
-Elasticsearch in Java Applications
-
-/////////////////
-
-

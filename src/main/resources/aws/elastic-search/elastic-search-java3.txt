@@ -1,0 +1,178 @@
+
+https://www.geeksforgeeks.org/advance-java/elasticsearch-in-java-applications/
+Elasticsearch in Java Applications
+
+/////////////////
+
+Prerequisites:
+
+First launch an Elasticsearch instance:
+
+docker run -d --name elastic-test -p 9200:9200 -e "discovery.type=single-node" 
+-e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.9.3
+
+Elasticsearch by default watches the 9200 port for incoming HTTP requests. By launching a preferred browser and visiting http://localhost:9200/, we can confirm that it has been started successfully:
+
+{
+  "name": "238170191b08",
+  "cluster_name": "elasticsearch",
+  "cluster_uuid": "pvHXz7xsS5W4zlZiiATelw",
+  "version": {
+    "number": "6.1.4",
+    "build_hash": "5b1fea5",
+    "build_date": "2024-01-12T01:27:58.208Z",
+    "build_snapshot": false,
+    "lucene_version": "7.1.0",
+    "minimum_wire_compatibility_version": "5.6.0",
+    "minimum_index_compatibility_version": "5.1.0"
+  },
+  "tagline": "You Know, for Search"
+}
+
+///////////////////////
+
+Step 1: Add Maven Dependencies
+
+Let's get right to the Java client now that our main Elasticsearch cluster is operational.Elasticsearch and the Jackson library must first be included to our pom.xml file:
+
+<dependency>
+    <groupId>org.elasticsearch</groupId>
+    <artifactId>elasticsearch</artifactId>
+    <version>8.9.4</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.16.4</version>
+</dependency>
+
+///////////////////////////////
+
+Step 2: Elasticsearch Java Client
+
+We can now communicate with Elasticsearch. We will then examine how to carry out the most typical tasks, such adding a document to an index, removing a document from an index, and looking up documents inside an index.
+
+RestClient restClient = RestClient
+  .builder(HttpHost.create("http://localhost:9200"))
+  .build();
+ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+ElasticsearchClient client = new ElasticsearchClient(transport);
+
+////////////////////////////
+
+Step 3: Document Indexing
+
+Adding data to Elastic is the first step towards making them searchable. We'll utilize the ElasticseachClient's.index() function for this:
+
+Person person = new Person(30, "dido datta", new Date(1771468076764L));
+IndexResponse response = client.index(i -> i
+  .index("person")
+  .id(person.getFullName())
+  .document(person));
+  
+/////////////////
+
+Step 4: Indexed Document Queries
+
+The SearchResponse returned by the.search() function contains Hits. The HitsMetadata can be obtained from the SearchResponse object, and then we can acquire the hits by using the.hits() method once again to receive a List of all the Person objects that match the search request.
+
+String searchText = "Rik";
+SearchResponse<Person> searchResponse = client.search(s -> s
+  .index("person")
+  .query(q -> q
+    .match(t -> t
+      .field("fullName")
+      .query(searchText))), Person.class);
+
+List<Hit<Person>> hits = searchResponse.hits().hits();
+assertEquals(1, hits.size());
+assertEquals("Rik Datta", hits.get(0).source().getFullName());
+
+///////////////////////////
+
+Step 5: Getting Specific Documents by ID
+
+Given a document's id, our goal is to retrieve it first, then remove it. To obtain documents, for example, we utilize the get() method:
+
+String documentId = "Rik Datta";
+GetResponse<Person> getResponse = client.get(s -> s
+  .index("person")
+  .id(documentId), Person.class);
+Person source = getResponse.source();
+assertEquals("Rik Datta", source.getFullName());
+
+/////////////////////////////
+
+Step 6: Erasing Specific Documents by ID
+
+Remove a document from an index using the delete() method:
+
+String documentId = dido ";
+DeleteResponse response = client.delete(i -> i
+  .index("person")
+  .id(documentId));
+assertEquals(Result.Deleted, response.result());
+assertEquals(" dido datta", response.id());
+
+/////////////////////////////
+
+Step 7: Running the application
+
+Now, let us run the application by performing all the above mentioned operations.
+
+public static void main(String[] args) throws IOException 
+{
+    makeConnection();
+     
+      // Creating a New Person Instance
+    System.out.println("Inserting a new Person with name Shubham...");
+    Person person = new Person();
+    person.setName("Shubham");
+  
+    person = insertPerson(person);
+    System.out.println("Person inserted --> " + person);
+     
+      // Updating the Name of Person
+    System.out.println("Changing name to `Rik Datta`...");
+    person.setName("Rik Datta");
+  
+      // Update Person on the Database
+    updatePersonById(person.getPersonId(), person);
+    System.out.println("Person updated  --> " + person);
+ 
+      // Getting Person on the Database 
+    System.out.println("Getting Rik...");
+    Person personFromDB = getPersonById(person.getPersonId());
+    System.out.println("Person from DB  --> " + personFromDB);
+ 
+      // Deleting Person from the Database
+    System.out.println("Deleting Rik...");
+    deletePersonById(personFromDB.getPersonId());
+    System.out.println("Person Deleted");
+ 
+    closeConnection();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
