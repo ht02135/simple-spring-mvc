@@ -1,0 +1,60 @@
+
+https://www.tutorialspoint.com/elasticsearch/elasticsearch_index_apis.htm
+Elasticsearch - Index APIs
+
+////////////////////
+
+Create Index
+
+This API helps you to create an index. An index can be created automatically when a user is passing JSON objects to any index or it can be created before that. 
+
+We can also add some settings to the above command −
+
+PUT colleges
+{
+  "settings" : {
+      "index" : {
+         "number_of_shards" : 3,
+         "number_of_replicas" : 2
+      }
+   }
+}
+
+////////////////////
+
+Delete Index
+
+This API helps you to delete any index. You just need to pass a delete request with the name of that particular Index.
+
+DELETE /colleges
+
+//////////////////////
+
+Get Index
+
+This API can be called by just sending get request to one or more than one indices. This returns the information about index.
+
+GET colleges
+
+//////////////////////
+
+Flush
+
+The flush process of an index makes sure that any data that is currently only persisted in the transaction log is also permanently persisted in Lucene. This reduces recovery times as that data does not need to be reindexed from the transaction logs after the Lucene indexed is opened.
+
+POST colleges/_flush
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

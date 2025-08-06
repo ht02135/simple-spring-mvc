@@ -1,0 +1,35 @@
+
+https://www.tutorialspoint.com/elasticsearch/elasticsearch_search_apis.htm
+Elasticsearch - Search APIs
+
+This API is used to search content in Elasticsearch. A user can search by sending a get request with query string as a parameter or they can post a query in the message body of post request. Mainly all the search APIS are multi-index, multi-type.
+
+////////////////////
+
+Multi-Index
+
+Elasticsearch allows us to search for the documents present in all the indices or in some specific indices. For example, if we need to search all the documents with a name that contains central, we can do as shown here −
+
+GET /_all/_search?q=city:paprola 
+
+///////////////////////
+
+Request Body Search
+
+We can also specify query using query DSL in request body and there are many examples already given in previous chapters. One such example is given here −
+
+POST /schools/_search
+{
+   "query":{
+      "query_string":{
+         "query":"up"
+      }
+   }
+}
+
+/////////////////////
+
+
+
+
+

@@ -1,0 +1,473 @@
+
+https://learncsdesigns.medium.com/demystifying-elasticsearch-query-dsl-part-4-565fb8b98129
+Demystifying Elasticsearch: Query DSL — Part 4
+
+supplement
+https://www.tutorialspoint.com/elasticsearch/elasticsearch_query_dsl.htm
+
+///////////////
+
+Elasticsearch is a powerful and flexible open-source search and analytics engine built on top of Apache Lucene. It is designed to handle large volumes of data and enables users to search, analyze, and visualize their data in real-time. In this post, we will delve into the key aspects of Elasticsearch related to searching and querying, including basic queries and filters, full-text search, and the Query DSL (Domain Specific Language).
+
+Understanding the Structure of a Query in Elasticsearch
+
+In Elasticsearch, querying is a fundamental aspect of retrieving relevant information from your indexed data. The structure of a query in Elasticsearch is typically represented in JSON format, forming the Query DSL (Domain-Specific Language). The basic structure consists of a "query" field, under which specific query types or clauses are nested.
+
+/////////////////////
+
+Here’s a simple example:
+
+{
+  "query": {
+    "match": {
+      "field_name": "search_text"
+    }
+  }
+}
+
+    The outermost "query" field indicates the beginning of the query.
+    The "match" field is a type of query that performs a full-text search on the specified field.
+    "field_name" represents the field in which the search is conducted.
+    "search_text" is the text or value to search for within the specified field.
+    
+//////////////////////
+//////////////////////
+
+Query Types in Elasticsearch
+
+Elasticsearch provides a variety of query types to cater to different use cases, allowing users to search, filter, and analyze data in diverse ways. Here are some of the essential query types:
+
+//////////////////////
+
+Match Queries:
+
+    Match Query: This is a basic full-text query. It analyzes the input text and constructs queries based on the terms it finds. This query searches for documents where the “description” field contains the terms “Elasticsearch” or “tutorial.”
+
+{
+  "query": {
+    "match": {
+      "description": "Elasticsearch tutorial"
+    }
+  }
+}
+
+//////////////////////
+
+    Match Phrase Query: Similar to the Match Query, but it ensures that the entire input phrase is present in the document. This query ensures that the exact phrase “open source” is present in the “content” field.
+
+{
+  "query": {
+    "match_phrase": {
+      "content": "open source"
+    }
+  }
+}
+
+////////////////////////
+
+    Multi Match Query: Allows you to perform a full-text search across multiple fields simultaneously. The search is performed across the “title” and “description” fields. The type is set to "best_fields," indicating that the document with the highest score in any of the specified fields will be considered the best match. The weight for the “title” field is increased (^2) to give it higher importance in the scoring.
+
+{
+  "query": {
+    "multi_match": {
+      "query": "Python",
+      "fields": ["title^2", "description"],
+      "type": "best_fields"
+    }
+  }
+}
+
+lousy explaination, my guess is query 'Python' in 2 fields???
+
+/////////////////////////
+
+Term-Level Queries:
+
+    Term Query: Searches for exact terms in the inverted index. Searches for documents where the “status.keyword” field is exactly “published.”
+
+{
+  "query": {
+    "term": {
+      "status.keyword": "published"
+    }
+  }
+}
+
+////////////////////////
+
+    Terms Query: Allows the search for multiple terms within a single query. Finds documents with the specified terms in the “tags” field.
+
+{
+  "query": {
+    "terms": {
+      "tags": ["elasticsearch", "search"]
+    }
+  }
+}
+
+/////////////////////////////
+
+    Range Query: Enables searching for a range of values (numeric or date ranges). Retrieves documents where the “price” field is between 20 and 50.
+
+{
+  "query": {
+    "range": {
+      "price": {
+        "gte": 20,
+        "lte": 50
+      }
+    }
+  }
+}
+
+//////////////////////////
+
+Compound Queries
+
+    Bool Query: Combines multiple queries using boolean operators (AND, OR, NOT). Combines multiple conditions using boolean logic.
+
+{
+  "query": {
+    "bool": {
+      "must": { "match": { "title": "Elasticsearch" } },
+      "must_not": { "term": { "status": "inactive" } },
+      "filter": { "range": { "timestamp": { "gte": "2022-01-01" } } }
+    }
+  }
+}
+
+lousy example, where is boolean operators (AND, OR, NOT)???
+
+/////////////////////////
+////////////////////////////
+
+Full-Text Queries:
+
+    Match All Query: Retrieves all documents in the index. Retrieves all documents in the index.
+
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+    Common Terms Query: Similar to the Match Query but avoids high-frequency terms. Similar to the Match Query but excludes high-frequency terms.
+
+{
+  "query": {
+    "common": {
+      "description": {
+        "query": "Elasticsearch tutorial",
+        "cutoff_frequency": 0.001
+      }
+    }
+  }
+}
+
+//////////////////////
+
+Geo Queries:
+
+    Geo Shape Query: Allows for complex geometric shapes to be used in queries. Searches for documents within a specified geographic shape.
+
+{
+  "query": {
+    "geo_shape": {
+      "location": {
+        "shape": {
+          "type": "circle",
+          "coordinates": [ -74.1, 40.7 ],
+          "radius": "10km"
+        },
+        "relation": "within"
+      }
+    }
+  }
+}
+
+    Geo Bounding Box Query: Filters documents based on a bounding box.
+
+{
+  "query": {
+    "geo_bounding_box": {
+      "pin.location": {
+        "top_left": {"lat": 40.73, "lon": -74.1},
+        "bottom_right": {"lat": 40.717, "lon": -73.99}
+      }
+    }
+  }
+}
+
+//////////////////////
+
+Nested Queries:
+
+    Nested Query: Allows you to query nested fields. Searches within nested fields.
+
+{
+  "query": {
+    "nested": {
+      "path": "comments",
+      "query": {
+        "match": { "comments.text": "Elasticsearch" }
+      }
+    }
+  }
+}
+
+/////////////////////
+
+Joining Queries:
+
+    Parent-Child Query: Enables joining parent and child documents. Retrieves parent documents based on matching criteria in associated child documents.
+
+{
+  "query": {
+    "has_child": {
+      "type": "comment",
+      "query": {
+        "match": {
+          "text": "Elasticsearch"
+        }
+      }
+    }
+  }
+}
+
+//////////////////
+
+Specialized Queries:
+
+    Fuzzy Query: Matches terms with some degree of error, useful for dealing with typos or misspellings.
+
+{
+  "query": {
+    "fuzzy": {
+      "title": {
+        "value": "elasticseach",
+        "fuzziness": 2
+      }
+    }
+  }
+}
+
+    Prefix Query: Searches for terms starting with a specified prefix, like usernames.
+
+{
+  "query": {
+    "prefix": {
+      "username": "ela"
+    }
+  }
+}
+
+    Wildcard Query: Allows for wildcard searches in terms, useful for pattern matching.
+
+{
+  "query": {
+    "wildcard": {
+      "email": "user*@example.com"
+    }
+  }
+}
+
+////////////////////
+
+Aggregation Queries:
+
+Elasticsearch supports a powerful aggregation framework for data analysis, allowing users to perform analytics on data like sum, average, min, max, etc.
+
+    Terms Aggregation: Find the distribution of a field’s values.
+
+{
+  "aggs": {
+    "field_distribution": {
+      "terms": {
+        "field": "your_field"
+      }
+    }
+  }
+}
+
+    Range Aggregation: Divide data into specified ranges.
+
+{
+  "aggs": {
+    "price_ranges": {
+      "range": {
+        "field": "price",
+        "ranges": [
+          { "to": 50 },
+          { "from": 50, "to": 100 },
+          { "from": 100 }
+        ]
+      }
+    }
+  }
+}
+
+    Average Aggregation: Calculate the average value of a numeric field.
+
+{
+  "aggs": {
+    "average_price": {
+      "avg": {
+        "field": "price"
+      }
+    }
+  }
+}
+
+    Sum Aggregation: Calculate the sum of a numeric field.
+
+{
+  "aggs": {
+    "total_sales": {
+      "sum": {
+        "field": "sales"
+      }
+    }
+  }
+}
+
+    Min and Max Aggregations: Find the minimum and maximum values of a field.
+
+{
+  "aggs": {
+    "min_price": {
+      "min": {
+        "field": "price"
+      }
+    },
+    "max_price": {
+      "max": {
+        "field": "price"
+      }
+    }
+  }
+}
+
+    Filter Aggregation: Apply filters to aggregate data selectively.
+
+{
+  "aggs": {
+    "filtered_sales": {
+      "filter": {
+        "range": { "price": { "gte": 50 } }
+      },
+      "aggs": {
+        "average_price": {
+          "avg": {
+            "field": "price"
+          }
+        }
+      }
+    }
+  }
+}
+
+////////////////////
+///////////////////////////////////
+
+Sorting in Elasticsearch
+
+Sorting is a crucial feature in search engines, allowing users to organize search results based on specific criteria. Elasticsearch provides robust sorting capabilities, enabling users to customize the order of returned documents.
+
+To sort search results in Elasticsearch, you can use the “sort” parameter in your query. For example, suppose you have an index containing documents with fields like “title,” “date,” and “popularity.” You can sort the results based on the “date” field in descending order using the following query:
+
+{
+  "query": {
+    "match_all": {}
+  },
+  "sort": [
+    {
+      "date": {
+        "order": "desc"
+      }
+    }
+  ]
+}
+
+////////////////////
+///////////////////////////////////
+
+Filtering in Elasticsearch
+
+Filtering is another critical aspect of Elasticsearch, allowing users to narrow down search results based on specific conditions. Elasticsearch provides various types of filters, and we’ll explore two of them: Range Filter and Exists Filter.
+Filtering search results based on certain conditions:
+
+Filters are used in Elasticsearch queries to restrict the documents returned based on certain criteria. For instance, if you want to retrieve documents where the “category” field is equal to “technology,” you can use a term filter:
+
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "term": {
+          "category.keyword": "technology"
+        }
+      }
+    }
+  }
+}
+
+////////////////////
+///////////////////////////////////
+
+Range Filter: Filtering based on a range of values:
+
+Elasticsearch supports range filters, allowing users to filter documents based on a range of values. For instance, if you want to retrieve documents where the “price” field is between 100 and 500, you can use a range filter:
+
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "range": {
+          "price": {
+            "gte": 100,
+            "lte": 500
+          }
+        }
+      }
+    }
+  }
+}
+
+This query will only return documents where the “price” falls within the specified range.
+
+//////////////////////
+
+Exists Filter: Filtering documents with a specific field:
+
+Sometimes, you might want to retrieve documents that contain a specific field. The “exists” filter can be useful for this purpose. For example, if you want to retrieve documents where the “author” field exists:
+
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "exists": {
+          "field": "author"
+        }
+      }
+    }
+  }
+}
+
+This query will only return documents where the “author” field is present.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
