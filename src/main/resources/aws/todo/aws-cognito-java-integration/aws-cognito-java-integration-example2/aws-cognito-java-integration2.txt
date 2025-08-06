@@ -4,3 +4,312 @@ Integrating AWS Cognito as an Identity Provider with Spring Boot & Terraform
 
 //////////////////////
 
+AWS Cognito provides a scalable and secure solution for managing user identities and authentication in web applications. In this article, we'll explore how to integrate AWS Cognito as an identity provider with a Spring Boot application and how to write it as Infrastructure as Code with Terraform.
+
+/////////////////////////
+
+About Cognito
+
+Amazon Cognito is an AWS fully managed service. It enables you to perform user registration, sign-in, and access control to applications, with multi-factor authentication option, identity federation with social and enterprise identity providers feature and user directory management.
+
+//////////////////////////////
+
+Prerequisites
+
+You will need the following tools to settle the things properly :
+
+    An AWS account
+    A Spring Boot application
+    AWS CLI installed and configured to acces your AWS account
+    AWS SDK for Java dependency in your dependency manager
+    Terraform installed and configured.
+
+//////////////////////////
+
+Set up AWS Cognito User Pool
+
+First, we have to create the User Pool in Cognito. Let's use Terraform to build this.
+
+    Create a new directory for your Terraform configuration and create a main.tf file inside it.
+    Add the following Terraform configuration to your main.tf:
+
+--------------------
+provider "aws" {
+  region = "eu-west-1"  # Replace with your preferred AWS region
+}
+
+resource "aws_cognito_user_pool" "user_pool" {
+  name = "my-user-pool"
+  alias_attributes = ["email"]
+  auto_verified_attributes = ["email"]
+  username_attributes = ["email"]
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+    invite_message_template {
+      email_message = "Your username is {username} and temporary password is {####}."
+      email_subject = "Your temporary password"
+      sms_message = "Your username is {username} and temporary password is {####}."
+    }
+  }
+  schema {
+    attribute_data_type = "String"
+    developer_only_attribute = false
+    mutable = true
+    name = "email"
+    required = true
+    string_attribute_constraints {
+      max_length = "2048"
+      min_length = "0"
+    }
+  }
+}
+
+resource "aws_cognito_user_pool_client" "user_pool_client" {
+  name = "my-app-client"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+  allowed_oauth_flows = ["code"]
+  allowed_oauth_scopes = ["openid"]
+  allowed_oauth_flows_user_pool_client = true
+  explicit_auth_flows = ["ALLOW_USER_PASSWORD_AUTH"]
+  generate_secret = false
+}
+
+resource "aws_cognito_user_group" "user_group" {
+  name        = "my-user-group"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+  description = "My user group description"
+}
+
+output "user_pool_id" {
+  value = aws_cognito_user_pool.user_pool.id
+}
+--------------------
+
+
+    Run terraform init and terraform apply to create the AWS Cognito User Pool. Replace the AWS region and names.
+    After creating the User Pool, note the User Pool ID for later configuration
+
+
+/////////////////////
+
+Configure Spring Boot Application
+
+In your Spring Boot application, you need to add the necessary dependencies and configure the Cognito identity provider.
+
+Add the AWS SDK for Java and Spring Security dependencies to your pom.xml:
+
+<dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-java-sdk-cognitoidentityprovider</artifactId>
+    <version>1.11.934</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+Configure Cognito in your application.properties or application.yml:
+
+spring.security.oauth2.client.registration.cognito.client-id=<client-id>
+spring.security.oauth2.client.registration.cognito.client-secret=<client-secret>
+spring.security.oauth2.client.registration.cognito.scope=openid
+spring.security.oauth2.client.provider.cognito.issuer-uri=https://cognito-idp.<aws-region>.amazonaws.com/<user-pool-id>
+
+Replace client-id, client-secret, aws-region, and user-pool-id with your AWS Cognito settings.
+
+///////////////////////
+
+Register / Login a User
+
+We'll need a controller to register / login users :
+
+@RestController
+@RequestMapping("/api/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationRequest userRequest) {
+        try {
+            userService.registerUser(userRequest); // Register user with Cognito
+            return ResponseEntity.ok("User registered successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error registering user: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody UserLoginRequest userRequest) {
+        if (userService.loginUser(userRequest)) { // Login user with Cognito
+            return ResponseEntity.ok("User logged in successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid username or password.");
+        }
+    }
+}
+
+
+////////////////////////
+
+And here is the service that implements register and login :
+
+@Service
+public class UserService {
+
+    @Autowired
+    private AmazonCognitoIdentityProvider cognitoIdentityProvider;
+
+    public void registerUser(UserRegistrationRequest userRequest) {
+        try {
+            // Prepare user's attributes
+            List<AttributeType> userAttributes = new ArrayList<>();
+            userAttributes.add(new AttributeType().withName("email").withValue(userRequest.getEmail()));
+            // Prepare the request
+            AdminCreateUserRequest createUserRequest = new AdminCreateUserRequest()
+                .withUserPoolId("cognito-userpool-id") // use environment variable
+                .withUsername(userRequest.getUsername())
+                .withUserAttributes(userAttributes)
+                .withTemporaryPassword(userRequest.getPassword())
+                .withDesiredDeliveryMediums("EMAIL");
+
+            // Use Cognito API
+            UserType newUser = cognitoIdentityProvider.adminCreateUser(createUserRequest);
+
+            // Add the user to a group
+            cognitoIdentityProvider.adminAddUserToGroup(new AdminAddUserToGroupRequest()
+                    .withGroupName("yourGroupName")
+                    .withUserPoolId("cognito-userpool-id") // use environment variable
+                    .withUsername(userRequest.getUsername()));
+
+        } catch (Exception e) {
+            // Handle register errors
+            throw new RuntimeException("Error registering user : " + e.getMessage(), e);
+        }
+    }
+
+    public boolean loginUser(UserLoginRequest userRequest) {
+        try {
+            AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
+                .withUserPoolId("cognito-userpool-id") // use environment variable
+                .withClientId("cognito-client-id") // use environment variable
+                .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
+                .withAuthParameters(Collections.singletonMap("USERNAME", userRequest.getUsername()))
+
+            AdminInitiateAuthResponse authResponse = cognitoIdentityProvider.adminInitiateAuth(authRequest);
+            if (ChallengeNameType.PASSWORD_VERIFIER.toString().equals(authResponse.getChallengeName())) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            // Handle login errors
+            return false;
+        }
+        return false; 
+    }
+}
+
+
+///////////////////////
+
+Manage permissions with Spring Security
+
+Create a custom UserDetails service that loads user information from Cognito. Here's a sample implementation :
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Service;
+
+import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
+import com.amazonaws.services.cognitoidp.model.AdminInitiateAuthRequest;
+import com.amazonaws.services.cognitoidp.model.AdminInitiateAuthResult;
+
+@Service
+public class CognitoUserDetailsService {
+
+    @Value("${cognito.user.pool.id}")
+    private String userPoolId;
+
+    @Value("${cognito.client.id}")
+    private String clientId;
+
+    private final AWSCognitoIdentityProvider cognitoIdentityProvider;
+
+    public CognitoUserDetailsService(AWSCognitoIdentityProvider cognitoIdentityProvider) {
+        this.cognitoIdentityProvider = cognitoIdentityProvider;
+    }
+
+    public UserDetails loadUserByUsername(String username, String password) {
+        AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
+            .withAuthFlow("ADMIN_NO_SRP_AUTH")
+            .withAuthParameters(
+                "USERNAME", username,
+                "PASSWORD", password
+            )
+            .withUserPoolId(userPoolId)
+            .withClientId(clientId);
+
+        AdminInitiateAuthResult authResult = cognitoIdentityProvider.adminInitiateAuth(authRequest);
+
+        // Check the authentication result
+        if ("SUCCESS".equals(authResult.getAuthenticationResult().getAuthenticationResultCode())) {
+            // Authentication is successful, create UserDetails
+            String sub = authResult.getAuthenticationResult().getSub();
+            String email = authResult.getAuthenticationResult().getUsername();
+
+            // You can retrieve additional user attributes as needed
+
+            return new User(sub, username, 
+                true, true, true, true,
+                new SimpleGrantedAuthority("ROLE_USER")
+            );
+        } else {
+            // Handle authentication failure
+            throw new AuthenticationException("Authentication failed");
+        }
+    }
+}
+
+Secure your endpoints by adding @PreAuthorize annotations to your controller methods:
+
+@RestController
+@RequestMapping("/api")
+public class MyController {
+
+    @GetMapping("/secured")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public String securedEndpoint() {
+        return "This is a secured endpoint!";
+    }
+}
+
+
+//////////////////
+
+Test the Integration
+
+Now you can test the integration. I recommend Postman to do it. Follow the steps :
+
+    Build and run your Spring Boot app
+    Authenticate with email/password on http://localhost:8080/api/user/login - POST
+
+
+///////////////
+
+aws cognito interest part is CognitoUserDetailsService.java
+
+
+
+
+
+
+
+
+
+
+
+
+
