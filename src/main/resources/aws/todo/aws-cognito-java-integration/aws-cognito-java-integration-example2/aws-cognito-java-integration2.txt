@@ -299,7 +299,13 @@ Now you can test the integration. I recommend Postman to do it. Follow the steps
 
 ///////////////
 
-incomplete example with many holes
+incomplete example with many holes especially holes related to CognitoUserDetailsService
+
+need to review 'spring-security-user-details-service'
+1>public class MyUserDetailsService implements UserDetailsService
+2>public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private MyUserDetailsService myUserDetailsService;	
 
 
 

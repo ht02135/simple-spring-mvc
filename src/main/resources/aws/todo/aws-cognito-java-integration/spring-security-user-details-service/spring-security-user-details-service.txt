@@ -1,0 +1,566 @@
+
+https://www.concretepage.com/spring-5/spring-security-userdetailsservice
+Spring Security UserDetailsService
+
+///////////////////////
+
+Spring Security UserDetailsService is core interface which loads user-specific data. It is used by DaoAuthenticationProvider. 
+
+The DaoAuthenticationProvider which is the implementation of AuthenticationProvider, retrieves user details from UserDetailsService. 
+
+To use UserDetailsService in our Spring Security application, we need to create a class by implementing UserDetailsService interface.
+The UserDetailsService has only one method as given below.
+
+UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
+
+The loadUserByUsername() method accepts username as argument and returns instance of UserDetails which stores user informations. If username not found, we need to throw UsernameNotFoundException.
+Spring Security provides built-in implementations of UserDetailsService such as CachingUserDetailsService, InMemoryUserDetailsManager, JdbcDaoImpl, JdbcUserDetailsManager, LdapUserDetailsManager, LdapUserDetailsService.
+On this page we will create custom UserDetailsService and use it in our applications using JavaConfig as well as XML configuration with HSQLDB database. 
+
+//////////////////
+
+
+Spring Security UserDetailsService
+Written by: Arvind Rai,
+Last updated: December 11, 2023
+Follow for latest posts:		
+Subscribe for video tutorials:	
+Spring 5	
+Spring Security UserDetailsService is core interface which loads user-specific data. It is used by DaoAuthenticationProvider. The DaoAuthenticationProvider which is the implementation of AuthenticationProvider, retrieves user details from UserDetailsService. To use UserDetailsService in our Spring Security application, we need to create a class by implementing UserDetailsService interface.
+The UserDetailsService has only one method as given below.
+
+UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
+
+The loadUserByUsername() method accepts username as argument and returns instance of UserDetails which stores user informations. If username not found, we need to throw UsernameNotFoundException.
+Spring Security provides built-in implementations of UserDetailsService such as CachingUserDetailsService, InMemoryUserDetailsManager, JdbcDaoImpl, JdbcUserDetailsManager, LdapUserDetailsManager, LdapUserDetailsService.
+On this page we will create custom UserDetailsService and use it in our applications using JavaConfig as well as XML configuration with HSQLDB database.
+
+////////////////
+
+1. Technologies Used
+Find the technologies being used in our example.
+1. Java 11
+2. Spring 5.2.1.RELEASE
+3. Spring Boot 2.2.1.RELEASE
+4. HSQLDB 2.5.0
+5. Tomcat 9
+6. Maven 3.5.2 
+
+////////////////////
+
+2. Implement UserDetailsService
+Find the custom UserDetailsService created in our demo application.
+MyUserDetailsService.java
+
+public class MyUserDetailsService implements UserDetailsService {
+	@Autowired
+	private UserRepository userRepository; 
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<CompUser> compUserOpt = userRepository.findById(username);
+		if (compUserOpt.isEmpty()) {
+			throw new UsernameNotFoundException("Username not found");
+		}
+		CompUser compUser = compUserOpt.get();
+		GrantedAuthority authority = new SimpleGrantedAuthority(compUser.getAuthority());
+		UserDetails userDetails = (UserDetails)new User(compUser.getUsername(), 
+				compUser.getPassword(), Arrays.asList(authority));
+		return userDetails;
+	}
+} 
+
+Our class is implementing UserDetailsService interface and overriding loadUserByUsername() method which accepts username as an argument submitted by login page. On the basis of username we fetch user data from database. Here we are using Spring Data CrudRepository to interact with database. 
+
+////////////////////
+
+3. Configure using JavaConfig
+Configure UserDetailsService using JavaConfig as following.
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private MyUserDetailsService myUserDetailsService;	
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+		.antMatchers("/admin/**").access("hasRole('ADMIN')")
+		.antMatchers("/user/**").access("hasAnyRole('USER', 'ADMIN')")
+		.and().formLogin()  //login configuration
+                .loginPage("/customLogin.jsp")
+                .loginProcessingUrl("/appLogin")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/user")	
+		.and().logout()  //logout configuration
+		.logoutUrl("/appLogout") 
+		.logoutSuccessUrl("/customLogin.jsp")
+		.and().exceptionHandling() //exception handling configuration
+		.accessDeniedPage("/error");
+	} 	
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder;
+	}
+} 
+
+
+
+The AuthenticationManagerBuilder is a SecurityBuilder that is used to create an AuthenticationManager. 
+
+////////////////////////
+
+4. Configure using XML Configuration
+Find the UserDetailsService configuration using XML configuration.
+
+<beans:bean name="userDetailsService" class="com.concretepage.config.MyUserDetailsService"/>
+<authentication-manager>
+	<authentication-provider user-service-ref="userDetailsService">
+		<password-encoder ref="bcryptEncoder"/>
+	</authentication-provider>
+</authentication-manager> 
+
+The <authentication-provider> element provides user-service-ref attribute to configure UserDetailsService bean. 
+
+/////////////////////////
+
+5. Database Schema
+In our example, we are using HSQLDB. Find the schema to store user details.
+
+CREATE TABLE comp_users (
+	username VARCHAR(50) NOT NULL,
+	password VARCHAR(300) NOT NULL,
+        authority VARCHAR(50) NOT NULL,
+	enabled TINYINT NOT NULL,
+	PRIMARY KEY (username)
+);
+
+INSERT INTO comp_users (username, password, authority, enabled) VALUES
+  ('krishna', '$2a$10$nnu2.EBSnJUQZmOv5hbD8.3C8dlifeLi26AWpoKN31FqjNXrijQMq', 'ROLE_ADMIN', 1),
+  ('surya', '$2a$10$DPzHnInANVY1utbuRfe0eOojtE02k23TGB5Q0L6mIHOBJQhKU7DTi', 'ROLE_USER', 1); 
+
+We have created two users with credentials krishna/k123 and surya/s123 here. We are using BCrypt password encoding in our demo application.
+
+
+////////////////////
+
+
+6. Maven Dependencies
+pom.xml
+
+<parent>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-parent</artifactId>
+	<version>2.2.1.RELEASE</version>
+	<relativePath />
+</parent>
+<dependencies>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-jpa</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.hsqldb</groupId>
+		<artifactId>hsqldb</artifactId>
+		<version>2.5.0</version>
+	</dependency>
+	<dependency>
+		<groupId>jstl</groupId>
+		<artifactId>jstl</artifactId>
+		<version>1.2</version>
+	</dependency>
+</dependencies> 
+
+/////////////////////
+
+DBConfig.java
+
+@Configuration
+@EnableJpaRepositories("com.concretepage.repository")
+public class DBConfig {
+	@Bean(name="entityManagerFactory")
+	public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
+	    LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
+	    lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
+	    lcemfb.setDataSource(dataSource());
+	    lcemfb.setPackagesToScan("com.concretepage.entity");
+	    return lcemfb;
+	}
+	
+	@Bean
+	public JpaVendorAdapter getJpaVendorAdapter() {
+	    JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+	    return adapter;
+	}	
+
+	@Bean
+	public DataSource dataSource() {
+	    DriverManagerDataSource dataSource = new DriverManagerDataSource();
+	    dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+	    dataSource.setUrl("jdbc:hsqldb:hsql://localhost:9001");
+	    dataSource.setUsername("sa");
+	    dataSource.setPassword("");
+	    return dataSource;
+	}
+	
+	@Bean(name="transactionManager")
+	public PlatformTransactionManager txManager(){
+	    JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(
+			getEntityManagerFactoryBean().getObject());
+	    return jpaTransactionManager;
+	}	
+} 
+
+/////////////////////////
+
+AppConfig.java
+
+@Configuration
+@ComponentScan("com.concretepage")
+@EnableWebMvc
+public class AppConfig {
+	@Bean
+	public InternalResourceViewResolver viewResolver() {
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		resolver.setPrefix("/WEB-INF/secure/");
+		resolver.setSuffix(".jsp");
+		return resolver;
+	}
+} 
+
+//////////////////////
+
+CompUser.java
+
+@Entity
+@Table(name = "comp_users")
+public class CompUser implements Serializable {
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name = "username")
+	private String username;
+
+	@Column(name = "password")
+	private String password;
+
+	@Column(name = "authority")
+	private String authority;
+
+	@Column(name = "enabled")
+	private int enabled;
+        
+        //Setters and Getters
+} 
+
+//////////////////
+
+UserRepository.java
+
+public interface UserRepository extends CrudRepository<CompUser, String>  {
+
+} 
+
+/////////////////
+
+AppController.java
+
+@Controller
+public class AppController {
+	@RequestMapping(value="/admin")
+	public String adminInfo(ModelMap model, Authentication authentication) {
+		model.addAttribute("name", authentication.getName());
+ 		return "info";
+ 	}
+	@RequestMapping(value="/user")
+	public String userInfo(ModelMap model, Authentication authentication) {
+		model.addAttribute("name", authentication.getName());
+ 		return "info";
+ 	}	
+	@RequestMapping(value="/error")
+	public String error() {
+ 		return "access-denied";
+ 	}
+} 
+
+///////////////////////
+
+SecurityInitializer.java
+
+public class SecurityInitializer extends AbstractSecurityWebApplicationInitializer {
+} 
+
+////////////////////////
+
+WebAppInitializer.java
+
+public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		return new Class[] { AppConfig.class };
+	}
+
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		return null;
+	}
+
+	@Override
+	protected String[] getServletMappings() {
+		return new String[] { "/" };
+	}
+} 
+
+
+///////////////////////
+
+customLogin.jsp
+
+<html>
+    <head>
+        <title>Spring Security Login</title>
+    </head>
+    <body>
+	<h3>Spring Security Login</h3>
+	<font color="red">
+		 ${SPRING_SECURITY_LAST_EXCEPTION.message}
+	</font>
+	<form action="<%=request.getContextPath()%>/appLogin" method="POST">
+	   <table border='1' cellspacing='0' cellpadding='10'>
+	   <tr><td>Username:</td> <td><input type="text" name="username"/></td></tr>
+	   <tr><td>Password:</td> <td><input type="password" name="password"/></td></tr>
+	   <tr>
+		 <td colspan='2' align='center'><input type="submit" value="Login"/>
+		  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>			
+		 </td>
+	   </tr>
+	   </table>
+	</form>
+    </body>
+</html> 
+
+/////////////////////
+
+info.jsp
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<html>
+    <head>
+        <title>Spring Security Example</title>
+    </head>
+    <body>
+      <h3>Hello <c:out value="${name}"/></h3>
+      <form action="<%=request.getContextPath()%>/appLogout" method="POST">
+        <input type="submit" value="Logout"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
+      </form>      
+    </body>
+</html> 
+
+/////////////////
+
+access-denied.jsp
+
+<html>
+    <head>
+        <title>Spring Security</title>
+    </head>
+    <body>
+      <h3>You are not authorized to access this page.</h3>
+      <form action="<%=request.getContextPath()%>/appLogout" method="POST">
+        <input type="submit" value="Logout"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
+      </form> 
+    </body>
+</html> 
+
+
+//////////////////////
+
+8. Example using XML Configuration
+Find the XML files of our demo application using XML configuration. Other Java and JSP files are same as given in demo application using JavaConfig.
+security-config.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<http>
+		<intercept-url  pattern="/admin/**" access="hasRole('ADMIN')" />
+		<intercept-url  pattern="/user/**" access="hasAnyRole('USER', 'ADMIN')" />		
+		<form-login 
+		   login-page="/customLogin.jsp" 
+		   login-processing-url="/appLogin"
+		   username-parameter="username"
+		   password-parameter="password"
+		   default-target-url="/user"/>
+		<logout 
+		   logout-url="/appLogout" 
+		   logout-success-url="/customLogin.jsp"/>  
+		<access-denied-handler error-page="/error"/>
+	</http>
+    
+        <beans:bean name="userDetailsService" class="com.concretepage.config.MyUserDetailsService"/>  
+	<beans:bean name="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
+	<authentication-manager>
+		<authentication-provider user-service-ref="userDetailsService">
+		    <password-encoder ref="bcryptEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+	
+</beans:beans> 
+
+///////////////////
+
+db-config.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"	
+        xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"	
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/data/jpa
+        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd        
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd		
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:annotation-config />
+	<jpa:repositories base-package="com.concretepage.repository" />
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="jdbc:hsqldb:hsql://localhost:9001" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+	<bean name="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+         <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
+         <property name="dataSource" ref="dataSource" />
+         <property name="packagesToScan">
+             <list>
+                <value>com.concretepage.entity</value>
+             </list>
+         </property>         
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	     <property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" /> 		
+</beans> 
+
+
+
+//////////////////
+
+app-config.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+	<context:component-scan base-package="com.concretepage" />
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	  <property name="prefix" value="/WEB-INF/secure/"/>
+	  <property name="suffix" value=".jsp"/> 
+        </bean>
+</beans> 
+
+
+
+//////////////////
+
+web.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+        http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+
+	<display-name>Spring Security Example</display-name>
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/app-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>
+	       /WEB-INF/db-config.xml
+	       /WEB-INF/security-config.xml
+	    </param-value>
+	</context-param>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+</web-app> 
+
+
+
+/////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
