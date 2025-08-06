@@ -1,5 +1,5 @@
 
-https://medium.com/@sumindaniro/user-authentication-and-authorization-with-aws-cognito-d204492dd1d0
-User Authentication and Authorization with AWS Cognito
+https://aws-tc-largeobjects.s3.amazonaws.com/DEV-AWS-MO-BuildingRedux/exercise-3-cognito.html
+Exercise 3: Amazon Cognito Authentication
 
 ///////////////
