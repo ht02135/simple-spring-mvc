@@ -200,6 +200,11 @@ Gets the temporary credentials for AWS services using ID token, Identity Pool ID
 
 5. Go to the endpoint that was copied in step “3.5” and you will be presented with the login page. Go ahead and try out create, verify and login of a user and as for the S3 bucket name give the bucket name that was created in step “3” and it will successfully display the files that was uploaded. By default verification code will be sent to your email.
 
+///////////////////
+
+cognito
+https://docs.aws.amazon.com/code-library/latest/ug/cognito-identity-provider_code_examples.html
+
 
 
 

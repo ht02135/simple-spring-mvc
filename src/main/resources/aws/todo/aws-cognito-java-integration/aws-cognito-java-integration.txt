@@ -1,0 +1,504 @@
+
+https://dev.to/daviidy/api-security-how-to-implement-authentication-and-authorization-with-aws-cognito-in-spring-boot-4713
+API security: How to implement Authentication and Authorization with AWS Cognito in Spring Boot 
+
+//////////////
+
+In this blog post, we'll focus on implementing the registration, login processes, and the JWT Token authorization with AWS Cognito. 
+
+Cognito's main features include:
+
+    User directory
+    Authentication server
+    Authorization service
+    User sign-up and authentication
+    Temporary security credentials
+    Session management
+    Forgotten password functionality
+
+Cognito also provides a secure identity store that can scale to millions of users. This store securely stores user profile data for users who sign up directly and for federated users who sign in with external identity providers. 
+
+/////////////////
+
+Just make sure that you have the following dependencies in your pom.xml file
+
+<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-cognitoidp</artifactId>
+            <version>1.11.934</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.26</version>
+        </dependency>
+<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+/////////////////
+
+Let's break down each dependency:
+
+    spring-boot-starter-security: is part of the Spring Boot framework and provides a comprehensive set of security-related features.
+        Authentication: Helps in user authentication.
+        Authorization: Supports role-based and permission-based access control.
+        Common security configurations out of the box.
+        Integration with various authentication providers.
+
+    aws-java-sdk-cognitoidp: is part of the AWS SDK for Java and specifically focuses on Amazon Cognito Identity Pools.
+        Provides Java APIs for interacting with Amazon Cognito Identity Pools.
+        Enables your Java application to integrate with Amazon Cognito for user management and authentication.
+        Includes functionality for user sign-up, sign-in, and other identity-related operations.
+
+    mysql-connector-java: is the official JDBC driver for MySQL databases, allowing Java applications to connect and interact with MySQL databases. Because you will need to create a local database. Look up online on how to do it with IntelliJ.
+
+    spring-boot-starter-oauth2-resource-server: is part of Spring Boot and is designed to set up an OAuth 2.0 Resource Server.
+        Configures the application to act as a resource server, capable of processing and validating OAuth 2.0 access tokens.
+        Allows the application to secure its resources and endpoints using OAuth 2.0 authentication and authorization.
+
+
+///////////////////
+
+The architecture:
+
+We'll use the Domain Driven Design principles:
+
+    controller: For handling HTTP requests and defining endpoints.
+    service: For implementing business logic.
+    repository: For data access to interact with databases like DynamoDB.
+    model: For defining domain entities and value objects.
+    requests: We could use Data Transfer Objects (DTO) that encapsulate data passed between layers. But for this project, we will use request classes, which serve as a form of DTO. Those classes define the structure of the data you expect to receive in your HTTP request.
+    config: For Spring configuration classes.
+    security: For security-related classes.
+
+Here is what your src/main folder should look like:
+
+├── java
+│   └── com
+│       └── example
+│           └── chat_app
+│               ├── ChatAppApplication.java
+│               ├── config
+│               │   ├── CognitoConfig.java
+│               │   └── SecurityConfig.java
+│               ├── controller
+│               │   ├── QuestionController.java
+│               │   └── UserController.java
+│               ├── dto
+│               ├── model
+│               │   ├── Question.java
+│               │   └── User.java
+│               ├── repository
+│               │   ├── QuestionRepository.java
+│               │   └── UserRepository.java
+│               ├── requests
+│               │   ├── CreateQuestionRequest.java
+│               │   ├── UserLoginRequest.java
+│               │   └── UserRegistrationRequest.java
+│               ├── security
+│               └── service
+│                   ├── CognitoService.java
+│                   ├── QuestionService.java
+│                   ├── QuestionServiceImpl.java
+│                   ├── UserService.java
+│                   └── UserServiceImpl.java
+└── resources
+    ├── application.properties
+    ├── simple.priv
+    ├── static
+    └── templates
+
+////////////////
+
+Registration and Login
+
+    Create a Cognito user pool: check this tutorial or this video to do it.
+    Add the following to your application.properties file
+
+spring.security.oauth2.client.registration.cognito.client-id=your_cognito_app_client_id
+spring.security.oauth2.client.registration.cognito.client-secret=your_cognito_app_client_secret
+spring.security.oauth2.client.registration.cognito.scope=openid
+spring.security.oauth2.client.provider.cognito.issuer-uri=https://cognito-idp.us-east-2.amazonaws.com/us-east-2_EDjR6VYYS https://cognito-idp.<REGION>.amazonaws.com/<POOL Id>
+aws.accessKeyId=aws_access_key
+aws.secretKey=aws_secret_key
+aws.region=aws_region
+spring.datasource.url=database_uri
+spring.datasource.username=database_username
+spring.datasource.password=database_password
+
+////////////////////
+
+
+    Add the controller actions for your login and register routes in the UserController:
+
+@Autowired
+    private UserServiceImpl userService;
+
+    @PostMapping(value = "/register", consumes = {"application/json"})
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
+        System.out.println(userRegistrationRequest);
+        // Perform user registration
+        User registeredUser = userService.registerUser(userRegistrationRequest);
+        if (registeredUser != null) {
+            return ResponseEntity.ok(registeredUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@Valid @RequestBody UserLoginRequest userLoginRequest) {
+        // Perform user login
+        User loggedInUser = userService.loginUser(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+
+        if (loggedInUser != null) {
+            // Successful login
+            return ResponseEntity.ok(loggedInUser);
+        } else {
+            // Invalid login, return an appropriate response
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+////////////////////
+
+
+    Add the registerUser and loginUser methods in the UserService interface and implement them in the UserServiceImpl class:
+
+public interface UserService {
+    User registerUser(UserRegistrationRequest userRegistrationRequest);
+    User loginUser(String username, String password);
+}
+
+@Service
+public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CognitoService cognitoService;
+
+    @Override
+    public User registerUser(UserRegistrationRequest userRegistrationRequest) {
+        String username = userRegistrationRequest.getUsername();
+        String password = userRegistrationRequest.getPassword();
+        String email = userRegistrationRequest.getEmail();
+        // Register the user with Amazon Cognito
+        return cognitoService.registerUser(username, email, password);
+    }
+
+    @Override
+    public User loginUser(String username, String password) {
+        return cognitoService.loginUser(username, password);
+    }
+}
+
+////////////////////
+
+
+    Implement the registration and login logic in the CognitoService:
+
+@Value("${spring.security.oauth2.client.registration.cognito.client-id}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.client.registration.cognito.client-secret}")
+    private String clientSecret;
+
+    @Value("${spring.security.oauth2.client.registration.cognito.scope}")
+    private String scope;
+
+    @Value("${spring.security.oauth2.client.provider.cognito.issuer-uri}")
+    private String issuerUri;
+
+    @Autowired
+    private AWSCognitoIdentityProvider cognitoIdentityProvider;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public User registerUser(String username, String email, String password) {
+        // Set up the AWS Cognito registration request
+        SignUpRequest signUpRequest = new SignUpRequest()
+                .withClientId(clientId)
+                .withUsername(username)
+                .withPassword(password)
+                .withUserAttributes(
+                        new AttributeType().withName("email").withValue(email)
+                );
+
+        // Register the user with Amazon Cognito
+        try {
+            SignUpResult signUpResponse = cognitoIdentityProvider.signUp(signUpRequest);
+
+            User registeredUser = new User();
+            registeredUser.setUsername(username);
+            registeredUser.setEmail(email);
+            registeredUser.setPassword(password);
+
+            return userRepository.save(registeredUser);
+
+        } catch (Exception e) {
+            throw new RuntimeException("User registration failed: " + e.getMessage(), e);
+        }
+    }
+
+    public User loginUser(String username, String password) {
+        // Set up the authentication request
+        InitiateAuthRequest authRequest = new InitiateAuthRequest()
+                .withAuthFlow("USER_PASSWORD_AUTH")
+                .withClientId(clientId)
+                .withAuthParameters(
+                        Map.of(
+                                "USERNAME", username,   // Use email as the username
+                                "PASSWORD", password
+                        )
+                );
+
+        try {
+            InitiateAuthResult authResult = cognitoIdentityProvider.initiateAuth(authRequest);
+            System.out.println(authResult);
+            AuthenticationResultType authResponse = authResult.getAuthenticationResult();
+
+            // At this point, the user is successfully authenticated, and you can access JWT tokens:
+            String accessToken = authResponse.getAccessToken();
+            String idToken = authResponse.getIdToken();
+            String refreshToken = authResponse.getRefreshToken();
+
+            // You can decode and verify the JWT tokens for user information
+
+            User loggedInUser = new User();
+            loggedInUser.setUsername(username);
+            loggedInUser.setAccessToken(accessToken); // Store the token for future requests
+
+            return loggedInUser;
+
+        } catch (Exception e) {
+            throw new RuntimeException("User login failed: " + e.getMessage(), e);
+        }
+    }
+
+/////////////////////////
+
+
+    Create the AWSCognitoIdentityProvider bean in your CognitoConfig class:
+
+@Configuration
+public class CognitoConfig {
+
+    @Value("${aws.accessKeyId}")
+    private String accessKey;
+
+    @Value("${aws.secretKey}")
+    private String secretKey;
+
+    @Value("${aws.region}")
+    private String region;
+
+
+    @Bean
+    public AWSCognitoIdentityProvider cognitoIdentityProvider() {
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+
+        return AWSCognitoIdentityProviderClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .withRegion(Regions.fromName(region))
+                .build();
+    }
+}
+
+
+////////////////////////////
+
+
+    Implement the UserLoginRequest and UserRegistrationRequest classes:
+
+public class UserLoginRequest {
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+    public String getPassword() {
+        return password;
+    }
+}
+
+public class UserRegistrationRequest {
+
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    @Email(message = "Invalid email address")
+    private String email;
+
+    // Getters and setters for the fields
+
+    public String getUsername() {
+        return username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getEmail() {
+        return email;
+    }
+
+}
+
+
+/////////////////
+
+
+    Implement the User model:
+
+@Entity
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email"),
+                @UniqueConstraint(columnNames = "username")
+        }
+)
+public class User {
+    @jakarta.persistence.Id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column
+    @NotEmpty(message = "Username is required")
+    @Size(min = 5, max = 50)
+    private String username;
+
+    @Column
+    @NotEmpty(message = "Email is required")
+    private String email;
+
+    @Column
+    @NotEmpty(message = "Password is required")
+    private String password;
+
+    @Transient
+    private String accessToken;
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+
+//////////////////
+
+
+
+    Finally, add this to your SecurityConfig class:
+
+@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests(
+            requests -> requests
+                    .requestMatchers("/admin")
+                    .hasAnyRole("Admin", "Editor")
+                    .requestMatchers("/login")
+                    .permitAll()
+                    .requestMatchers("/register")
+                    .permitAll()
+                    .requestMatchers("/logout")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+        );
+
+        http.csrf(AbstractHttpConfigurer::disable);
+
+        return http.build();
+    }
+
+
+///////////////////
+
+Now start your Spring app, open Postman, and ensure your app is connected to your database. Run the POST /register request and you should get the following result:
+
+{
+    "id": <user_id>,
+    "username": <username>,
+    "email": <email>,
+    "password": <password>,
+    "accessToken": null
+}
+
+You should also be able to see the new user in your AWS Cognito app.
+Run the POST /login request and you should get the following result:
+
+{
+    "id": <user_id>,
+    "username": <username>,
+    "email": <email>,
+    "password": null,
+    "accessToken": <access_token>,
+}
+
+Don't forget to confirm manually the user account from the AWS Cognito. You can look up the documentation to see how you can also do it using Spring Boot.
+
+///////////////////
+
+
+
+
+
+
+
+
+
+
+

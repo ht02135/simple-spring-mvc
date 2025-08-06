@@ -1,0 +1,9 @@
+
+https://docs.aws.amazon.com/code-library/latest/ug/code_example_library_by_service.html
+Code examples by service using AWS SDKs
+
+/////////////////
+
+cognito
+https://docs.aws.amazon.com/code-library/latest/ug/cognito-identity-provider_code_examples.html
+
