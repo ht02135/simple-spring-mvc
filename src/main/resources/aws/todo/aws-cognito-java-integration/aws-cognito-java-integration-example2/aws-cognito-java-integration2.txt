@@ -299,7 +299,7 @@ Now you can test the integration. I recommend Postman to do it. Follow the steps
 
 ///////////////
 
-aws cognito interest part is CognitoUserDetailsService.java
+incomplete example with many holes
 
 
 
