@@ -1,0 +1,137 @@
+
+https://lumigo.io/learn/aws-lambda-functions-the-basics-and-a-quick-tutorial/
+AWS Lambda Functions: The Basics and a Quick Tutorial
+
+//////////////////////
+
+AWS Lambda is a serverless compute service that lets you run code without provisioning or managing servers. Lambda functions are pieces of code that perform specific tasks, such as processing data streams, responding to HTTP requests, or integrating with other AWS services. 
+
+With Lambda, you can execute code in response to triggers such as changes in data, user actions, or predefined schedules, allowing you to build scalable and responsive applications without the overhead of server management. 
+
+Lambda supports multiple programming languages, including Node.js, Python, Java
+
+/////////////////////////
+
+With AWS Lambda, users can upload code and Lambda handles the execution. Here’s a step-by-step breakdown of how it works:
+
+    You create a Lambda function by uploading your code, either as a .zip file or by writing it directly in the AWS Management Console.
+    You configure the events that will trigger your function, such as an HTTP request through Amazon API Gateway, a file upload to Amazon S3, or a message in an Amazon SQS queue.
+    When an event triggers the function, Lambda allocates an instance from its pool of compute resources to run your function. It initializes the runtime environment with the specified configuration settings.
+    Lambda runs the code within this execution environment. The environment includes the necessary runtime (like Node.js or Python) and any libraries you packaged with the code.
+    AWS Lambda automatically scales the number of instances handling requests based on the rate of incoming requests. This ensures that the application can handle variable loads without manual intervention.
+    Lambda integrates with Amazon CloudWatch to provide logging and monitoring. You can view logs, set alarms, and track performance metrics such as execution duration and error rates.
+    You are billed based on the number of requests and the execution duration, measured in milliseconds.
+
+
+//////////////////
+
+AWS Lambda can be triggered by various AWS services and events. Some common triggers include:
+
+    Amazon S3: Trigger Lambda functions in response to events such as object creation, deletion, or modification in S3 buckets.
+    Amazon DynamoDB: Execute a Lambda function when there are changes in a DynamoDB table, such as item insertions, updates, or deletions.
+    Amazon Kinesis: Process data streams in real time by triggering Lambda functions with Kinesis stream records.
+    Amazon SQS: Trigger Lambda functions to handle messages in an SQS queue, enabling decoupled and scalable architectures.
+    Amazon SNS: Respond to messages published to an SNS topic by triggering Lambda functions, useful for sending notifications or processing messages.
+    Amazon API Gateway: Integrate Lambda functions with API Gateway to create scalable and secure APIs that execute your Lambda functions upon HTTP requests.
+    CloudWatch Events and EventBridge: Schedule Lambda functions to run at specific times or respond to system events, allowing for automated workflows and maintenance tasks.
+    AWS IoT: Trigger Lambda functions based on IoT events, enabling real-time processing and actions for IoT applications.
+    Amazon Cognito: Use Lambda functions for custom authentication, validation, and user pool management operations in Cognito.
+
+
+////////////////////
+
+Creating a Lambda Function with the Console
+
+To create a Lambda function using the console, follow these steps:
+
+1>Navigate to the AWS Lambda console and click Create function.
+
+2. Select the Author from scratch option.
+
+3. For Basic information, enter a function name such as exampleLambdaFunction.
+
+4. Select Python 3.12 or Node.js 20.x as the runtime.
+
+5. Keep the default architecture setting of x86_64 and select Create function.
+
+6. This creates a basic function that returns the message “Hello from Lambda!” and grants basic write permissions to CloudWatch Logs.
+
+7. To modify the function code, go to the Code tab.
+
+8. In the console’s built-in code editor, replace the default code with the following Node.js code:
+
+---------------
+export consthandler = async (event, context) => {
+    const number1 = event.number1;
+    const number2 = event.number2;
+
+    if (typeof number1 !== 'number' || typeof number2 !== 'number') {
+        throw new Error("Both number1 and number2 should be numbers");
+    }
+
+    const sum = number1 + number2;
+    console.log(`The sum of ${number1} and ${number2} is ${sum}`);
+    console.log('CloudWatch log group: ', context.logGroupName);
+
+    let response = {
+        "sum": sum,
+    };
+    return {
+        statusCode: 200,
+        body: JSON.stringify(response),
+    };
+};
+-----------------
+
+This code takes a JSON object with two numbers, computes their sum, and returns it as a JSON string.
+
+9. Select Deploy to update the function’s code.
+
+10. Wait for the console to display a banner confirming the successful update.
+
+///////////////////////
+
+Invoking the Lambda Function with the Console
+
+To test your newly created Lambda function using the console:
+
+1>Go to the Code source pane and select Test.
+
+2. Choose Create new event.
+
+3. Enter an event name such as exampleTestEvent.
+
+4. Replace the default values under Event JSON with the following:
+
+5. Select Save and then Test again to invoke the function.
+
+6. The console will display the response and function logs in the Execution results tab. You should see something similar to:
+
+7. To view invocation records, open the CloudWatch console and navigate to the Log groups page.
+
+8. Choose the relevant log group for the function (/aws/lambda/exampleLambdaFunction).
+
+9. In the Log streams tab, select the log stream for the function’s invocation to view detailed logs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

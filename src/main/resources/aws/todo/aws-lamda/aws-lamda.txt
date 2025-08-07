@@ -1,6 +1,0 @@
-
-google aws-lamda
-
-serverless
-
-//////////////////////

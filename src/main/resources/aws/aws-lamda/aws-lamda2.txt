@@ -1,0 +1,304 @@
+
+https://www.baeldung.com/java-aws-lambda
+A Basic AWS Lambda Example With Java
+
+//////////////////////
+
+AWS Lambda is a serverless computing service provided by Amazon. It’s a powerful tool that helps us build scalable event-driven applications.
+
+The serverless nature of AWS Lambda allows us to focus on our business logic, while AWS takes care of dynamic allocation and provisioning of servers. It’s also a cost-effective solution as we only pay for the actual execution time and memory consumption of our code.
+
+2. Dependencies
+
+Let’s start by adding the Lambda core dependency to our project’s pom.xml file:
+
+<dependency> 
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-lambda-java-core</artifactId>
+    <version>1.2.3</version>
+</dependency>
+
+Next, we’ll need to add the Maven Shade Plugin:
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.6.0</version>
+    <configuration>
+        <createDependencyReducedPom>false</createDependencyReducedPom>
+    </configuration>
+    <executions>
+        <execution>
+            <phase>package</phase>
+	    <goals>
+                <goal>shade</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+The Maven Shade Plugin is essential when building AWS Lambda functions with Java. It allows us to package our application and its dependencies into a single, self-contained JAR file, also known as an “uber” or “fat” JAR.
+
+The plugin extracts the content of all our dependencies and puts them with the classes of our project, which is how AWS Lambda expects us to deploy our code.
+
+We can create our fat JAR in the target directory of our project by executing:
+
+mvn clean package
+
+////////////////////////
+
+3. Creating a Handler
+
+The entry point for any AWS Lambda function is a handler method. It processes the incoming request and returns a response.
+
+When creating a Lambda function, we have to specify our handler. We do this using the format package.ClassName
+
+///////////////////////
+
+3.1. Implementing the RequestHandler Interface
+
+The most common and recommended way to define a handler is by implementing the RequestHandler interface and overriding its handleRequest() method:
+
+class LambdaHandler implements RequestHandler<Request, Response> {
+
+    @Override
+    public Response handleRequest(Request request, Context context) {
+        LambdaLogger logger = context.getLogger();
+        logger.log("Processing question from " + request.name(), LogLevel.INFO);
+        return new Response("Subscribe to Baeldung Pro: baeldung.com/members");
+    }
+}
+
+record Request(String name, String question) {}
+
+record Response(String answer) {}
+
+The Request and Response are simple records that represent the input and output of our Lambda function. We also specify these types as generic parameters in the RequestHandler interface.
+
+The handleRequest() method takes our Request record and a Context object as parameters. The Context parameter provides useful information about the Lambda execution environment, including a LambdaLogger that we can use for logging.
+
+/////////////////////
+
+3.2. Implementing the RequestStreamHandler Interface
+
+Another approach to define a handler is to implement the RequestStreamHandler interface:
+
+class LambdaStreamHandler implements RequestStreamHandler {
+
+    @Override
+    public void handleRequest(InputStream input, OutputStream output, Context context) {
+        ObjectMapper mapper = new ObjectMapper();
+        Request request = mapper.readValue(input, Request.class);
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output))) {
+            writer.write("Hello " + request.name() + ", Baeldung has great Java content for you!");
+            writer.flush();
+        }
+    }
+
+    record Request(String name) {}
+}
+
+Here, we implement the RequestStreamHandler interface and override the handleRequest() method. Using ObjectMapper, we deserialize the raw request data from the InputStream and write our response to the OutputStream.
+
+This interface is useful when working with raw input and output streams.
+
+/////////////////////
+
+3.3. Custom Handler Method
+
+Lastly, we can define a custom handler method:
+
+class CustomLambdaHandler {
+
+    public Response handlingRequestFreely(Request request, Context context) {
+        LambdaLogger logger = context.getLogger();
+        logger.log(request.name() + " has invoked the lambda function", LogLevel.INFO);
+        return new Response("Subscribe to Baeldung Pro: baeldung.com/members");
+    }
+
+    record Request(String name) {}
+
+    record Response(String answer) {}
+}
+
+In this approach, we create a CustomLambdaHandler class with a handlingRequestFreely() method that takes the Request record and Context object as parameters, similar to the RequestHandler example. The only difference is that we’re not implementing any specific interface.
+
+Unlike the previous two approaches, when creating a custom handler method, we need to use the format package.ClassName::methodName to configure our handler. For example, if our CustomLambdaHandler class is in the package com.baeldung.lambda, then we’ll specify the handler as com.baeldung.lambda.CustomLambdaHandler::handlingRequestFreely when creating our Lambda function.
+
+///////////////////////////
+
+assuming we did 'class LambdaHandler implements RequestHandler<Request, Response>'
+
+4. Testing Lambda Function Locally Using LocalStack
+
+During development, it’s often convenient to test our Lambda functions locally before deploying them to AWS. LocalStack is a popular tool that allows us to run an emulated AWS environment locally on our machine.
+
+We’ll test our LambdaHandler class, which we created earlier by implementing the RequestHandler interface.
+
+First, let’s start a LocalStack container using Docker:
+
+docker run \
+    --rm -it \
+    -p 127.0.0.1:4566:4566 \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v ./target:/opt/code/localstack/target \
+    localstack/localstack
+
+We map the required port and mount our project’s target directory, which contains our fat JAR, into the container. It’s important to note that there are other ways to install Localstack as well.
+
+/////////////////////////
+
+Next, we’ll get into our container’s shell and create our Lambda function:
+
+awslocal lambda create-function \
+    --function-name baeldung-lambda-function \
+    --runtime java21 \
+    --handler com.baeldung.lambda.LambdaHandler\
+    --role arn:aws:iam::000000000000:role/lambda-role \
+    --zip-file fileb:///opt/code/localstack/target/java-lambda-function-0.0.1.jar
+
+We specify Java 21 as the runtime, our handler, and the location of our JAR file in the container using the zip-file parameter.
+
+////////////////////
+
+With our function created, let’s now invoke it:
+
+awslocal lambda invoke \
+    --function-name baeldung-lambda-function \
+    --payload '{ "name": "John Doe", "question": "How do I view articles ad-free and in dark mode on Baeldung?" }' output.txt
+
+We pass our function name and JSON request payload. The response from our Lambda function is saved in the specified output.txt file, which contains:
+
+{
+    "answer": "Subscribe to Baeldung Pro: baeldung.com/members"
+}
+
+///////////////////
+
+5. Deploying Lambda Function
+
+Now that we’ve created our Lambda function and tested it locally, let’s look at how we can deploy it to our AWS environment.
+
+We’ll use AWS CloudFormation
+
+/////////////////////
+
+5.1. Creating AWS CloudFormation Template
+
+First, we’ll need to store our fat JAR file in an Amazon S3 bucket. This is necessary as CloudFormation references the JAR file from the specified S3 bucket during the deployment process.
+
+Next, let’s create a generic CloudFormation template for our Lambda function:
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda function deployment with Java 21 runtime
+
+Parameters:
+    LambdaHandler:
+        Type: String
+        Description: The handler for the Lambda function
+    S3BucketName:
+        Type: String
+        Description: The name of the S3 bucket containing the Lambda function JAR file
+    S3Key:
+        Type: String
+        Description: The S3 key (file name) of the Lambda function JAR file
+
+Resources:
+    BaeldungLambdaFunction:
+        Type: AWS::Lambda::Function
+        Properties:
+            FunctionName: baeldung-lambda-function
+            Handler: !Ref LambdaHandler
+            Role: !GetAtt LambdaExecutionRole.Arn
+            Code:
+                S3Bucket: !Ref S3BucketName
+                S3Key: !Ref S3Key
+            Runtime: java21
+            Timeout: 10
+            MemorySize: 512
+    LambdaExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: lambda.amazonaws.com
+                      Action: sts:AssumeRole
+            ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+In our CloudFormation template, we define a Lambda function named baeldung-lambda-function. We attach the managed policy AWSLambdaBasicExecutionRole to our Lambda function through the IAM role LambdaExecutionRole, granting it the necessary permissions to execute and write logs to Amazon CloudWatch.
+
+The Parameters in our CloudFormation template allow us to define input values that we can pass to our template during stack creation. We use the !Ref function to dynamically reference these parameter values in our template to define our lambda properties.
+
+/////////////////////
+
+5.2. Creating CloudFormation Stack
+
+Now that we’ve defined our template, we need to create our CloudFormation stack using the AWS CLI:
+
+aws cloudformation create-stack \
+    --stack-name baeldung-cloudformation-java-21-lambda-function \
+    --template-body file://java-21-lambda-function-template.yaml \
+    --capabilities CAPABILITY_IAM \
+    --parameters \
+        ParameterKey=LambdaHandler,ParameterValue=com.baeldung.lambda.LambdaHandler\
+        ParameterKey=S3BucketName,ParameterValue=baeldung-lambda-tutorials-bucket \
+        ParameterKey=S3Key,ParameterValue=java-lambda-function-0.0.1.jar
+
+In our create-stack command, we provide three parameters:
+
+    stack-name: to specify the name of our CloudFormation stack
+    template-body: to specify the path to our CloudFormation template file
+    parameters: to specify the parameter values for our Lambda function
+
+We also provide the value CAPABILITY_IAM in the capabilities parameter. This is required when our template creates a new IAM resource — for example, the IAM role for our Lambda function in our example.
+
+///////////////////
+
+5.3. Triggering Lambda Function
+
+Once our Lambda function is deployed successfully, we can invoke it via the AWS CLI:
+
+aws lambda invoke --function-name my-lambda-function \
+    --cli-binary-format raw-in-base64-out \
+    --payload '{ "name": "John Doe", "question": "How do I view articles ad-free and in dark mode on Baeldung?" }' output.txt
+
+The above command is a little different from the one we executed in our LocalStack container. However, it will behave the same and output the response to the output.txt file.
+
+////////////////////
+
+this lambda thing feels like pain in the ass
+1>you have to build java-lambda-function-0.0.1.jar
+2>you have to build java-21-lambda-function-template.yaml
+
+assuming you just want to build api with aws api gateway and lambda
+1>unless your app is completely serverless api pureplay what is the point?
+2>most likely your app gonna be your core web app that doing many thing and on the side servering restful api call...  why would you rip your restful api out and dive into pain in ass aws lambda other than prove you know how aws lambda works???
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
