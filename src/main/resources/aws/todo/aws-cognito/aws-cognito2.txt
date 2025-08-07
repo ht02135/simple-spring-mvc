@@ -1,5 +1,0 @@
-
-https://frontegg.com/guides/aws-cognito-user-pool
-AWS Cognito User Pools: The Basics and a Quick Tutorial
-
-///////////////
