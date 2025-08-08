@@ -1,0 +1,7 @@
+<dependencies>
+    <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>elasticsearch-rest-high-level-client</artifactId>
+        <version>7.17.10</version>
+    </dependency>
+</dependencies>

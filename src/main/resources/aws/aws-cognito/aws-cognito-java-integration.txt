@@ -8,11 +8,16 @@ Java Integration with Amazon Cognito Developer Tutorial
 
 Maven dependencies:
 
-<dependency> <groupId>com.amazonaws aws-java-sdk 1.11.360 com.amazonaws aws-java-sdk-core 1.11.360 com.amazonaws aws-java-sdk-cognitoidp 1.11.360
+<dependency> 
+<groupId>
+com.amazonaws aws-java-sdk 1.11.360 
+com.amazonaws aws-java-sdk-core 1.11.360 
+com.amazonaws aws-java-sdk-cognitoidp 1.11.360
 
 ///////////////
 
-The second step is to create our AWSCognitoIdentityProvider using the credentials we have in the AwsCredentials.properties file.
+The second step is to create our AWSCognitoIdentityProvider using the credentials 
+we have in the AwsCredentials.properties file.
 
 Important: When you see a call to a Cognito Config, it is a call to a property file that has the following information:
 
@@ -36,11 +41,18 @@ public AWSCognitoIdentityProvider getAmazonCognitoIdentityClient() {
 //////////
 
 Sign Up Implementation:
-While implementing the ‘sign up’ functionality, you get a set of default attributes; these attributes in Cognito are called ‘standard attributes.’ In addition to these, Cognito also allows you to add custom attributes to your specific user pool definition in the AWS console.
+While implementing the ‘sign up’ functionality, you get a set of default 
+attributes; these attributes in Cognito are called ‘standard attributes.’ 
+In addition to these, Cognito also allows you to add custom attributes 
+to your specific user pool definition in the AWS console.
 
-These are the Cognito standard attributes: address, birthdate, email, family name, gender, given name, location, middle name, last name, nickname, phone number, picture, preferred username, profile, time zone, ‘updated at’ time, and website.
+These are the Cognito standard attributes: 
+address, birthdate, email, family name, gender, given name, location, 
+middle name, last name, nickname, phone number, picture, preferred username, 
+profile, time zone, ‘updated at’ time, and website.
 
-In this sign-up implementation example, we are going to be using two custom fields: the company position and the company name.
+In this sign-up implementation example, we are going to be using two 
+custom fields: the company position and the company name.
 
 public static UserType signUp(UserSignUpRequest signUpRequest){
         AWSCognitoIdentityProvider cognitoClient = getAmazonCognitoIdentityClient();
@@ -79,23 +91,53 @@ public static UserType signUp(UserSignUpRequest signUpRequest){
         return cognitoUser;
     }
     
-With Message Action: If the message action is not set, the default is to send a welcome message via email or phone (SMS). The welcome message includes custom sign up instructions, the username, and a temporary password. When we execute the withMessageAction suppress option, Amazon Cognito will not send any email, and in this case, the user will be in the FORCE_CHANGE_PASSWORD state until they sign in and change their password.
+With Message Action: If the message action is not set, the default is to 
+send a welcome message via email or phone (SMS). The welcome message 
+includes custom sign up instructions, the username, and a temporary password. 
 
-With Temporary Password: This parameter is not required, and if you don’t specify a value, Amazon Cognito generates one for you. In the example shown, we defined a temporary password.
+When we execute the withMessageAction suppress option, Amazon Cognito 
+will not send any email, and in this case, the user will be in the 
+FORCE_CHANGE_PASSWORD state until they sign in and change their password.
 
-With Desired Delivery Mediums: This parameter is not required; if you don’t specify a value, the default value is “SMS.” In this case, we chose ‘email,’ but if we want, we can select both email and SMS.
+With Temporary Password: This parameter is not required, and if you don’t 
+specify a value, Amazon Cognito generates one for you. In the example 
+shown, we defined a temporary password.
 
-With Force Alias Creation: This parameter is not required and is only used if the ‘phone number verified’ or the ‘email verified’ attribute is set to ‘true.’ Otherwise, it is ignored. If we set this to ‘true,’ and the specified phone number or email address already exists as an alias with a different user, the API call is going to migrate the alias from the existing user to the newly created user.
+With Desired Delivery Mediums: This parameter is not required; if you 
+don’t specify a value, the default value is “SMS.” In this case, we 
+chose ‘email,’ but if we want, we can select both email and SMS.
+
+With Force Alias Creation: This parameter is not required and is only 
+used if the ‘phone number verified’ or the ‘email verified’ attribute 
+is set to ‘true.’ Otherwise, it is ignored. If we set this to ‘true,’ 
+and the specified phone number or email address already exists as an 
+alias with a different user, the API call is going to migrate the 
+alias from the existing user to the newly created user.
 
 //////////////////////
 
 Sign In Implementation:
 
-In this example, we are going to call two functions of the AWS Cognito Identity Provider. First, we are going make the ‘Admin Initiate Auth Request,’ and if the user is on the FORCE_CHANGE_PASSWORD status, we are going to call the ‘Admin Respond To Auth Challenge.’
+In this example, we are going to call two functions of the AWS Cognito 
+Identity Provider. 
 
-The Admin Initiate Auth Request: This initiates the authentication flow as an administrator. If the action is successful, it returns an authentication response with an access token, ‘expires in’ time, ID token, refresh token and a token type. If the request needs another challenge before it gets the token’s challenge name, the challenge parameters and session are returned.
+First, we are going make the ‘Admin Initiate Auth Request,’ and if the 
+user is on the FORCE_CHANGE_PASSWORD status, we are going to call the 
+‘Admin Respond To Auth Challenge.’
 
-The Admin Respond To Auth Challenge Request: This responds to an authentication challenge as an administrator. It requires the challenge name, the client ID, the user pool ID, the session, and the challenge responses. If the action is successful, it returns an authentication response with an access token, ‘expires in’ time, ID token, refresh token and a token type.
+The Admin Initiate Auth Request: This initiates the authentication flow 
+as an administrator. If the action is successful, it returns an 
+authentication response with an access token, ‘expires in’ time, ID token, 
+refresh token and a token type. If the request needs another challenge 
+before it gets the token’s challenge name, the challenge parameters 
+and session are returned.
+
+The Admin Respond To Auth Challenge Request: This responds to an 
+authentication challenge as an administrator. It requires the challenge 
+name, the client ID, the user pool ID, the session, and the challenge 
+responses. If the action is successful, it returns an authentication 
+response with an access token, ‘expires in’ time, ID token, refresh 
+token and a token type.
 
 They are a lot of challenge types, such as:
 
@@ -109,7 +151,9 @@ They are a lot of challenge types, such as:
     ADMIN_NO_SRP_AUTH: This is returned if you need to authenticate with USERNAME and PASSWORD directly. An app client must be enabled to use this flow.
     NEW_PASSWORD_REQUIRED: This is for users who are required to change their passwords after a successful first login. This challenge should be passed with NEW_PASSWORD and any other required attributes.
 
-In this example, we are going to respond to the ‘new password required’ challenge type, so we are going to send the username, the previous password and the new password as the challenge response.
+In this example, we are going to respond to the ‘new password required’ challenge 
+type, so we are going to send the username, the previous password and the new 
+password as the challenge response.
 
 public  SpringSecurityUser signIn(AuthenticationRequestauthenticationRequest){
     AuthenticationResultType authenticationResult = null;

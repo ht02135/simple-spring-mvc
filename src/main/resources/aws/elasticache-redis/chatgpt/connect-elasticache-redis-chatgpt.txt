@@ -1,0 +1,71 @@
+
+query following in https://chatgpt.com/
+
+Configure Security Groups:
+  We should change the security group of the ElastiCache Redis cluster. 
+  It needs to allow incoming traffic from the EC2 instance on the Redis 
+  port. The default port is 6379.
+  
+  We also need to make sure the EC2 instance’s security group allows 
+  SSH access on port 22 from our local machine’s IP. 
+  
+//////////////
+
+1. Allow EC2 to Access ElastiCache on Port 6379
+
+Step A: Find the Security Group attached to the EC2 instance
+	Go to EC2 Dashboard → Instances → Select your instance → Security tab 
+	→ Note the security group name.
+    
+Step B: Find the Security Group attached to the ElastiCache cluster
+	Go to ElastiCache Dashboard → Redis → Select your cluster → Details 
+	→ Note the security group. 
+
+Step C: Edit ElastiCache Security Group to allow EC2
+    Go to EC2 > Security Groups
+    Select the ElastiCache Redis cluster's security group
+    Click Inbound rules > Edit inbound rules
+    Add a new rule:
+        Type: Custom TCP
+        Port range: 6379
+        Source: Select “Custom” → Choose the EC2 instance’s security group 
+        (not its IP)
+
+	Why? This allows your EC2 instance to access Redis, without exposing 
+	Redis to the public internet.
+
+//////////////
+
+2. Allow SSH Access to EC2 from Your Local Machine
+
+Step A: Find your public IP
+	You can get your IP from https://whatismyipaddress.com
+Step B: Edit EC2 Security Group to Allow SSH
+    Go to EC2 > Security Groups
+    Select the EC2 instance's security group
+    Click Inbound rules > Edit inbound rules
+    Add or edit a rule:
+        Type: SSH
+        Port range: 22
+        Source: My IP (AWS will auto-fill your current IP)
+
+//////////////
+//////////////
+//////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

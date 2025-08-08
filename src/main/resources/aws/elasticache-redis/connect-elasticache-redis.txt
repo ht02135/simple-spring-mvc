@@ -8,34 +8,45 @@ A Simple Guide to Connect to Amazon ElastiCache Redis from Outside of Amazon
 
 In this chapter, we will talk about these solutions:
 
-Part 1 - Configure Security Group for ElastiCache Redis Access: We will learn how to set up security groups to let traffic in from our external IP.
+Part 1 - Configure Security Group for ElastiCache Redis Access: We will learn 
+how to set up security groups to let traffic in from our external IP.
 
-Part 3 - Use an SSH Tunnel to Access ElastiCache Redis: We will understand how to make an SSH tunnel for safe connections to our Redis.
+Part 3 - Use an SSH Tunnel to Access ElastiCache Redis: We will understand 
+how to make an SSH tunnel for safe connections to our Redis.
 
-Part 6 - Implement IAM Roles and Policies for Secure Access: We will learn how to control access with AWS Identity and Access Management (IAM).
+Part 6 - Implement IAM Roles and Policies for Secure Access: We will learn 
+how to control access with AWS Identity and Access Management (IAM).
 
 ////////////////
 
 1>Part 1 - Configure Security Group for ElastiCache Redis Access
 
-To connect to Amazon ElastiCache Redis from outside of Amazon, we need to configure the security group for our ElastiCache Redis instance. This means we must allow traffic from our local machine’s IP address.
+To connect to Amazon ElastiCache Redis from outside of Amazon, 
+we need to configure the security group for our ElastiCache Redis 
+instance. This means we must allow traffic from our local machine’s 
+IP address.
 
-    Access the AWS Management Console:
-        Go to the ElastiCache service.
+1>Access the AWS Management Console:
+  Go to the ElastiCache service.
 
-    Select Your Redis Cluster:
-        Click on the Redis option. Then choose the Redis cluster we want to set up.
+2>Select Your Redis Cluster:
+  Click on the Redis option. Then choose the Redis cluster we want 
+  to set up.
 
-    Locate the Security Group:
-        In the cluster details, we find the Security Group ID connected to our Redis instance. We click on it to open the security group settings in the EC2 console.
+3>Locate the Security Group:
+  In the cluster details, we find the Security Group ID connected 
+  to our Redis instance. We click on it to open the security group 
+  settings in the EC2 console.
 
-    Edit Inbound Rules:
-        Click on the Inbound rules tab. Then click on Edit inbound rules.
-        We add a new rule with these settings:
-            Type: Custom TCP
-            Protocol: TCP
-            Port Range: 6379 (this is the default port for Redis)
-            Source: Our local machine’s IP address in CIDR notation (like 203.0.113.0/32 <-- some how i think this is stupid).
+3a>Edit Inbound Rules:
+   Click on the Inbound rules tab. Then click on Edit inbound rules.
+   We add a new rule with these settings:
+   	Type: Custom TCP
+    Protocol: TCP
+    Port Range: 6379 (this is the default port for Redis)
+    Source: Our local machine’s IP address in CIDR notation 
+    (like 203.0.113.0/32 <-- some how i think this is stupid 
+    to lock to one machine unless you have one czar managing it).
 
     Save Rules:
 
@@ -43,26 +54,42 @@ To connect to Amazon ElastiCache Redis from outside of Amazon, we need to config
 
 3>Part 3 - Use an SSH Tunnel to Access ElastiCache Redis
 
-To connect to Amazon ElastiCache Redis from outside AWS, we can use an SSH tunnel. Here are the steps we need to follow:
+To connect to Amazon ElastiCache Redis from outside AWS, we can use 
+an SSH tunnel. Here are the steps we need to follow:
 
-a>Set Up an EC2 Instance: First, we need an EC2 instance in the same VPC as our ElastiCache Redis cluster. 
+1>Set Up an EC2 Instance: 
+  First, we need an EC2 instance in the same  VPC as our ElastiCache 
+  Redis cluster. 
     
-b>Configure Security Groups:
+2>Configure Security Groups:
+  We should change the security group of the ElastiCache Redis cluster. 
+  It needs to allow incoming traffic from the EC2 instance on the Redis 
+  port. The default port is 6379.
+  
+  We also need to make sure the EC2 instance’s security group allows 
+  SSH access on port 22 from our local machine’s IP. 
+  <-- hung : not big fan of locking down to one local machine ip...
+  
+  note: above instruction is so shitty, use chatgpt to list out steps in
+  connect-elasticache-redis-chatgpt.txt
 
-    We should change the security group of the ElastiCache Redis cluster. It needs to allow incoming traffic from the EC2 instance on the Redis port. The default port is 6379.
-    We also need to make sure the EC2 instance’s security group allows SSH access on port 22 from our local machine’s IP. <-- hung : not big fan of locking down to one local machine ip...
-
-c>Establish SSH Tunnel: We can use this command to create an SSH tunnel. This is from our local machine to the ElastiCache Redis instance through the EC2 instance.
+c>Establish SSH Tunnel: We can use this command to create an SSH tunnel. 
+This is from our local machine to the ElastiCache Redis instance through 
+the EC2 instance.
 
 ssh -i /path/to/your-key.pem -L 6379:<elasticache-endpoint>:6379 ec2-user@<ec2-public-ip>
 
-d>Connect Using Redis CLI: After we set up the SSH tunnel, we can connect to our ElastiCache Redis using the Redis CLI from our local machine.
+d>Connect Using Redis CLI: After we set up the SSH tunnel, we can connect 
+to our ElastiCache Redis using the Redis CLI from our local machine.
 
 redis-cli -h 127.0.0.1 -p 6379
 
-This command will send our Redis commands through the SSH tunnel to the ElastiCache Redis cluster. If we want to learn more about Redis commands, we can check this guide on how to use Redis commands.
+This command will send our Redis commands through the SSH tunnel to the 
+ElastiCache Redis cluster. If we want to learn more about Redis commands, 
+we can check this guide on how to use Redis commands.
 
-By using an SSH tunnel, we make sure we can access our Amazon ElastiCache Redis securely. It also keeps it safe from being exposed directly to the internet.
+By using an SSH tunnel, we make sure we can access our Amazon ElastiCache 
+Redis securely. It also keeps it safe from being exposed directly to the internet.
 
 ////////////////
 ////////////////
@@ -70,17 +97,19 @@ By using an SSH tunnel, we make sure we can access our Amazon ElastiCache Redis 
 
 Part 4 - Expose ElastiCache Redis via a Public IP (Not Recommended)
 
-We do not recommend exposing your Amazon ElastiCache Redis instance with a public IP. It can cause security problems. But if we must do it, here are the steps.
+1>We do not recommend exposing your Amazon ElastiCache Redis instance with 
+a public IP. It can cause security problems. But if we must do it, here 
+are the steps.
 
-    Modify Security Group:
-        Go to the AWS Management Console.
-        Click on the EC2 service and then Security Groups.
-        Find the security group for your ElastiCache Redis instance.
-        Add a rule for Redis (default port 6379):
-            Type: Custom TCP
-            Protocol: TCP
-            Port Range: 6379
-            Source: Your IP address (or 0.0.0.0/0 for all IPs, but this is not good)
+2>Modify Security Group:
+	Go to the AWS Management Console.
+    Click on the EC2 service and then Security Groups.
+    Find the security group for your ElastiCache Redis instance.
+    Add a rule for Redis (default port 6379):
+    	Type: Custom TCP
+        Protocol: TCP
+        Port Range: 6379
+        Source: Your IP address (or 0.0.0.0/0 for all IPs, but this is not good)
 
     Here is an Example Inbound Rule:
 
@@ -92,7 +121,8 @@ We do not recommend exposing your Amazon ElastiCache Redis instance with a publi
         Change the subnet route table to let internet traffic go through.
 
     Access ElastiCache Redis:
-        Use the public endpoint from ElastiCache to connect. We can use the Redis CLI or any Redis client library.
+        Use the public endpoint from ElastiCache to connect. We can use the Redis 
+        CLI or any Redis client library.
 
     Example command with Redis CLI:
 
@@ -105,31 +135,40 @@ We do not recommend exposing your Amazon ElastiCache Redis instance with a publi
 
 Part 5 - Connect Using Redis CLI from Your Local Machine
 
-To connect to Amazon ElastiCache Redis from our local machine with Redis CLI, let’s follow these steps.
+1>To connect to Amazon ElastiCache Redis from our local machine with Redis CLI, 
+let’s follow these steps.
 
-    Install Redis CLI: First, we need to have Redis CLI on our local machine. We can download it from the Redis website. If we use a package manager, we can install it like this:
+    Install Redis CLI: First, we need to have Redis CLI on our local machine. 
+    We can download it from the Redis website. If we use a package manager, 
+    we can install it like this:
 
     For macOS:
-
     brew install redis
 
     For Ubuntu:
-
     sudo apt-get install redis-tools
 
-    Get Endpoint: Next, we get the endpoint of our ElastiCache Redis instance from the AWS Management Console. It looks like this: your-cache-endpoint.amazonaws.com:6379.
+    Get Endpoint: Next, we get the endpoint of our ElastiCache Redis instance 
+    from the AWS Management Console. It looks like this: 
+    your-cache-endpoint.amazonaws.com:6379.
 
-    Check Security Group: We must check that the security group for our ElastiCache instance allows inbound traffic. It should allow traffic from our local machine’s IP address on port 6379. We can do this in the AWS Management Console under Security Groups settings.
+    Check Security Group: We must check that the security group for our 
+    ElastiCache instance allows inbound traffic. It should allow traffic 
+    from our local machine’s IP address on port 6379. We can do this in 
+    the AWS Management Console under Security Groups settings.
 
-    Connect Using Redis CLI: Now, we can connect to our ElastiCache Redis instance. We use this command:
+    Connect Using Redis CLI: Now, we can connect to our ElastiCache Redis 
+    instance. We use this command:
 
     redis-cli -h your-cache-endpoint.amazonaws.com -p 6379
 
-    Authentication: If our Redis instance needs a password, we add the -a option with our password:
+    Authentication: If our Redis instance needs a password, we add the 
+    -a option with our password:
 
     redis-cli -h your-cache-endpoint.amazonaws.com -p 6379 -a yourpassword
 
-    Test the Connection: After we connect, we can test our Redis connection by running a simple command:
+    Test the Connection: After we connect, we can test our Redis 
+    connection by running a simple command:
 
     ping
 
@@ -142,15 +181,19 @@ To connect to Amazon ElastiCache Redis from our local machine with Redis CLI, le
 
 Part 6 - Implement IAM Roles and Policies for Secure Access
 
-We need to connect to Amazon ElastiCache Redis safely from outside Amazon. To do this, we should use IAM roles and policies. These will help us to limit access to our Redis instance. Here are the steps we can follow:
+We need to connect to Amazon ElastiCache Redis safely from outside Amazon. 
+To do this, we should use IAM roles and policies. These will help us to 
+limit access to our Redis instance. Here are the steps we can follow:
 
     Create an IAM Role:
         First, we go to the AWS IAM console.
         Next, we click on “Roles” and then “Create role”.
-        We choose the service that will use this role. For example, we can pick EC2 if we are using an EC2 instance.
+        We choose the service that will use this role. For example, we can 
+        pick EC2 if we are using an EC2 instance.
 
     Attach Policies:
-        We can create a new policy or use existing ones. These policies need to give permission for ElastiCache. Here is a simple policy we can use:
+        We can create a new policy or use existing ones. These policies need 
+        to give permission for ElastiCache. Here is a simple policy we can use:
 
     {
       "Version": "2012-10-17",
@@ -163,13 +206,15 @@ We need to connect to Amazon ElastiCache Redis safely from outside Amazon. To do
       ]
     }
 
-        This policy lets us do the actions needed on our ElastiCache Redis instance.
+    This policy lets us do the actions needed on our ElastiCache Redis instance.
 
     Attach Role to EC2 Instances:
-        If we are using EC2, we should attach the IAM role to our EC2 instance. We can do this when we create the instance or change the settings later.
+        If we are using EC2, we should attach the IAM role to our EC2 instance.
+		We can do this when we create the instance or change the settings later.
 
     Use AWS Credentials:
-        When we connect from our app, we can use the AWS SDK to get temporary credentials. For example, if we are using AWS SDK for Python (Boto3), we can do this:
+        When we connect from our app, we can use the AWS SDK to get temporary 
+        credentials. For example, if we are using AWS SDK for Python (Boto3), we can do this:
 
     import boto3
 
@@ -177,7 +222,8 @@ We need to connect to Amazon ElastiCache Redis safely from outside Amazon. To do
     credentials = session.get_credentials()
 
     Connect to ElastiCache Redis:
-        Now we can use the credentials we got to connect to our Redis instance safely. We need to make sure our Redis client uses these credentials.
+        Now we can use the credentials we got to connect to our Redis instance safely. 
+        We need to make sure our Redis client uses these credentials.
 
 ////////////////
 ////////////////
