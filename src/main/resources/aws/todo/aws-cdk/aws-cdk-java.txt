@@ -24,6 +24,260 @@ then harvest the actual cloudformation template via cdk synth
 
 ////////////////////////
 
+Getting Started With AWS CDK
+
+To install the AWS CDK on my Macbook Pro, I ran:
+
+npm install -g aws-cdk
+
+////////////////////////////
+
+I created CDK project, in an empty directory, with the following command:
+
+cdk init app --language java
+
+he `cdk.json` file tells the CDK Toolkit how to execute your app.
+
+## Useful commands* `mvn package`     compile and run tests
+ * `cdk ls`          list all stacks in the app
+ * `cdk synth`       emits the synthesized CloudFormation template
+ * `cdk deploy`      deploy this stack to your default AWS account/region
+ * `cdk diff`        compare deployed stack with current state
+ * `cdk docs`        open CDK documentation
+ 
+////////////////////
+
+prev command spit out pom.xml
+...
+        <!-- AWS Cloud Development Kit -->
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>core</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>iam</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>eks</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>ec2</artifactId>
+            <version>${cdk.version}</version>
+        </dependency><dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.18.1</version>
+            <scope>test</scope>
+        </dependency>
+..
+
+//////////////////
+
+also spit out
+
+The NewCdkProjectApp.java file refers to the NewCdkProjectStack object that is instantiated to synthesize the CloudFormation template.
+
+package com.myorg;
+import software.amazon.awscdk.core.App;
+import java.util.Arrays;
+
+public class NewCdkProjectApp {
+    public static void main(final String[] args) {
+        App app = new App();        new NewCdkProjectStack(app, "NewCdkProjectStack");        app.synth();
+    }
+}
+
+////////////////////
+
+The NewCdkProjectStack.java file is where the Java code is written to create the AWS resources created by the CloudFormation stack. This stack creates an Amazon S3 bucket, and an AWS IAM role with one attached policy.
+
+package com.myorg;import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.RemovalPolicy;
+import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.services.iam.IManagedPolicy;
+import software.amazon.awscdk.services.iam.ManagedPolicy;
+import software.amazon.awscdk.services.iam.Role;
+import software.amazon.awscdk.services.iam.ServicePrincipal;
+import software.amazon.awscdk.services.s3.BlockPublicAccess;
+import software.amazon.awscdk.services.s3.Bucket;
+import software.amazon.awscdk.services.s3.BucketEncryption;import java.util.ArrayList;
+import java.util.List;public class NewCdkProjectStack extends Stack {
+    public NewCdkProjectStack(final Construct scope, final String id) {
+        this(scope, id, null);
+    }public NewCdkProjectStack(final Construct scope, final String id, final StackProps props) {
+        super(scope, id, props);// The code that defines your stack goes here
+        Bucket.Builder.create(this, "MyFirstBucket")
+                .versioned(true)
+                .bucketName("cdk-unique-bucket-name")
+                .encryption(BucketEncryption.S3_MANAGED)
+                .blockPublicAccess(BlockPublicAccess.BLOCK_ALL)
+                .removalPolicy(RemovalPolicy.DESTROY)
+                .build();List<IManagedPolicy> policies = new ArrayList<>();
+        policies.add(ManagedPolicy
+                .fromManagedPolicyArn(this, "admin",
+                        "arn:aws:iam::aws:policy/AdministratorAccess"));Role.Builder.create(this, "SCLauncher")
+                .roleName("SCLauncher")
+                .description("Role to provision project in ServiceCatalog, used by Service Catalog service")
+                .managedPolicies(policies)
+                .assumedBy(ServicePrincipal.Builder.create("servicecatalog.amazonaws.com").build())
+                .build();
+    }
+}
+
+/////////////////////
+
+As seen in the Java code example, the AWS CDK uses the builder pattern to create Java objects in a directed manner. This approach helps to remove variability in the creation process. The AWS CDK also exposes a fluent API (using Java method cascading) that provides a user-experience that helps developers move quickly through the object configuration. I think that fluent-interfaces help developers better understand the object graph they are creating.
+
+////////////////////
+
+I could run a mvn compile to verify that my Java code will compile, but it is not necessary. To view the output CloudFormation template, I ran:
+
+cdk synthResources:
+  MyFirstBucketB8884501:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: cdk-unique-bucket-name
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: NewCdkProjectStack/MyFirstBucket/Resource
+  SCLauncher54301679:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: servicecatalog.amazonaws.com
+        Version: "2012-10-17"
+      Description: Role to provision project in ServiceCatalog, used by Service Catalog service
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      RoleName: SCLauncher
+    Metadata:
+      aws:cdk:path: NewCdkProjectStack/SCLauncher/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.91.0,@aws-cdk/aws-events=1.91.0,@aws-cdk/aws-iam=1.91.0,@aws-cdk/aws-kms=1.91.0,@aws-cdk/aws-s3=1.91.0,@aws-cdk/cloud-assembly-schema=1.91.0,@aws-cdk/core=1.91.0,@aws-cdk/cx-api=1.91.0,@aws-cdk/region-info=1.91.0,jsii-runtime=Java/15.0.1
+    Metadata:
+      aws:cdk:path: NewCdkProjectStack/CDKMetadata/Default
+    Condition: CDKMetadataAvailable
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
+              
+//////////////////
+
+If I want to change the stack, like add another policy to the SCLauncher role, I would modify the Java stack source file.
+
+policies.add(ManagedPolicy
+                .fromManagedPolicyArn(this, "power",
+                        "arn:aws:iam::aws:policy/PowerUserAccess"));
+
+Then run the deployment command:
+
+cdk deploy
+
+///////////////////
 
 
 

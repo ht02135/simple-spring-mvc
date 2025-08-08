@@ -1,26 +1,5 @@
 
-https://chatgpt.com/
-
-///////////////
-
-Prerequisites
-
-    Install AWS CDK CLI: npm install -g aws-cdk
-
-    Install Java 11+ and Maven or Gradle
-
-    Bootstrap your environment: cdk bootstrap
-
-    Create a new Java CDK project:
-
-cdk init app --language java
-
-///////////////
-
-Maven Dependencies (in pom.xml)
-
-Ensure the following are added to your dependencies:
-
+/*
 <dependencies>
     <dependency>
         <groupId>software.amazon.awscdk</groupId>
@@ -33,11 +12,7 @@ Ensure the following are added to your dependencies:
         <version>10.3.0</version>
     </dependency>
 </dependencies>
-
-//////////////////
-
-Java CDK Code Example (in your Stack class)
-
+///////////////////
 Here's a full working example of provisioning:
 
     VPC with public/private subnets
@@ -45,9 +20,7 @@ Here's a full working example of provisioning:
     Security Group
     Application Load Balancer
     Route53 A record
-    
-//////////////
-
+*/
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.elasticloadbalancingv2.*;
@@ -124,12 +97,4 @@ public class NetworkStack extends Stack {
     }
 }
 
-//////////////////
-
-Deploy
-
-Run this from your project root:
-
-cdk synth
-cdk deploy
 
