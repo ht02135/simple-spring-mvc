@@ -1,0 +1,83 @@
+
+https://chatgpt.com/
+
+//////////////////
+
+ 1. Add Apache POI to Your Project
+
+If you're using Grape in Groovy (for dependency management), include:
+
+@Grapes([
+    @Grab(group='org.apache.poi', module='poi', version='5.2.3'),
+    @Grab(group='org.apache.poi', module='poi-ooxml', version='5.2.3')
+])
+
+////////////////////
+
+2. Groovy Script to Enter a Record
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.ss.usermodel.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+
+def filePath = "data.xlsx"
+def record = ["John Doe", "john@example.com", 29]
+
+// Load or create workbook
+File file = new File(filePath)
+XSSFWorkbook workbook
+Sheet sheet
+
+if (file.exists()) {
+    workbook = new XSSFWorkbook(new FileInputStream(file))
+    sheet = workbook.getSheetAt(0)
+} else {
+    workbook = new XSSFWorkbook()
+    sheet = workbook.createSheet("Sheet1")
+}
+
+// Find the next empty row
+int lastRowNum = sheet.lastRowNum
+int newRowNum = (sheet.getRow(lastRowNum) == null) ? lastRowNum : lastRowNum + 1
+Row row = sheet.createRow(newRowNum)
+
+// Fill the row with record data
+record.eachWithIndex { value, col ->
+    Cell cell = row.createCell(col)
+    if (value instanceof Integer) {
+        cell.setCellValue(value as int)
+    } else {
+        cell.setCellValue(value.toString())
+    }
+}
+
+// Save the updated file
+FileOutputStream fos = new FileOutputStream(filePath)
+workbook.write(fos)
+fos.close()
+workbook.close()
+
+println "Record added to ${filePath}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

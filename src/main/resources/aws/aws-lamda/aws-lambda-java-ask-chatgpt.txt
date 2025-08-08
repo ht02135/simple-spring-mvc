@@ -1,0 +1,118 @@
+
+https://chatgpt.com/
+
+////////////////
+
+1. Prerequisites
+
+    Java Development Kit (JDK) – Java 8 or Java 11
+
+    Apache Maven or Gradle
+
+    AWS CLI – Configured with credentials
+
+    AWS Account
+    
+///////////////////
+
+2. Lambda Project Structure (Maven Example)
+
+pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>lambda-java-example</artifactId>
+  <version>1.0</version>
+  <dependencies>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-core</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-events</artifactId>
+      <version>3.11.0</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>shade</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+///////////////////
+
+3. Writing a Lambda Handler
+Example: Simple Handler (POJO-style)
+
+package com.example;
+
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+
+public class HelloLambda implements RequestHandler<String, String> {
+    @Override
+    public String handleRequest(String input, Context context) {
+        return "Hello, " + input + "!";
+    }
+}
+
+    RequestHandler<InputType, OutputType> is the AWS Lambda interface.
+
+    The handleRequest() method is called when the Lambda is invoked.
+    
+///////////////////
+
+4. Build and Package
+Package with Maven:
+
+mvn clean package
+
+////////////////////////
+
+5. Deploy to AWS Lambda
+Option 1: Use AWS CLI
+
+aws lambda create-function \
+  --function-name HelloLambda \
+  --runtime java11 \
+  --handler com.example.HelloLambda::handleRequest \
+  --memory-size 512 \
+  --timeout 15 \
+  --zip-file fileb://target/lambda-java-example-1.0.jar \
+  --role arn:aws:iam::<account-id>:role/<lambda-execution-role>
+  
+////////////////
+
+6. Testing Your Lambda
+
+You can test from the AWS Console or using the CLI:
+
+aws lambda invoke \
+  --function-name HelloLambda \
+  --payload '"World"' \
+  response.json
+
+response.json should contain:
+
+"Hello, World!"
+
+
+
+
+
+
+
+
