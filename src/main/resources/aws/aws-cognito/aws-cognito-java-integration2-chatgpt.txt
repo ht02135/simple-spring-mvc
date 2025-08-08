@@ -1,0 +1,40 @@
+
+https://chatgpt.com/
+
+////////////////////
+
+You’ve posted a fairly comprehensive Java-based integration with Amazon Cognito for user authentication and management, including:
+
+    Sign up
+
+    Sign in (with support for password challenge)
+
+    Group assignment
+
+    Password change
+
+    Fetching user info
+
+    JWT validation via Nimbus library
+    
+////////////////
+
+GENERAL STRUCTURE
+
+You are using the AWS SDK for Java v1 (e.g., AWSCognitoIdentityProvider), and integrating with Spring Security. You are also using Nimbus JOSE + JWT for token verification — a good choice for custom JWT logic.
+
+///////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
