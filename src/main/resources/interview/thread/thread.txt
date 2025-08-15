@@ -202,7 +202,10 @@ synchronized(monitor)
 monitor.wait();       Here Lock Is Released by Current Thread  
 } 
 
-sleep(): As the name suggests, it is a static method that pauses or stops the execution of the current thread for some specified period. It doesn’t release the lock while waiting and is mostly used to introduce pause on execution. It is defined in thread class, and no need to call from a synchronized context.  
+sleep(): As the name suggests, it is a static method that pauses or stops the 
+execution of the current thread for some specified period. It doesn’t release 
+the lock while waiting and is mostly used to introduce pause on execution. It 
+is defined in thread class, and no need to call from a synchronized context.  
 
 Example:  
 
@@ -216,24 +219,39 @@ Thread.sleep(1000);     Here Lock Is Held by The Current Thread
 
 9. What’s the difference between notify() and notifyAll()?
 
-notify(): It sends a notification and wakes up only a single thread instead of multiple threads that are waiting on the object’s monitor.
+notify(): It sends a notification and wakes up only a single thread instead of 
+multiple threads that are waiting on the object’s monitor.
 
-notifyAll(): It sends notifications and wakes up all threads and allows them to compete for the object's monitor instead of a single thread. 
+notifyAll(): It sends notifications and wakes up all threads and allows them 
+to compete for the object's monitor instead of a single thread. 
 
 ///////////////////////
 
 10. Why wait(), notify(), and notifyAll() methods are present in Object class?
 
-We know that every object has a monitor that allows the thread to hold a lock on the object. But the thread class doesn't contain any monitors. Thread usually waits for the object’s monitor (lock) by calling the wait() method on an object, and notify other threads that are waiting for the same lock using notify() or notifyAll() method.  Therefore, these three methods are called on objects only and allow all threads to communicate with each that are created on that object.
+We know that every object has a monitor that allows the thread to hold a lock on 
+the object. But the thread class doesn't contain any monitors. Thread usually 
+waits for the object’s monitor (lock) by calling the wait() method on an object, 
+and notify other threads that are waiting for the same lock using notify() or 
+notifyAll() method.  Therefore, these three methods are called on objects only 
+and allow all threads to communicate with each that are created on that object.
 
 /////////////////////////
 
 11. What is Runnable and Callable Interface? Write the difference between them.
 
-Both the interfaces are generally used to encapsulate tasks that are needed to be executed by another thread. But there are some differences between them as given below: 
+Both the interfaces are generally used to encapsulate tasks that are needed to 
+be executed by another thread. But there are some differences between them as 
+given below: 
 
-Running Interface: This interface is basically available in Java right from the beginning. It is simply used to execute code on a concurrent thread.  
-Callable Interface: This interface is basically a new one that was introduced as a part of the concurrency package. It addresses the limitation of runnable interfaces along with some major changes like generics, enum, static imports, variable argument method, etc. It uses generics to define the return type of object.   
+Running Interface: This interface is basically available in Java right from the 
+beginning. It is simply used to execute code on a concurrent thread.  
+
+Callable Interface: This interface is basically a new one that was introduced 
+as a part of the concurrency package. It addresses the limitation of runnable 
+interfaces along with some major changes like generics, enum, static imports, 
+variable argument method, etc. It uses generics to define the return type of 
+object.   
 
 public interface Runnable  
 {   
@@ -264,7 +282,13 @@ There are various benefits of multithreading as given below:
 
 13. Explain thread pool?
 
-A Thread pool is simply a collection of pre-initialized or worker threads at the start-up that can be used to execute tasks and put back in the pool when completed. It is referred to as pool threads in which a group of fixed-size threads is created.  By reducing the number of application threads and managing their lifecycle, one can mitigate the issue of performance using a thread pool. Using threads, performance can be enhanced and better system stability can occur. To create the thread pools, java.util.concurrent.Executors class usually provides factory methods.
+A Thread pool is simply a collection of pre-initialized or worker threads at the 
+start-up that can be used to execute tasks and put back in the pool when completed. 
+It is referred to as pool threads in which a group of fixed-size threads is created.  
+By reducing the number of application threads and managing their lifecycle, one can 
+mitigate the issue of performance using a thread pool. Using threads, performance 
+can be enhanced and better system stability can occur. To create the thread pools, 
+java.util.concurrent.Executors class usually provides factory methods.
 
 //////////////////////////
 
