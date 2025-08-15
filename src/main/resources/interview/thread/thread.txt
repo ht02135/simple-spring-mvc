@@ -105,7 +105,8 @@ public class ClassLevelLockExample
  } 
 } 
 
-Object Lock: In java, each and every object has a unique lock usually referred to as an object-level lock. These locks are achieved using the keyword ‘synchronized’ and can be used to protect non-static data. It is generally used when one wants to synchronize a non-static method or block so that only the thread will be able to execute the code block on a given instance of the class.  
+Object Lock: In java, each and every object has a unique lock usually referred to 
+as an object-level lock. These locks are achieved using the keyword ‘synchronized’ and can be used to protect non-static data. It is generally used when one wants to synchronize a non-static method or block so that only the thread will be able to execute the code block on a given instance of the class.  
 
 Example:  
 
@@ -124,17 +125,29 @@ public class ObjectLevelLockExample
 
 6. What's the difference between User thread and Daemon thread?
 
-User and Daemon are basically two types of thread used in Java by using a ‘Thread Class’.  
+User and Daemon are basically two types of thread used in Java by using a 
+‘Thread Class’.  
 
-User Thread (Non-Daemon Thread): In Java, user threads have a specific life cycle and its life is independent of any other thread. JVM (Java Virtual Machine) waits for any of the user threads to complete its tasks before terminating it. When user threads are finished, JVM terminates the whole program along with associated daemon threads. 
+User Thread (Non-Daemon Thread): In Java, user threads have a specific 
+life cycle and its life is independent of any other thread. JVM (Java 
+Virtual Machine) waits for any of the user threads to complete its tasks 
+before terminating it. When user threads are finished, JVM terminates the 
+whole program along with associated daemon threads. 
 
-Daemon Thread: In Java, daemon threads are basically referred to as a service provider that provides services and support to user threads. There are basically two methods available in thread class for daemon thread: setDaemon() and isDaemon(). 
+Daemon Thread: In Java, daemon threads are basically referred to as a 
+service provider that provides services and support to user threads. 
+There are basically two methods available in thread class for daemon 
+thread: setDaemon() and isDaemon(). 
 
 /////////////////////
 
 7. How can we create daemon threads?
 
-We can create daemon threads in java using the thread class setDaemon(true). It is used to mark the current thread as daemon thread or user thread. isDaemon() method is generally used to check whether the current thread is daemon or not. If the thread is a daemon, it will return true otherwise it returns false.  
+We can create daemon threads in java using the thread class setDaemon(true). 
+It is used to mark the current thread as daemon thread or user thread.
+ isDaemon() method is generally used to check whether the current thread 
+ is daemon or not. If the thread is a daemon, it will return true otherwise 
+ it returns false.  
 Example:   
 Program to illustrate the use of setDaemon() and isDaemon() method. 
 
@@ -176,7 +189,11 @@ public class DaemonThread extends Thread
 
 8. What are the wait() and sleep() methods?
 
-wait(): As the name suggests, it is a non-static method that causes the current thread to wait and go to sleep until some other threads call the notify () or notifyAll() method for the object’s monitor (lock). It simply releases the lock and is mostly used for inter-thread communication. It is defined in the object class, and should only be called from a synchronized context. 
+wait(): As the name suggests, it is a non-static method that causes the current 
+thread to wait and go to sleep until some other threads call the notify () or 
+notifyAll() method for the object’s monitor (lock). It simply releases the lock 
+and is mostly used for inter-thread communication. It is defined in the object 
+class, and should only be called from a synchronized context. 
 
 Example:  
 
