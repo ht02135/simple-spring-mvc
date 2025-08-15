@@ -304,21 +304,35 @@ of a thread class.
 
 15. What do you mean by garbage collection?
 
-Garbage collection is basically a process of managing memory automatically. It uses several GC algorithms among which the popular one includes Mark and Sweep. The process includes three phases i.e., marking, deletion, and compaction/copying. In simple words, a garbage collector finds objects that are no longer required by the program and then delete or remove these unused objects to free up the memory space.
+Garbage collection is basically a process of managing memory automatically. It uses several 
+GC algorithms among which the popular one includes Mark and Sweep. The process includes 
+three phases i.e., marking, deletion, and compaction/copying. In simple words, a garbage 
+collector finds objects that are no longer required by the program and then delete or 
+remove these unused objects to free up the memory space.
 
 //////////////////////////////////
 
 16. Explain the meaning of the deadlock and when it can occur?
 
-Deadlock, as the name suggests, is a situation where multiple threads are blocked forever. It generally occurs when multiple threads hold locks on different resources and are waiting for other resources to complete their task.
+Deadlock, as the name suggests, is a situation where multiple threads are blocked 
+forever. It generally occurs when multiple threads hold locks on different resources 
+and are waiting for other resources to complete their task.
 
-The above diagram shows a deadlock situation where two threads are blocked forever.  Thread 1 is holding Object 1 but needs object 2 to complete processing whereas Thread 2 is holding Object 2 but needs object 1 first. In such conditions, both of them will hold lock forever and will never complete tasks.
+The above diagram shows a deadlock situation where two threads are blocked forever.  
+Thread 1 is holding Object 1 but needs object 2 to complete processing whereas Thread 
+2 is holding Object 2 but needs object 1 first. In such conditions, both of them 
+will hold lock forever and will never complete tasks.
 
 ///////////////////////////////////
 
 17. Explain volatile variables in Java?
 
-A volatile variable is basically a keyword that is used to ensure and address the visibility of changes to variables in multithreaded programming. This keyword cannot be used with classes and methods, instead can be used with variables. It is simply used to achieve thread-safety. If you mark any variable as volatile, then all the threads can read its value directly from the main memory rather than CPU cache, so that each thread can get an updated value of the variable.
+A volatile variable is basically a keyword that is used to ensure and address the 
+visibility of changes to variables in multithreaded programming. This keyword cannot 
+be used with classes and methods, instead can be used with variables. It is simply 
+used to achieve thread-safety. If you mark any variable as volatile, then all the 
+threads can read its value directly from the main memory rather than CPU cache, so 
+that each thread can get an updated value of the variable.
 
 ///////////////////////////////////
 
@@ -328,10 +342,14 @@ A volatile variable is basically a keyword that is used to ensure and address th
 Threads can communicate using three methods i.e., wait(), notify(), and notifyAll().
 19. Can two threads execute two methods (static and non-static concurrently)?
 
-Yes, it is possible. If both the threads acquire locks on different objects, then they can execute concurrently without any problem.
+Yes, it is possible. If both the threads acquire locks on different objects, then 
+they can execute concurrently without any problem.
 20. What is the purpose of the finalize() method?
 
-Finalize() method is basically a method of Object class specially used to perform cleanup operations on unmanaged resources just before garbage collection. It is not at all intended to be called a normal method. After the complete execution of finalize() method, the object gets destroyed automatically
+Finalize() method is basically a method of Object class specially used to perform 
+cleanup operations on unmanaged resources just before garbage collection. It is not 
+at all intended to be called a normal method. After the complete execution of 
+finalize() method, the object gets destroyed automatically
 
 /////////////////////////////////////////
 /////////////////////////////////////////
