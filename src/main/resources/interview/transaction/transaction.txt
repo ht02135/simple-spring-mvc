@@ -157,14 +157,20 @@ public class UserService {
 
 Compared with the plain JDBC example:
 
-    You do not have to mess with opening or closing database connections yourself (try-finally). Instead you use Transaction Callbacks.
+You do not have to mess with opening or closing database connections yourself 
+(try-finally). Instead you use Transaction Callbacks.
 
-    You also do not have to catch SQLExceptions, as Spring converts these exceptions to runtime exceptions for you.
+You also do not have to catch SQLExceptions, as Spring converts these 
+exceptions to runtime exceptions for you.
 
-    And you have better integration into the Spring ecosystem. TransactionTemplate will use a TransactionManager internally, which will use a data source. All are beans that you have to specify in your Spring context configuration, but then don’t have to worry about anymore later on.
+And you have better integration into the Spring ecosystem. TransactionTemplate 
+will use a TransactionManager internally, which will use a data source. All 
+are beans that you have to specify in your Spring context configuration, but 
+then don’t have to worry about anymore later on.
 
-While this counts as a minor improvement, programmatic transaction management is not what Spring’s transaction framework mainly is about. Instead, it’s all about declarative transaction management. Let’s find out what that is.
-
+While this counts as a minor improvement, programmatic transaction management 
+is not what Spring’s transaction framework mainly is about. Instead, it’s 
+all about declarative transaction management. Let’s find out what that is.
 
 //////////////////////////
 
