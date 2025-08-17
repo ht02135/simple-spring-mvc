@@ -5,9 +5,11 @@ Spring Transaction Management: @Transactional In-Depth
 
 ////////////////////
 
-in this guide you are going to learn about the main pillars of Spring core’s transaction abstraction framework 
+in this guide you are going to learn about the main pillars of Spring core’s 
+transaction abstraction framework 
 
-    @Transactional (Declarative Transaction Management) vs Programmatic Transaction Management.
+    @Transactional (Declarative Transaction Management) vs 
+    Programmatic Transaction Management.
 
     Physical vs Logical transactions.
 
@@ -19,17 +21,24 @@ in this guide you are going to learn about the main pillars of Spring core’s t
 
 ////////////////////////////
 
-From the ground up, step by step. This means, starting with plain old JDBC transaction management.
+From the ground up, step by step. This means, starting with plain old 
+JDBC transaction management.
 
 Why?
 
-Because everything that Spring does is based on these very JDBC basics. And you’ll save a ton of time with Spring’s @Transactional annotation later, if you grasp these basics.
+Because everything that Spring does is based on these very JDBC basics. 
+And you’ll save a ton of time with Spring’s @Transactional annotation later, 
+if you grasp these basics.
 
 How to start, commit or rollback JDBC transactions
 
-The first important take-away is this: It does not matter if you are using Spring’s @Transactional annotation, plain Hibernate, jOOQ or any other database library.
+The first important take-away is this: It does not matter if you are 
+using Spring’s @Transactional annotation, plain Hibernate, jOOQ or 
+any other database library.
 
-In the end, they all do the very same thing to open and close (let’s call that 'manage') database transactions. Plain JDBC transaction management code looks like this:
+In the end, they all do the very same thing to open and close 
+(let’s call that 'manage') database transactions. Plain JDBC 
+transaction management code looks like this:
 
 import java.sql.Connection;
 
@@ -44,29 +53,47 @@ try (connection) {
     connection.rollback(); // (4)
 }
 
-1>You need a connection to the database to start transactions. DriverManager.getConnection(url, user, password) would work as well, though in most enterprise-y applications you will have a data source configured and get connections from that.
+1>You need a connection to the database to start transactions. 
+DriverManager.getConnection(url, user, password) would work as well, 
+though in most enterprise-y applications you will have a data source 
+configured and get connections from that.
 
-2>This is the only way to 'start' a database transaction in Java, even though the name might sound a bit off. setAutoCommit(true) makes sure that every single SQL statement automatically gets wrapped in its own transaction and setAutoCommit(false) is the opposite: You are the master of the transaction(s) and you’ll need to start calling commit and friends. Do note, the autoCommit flag is valid for the whole time your connection is open, which means you only need to call the method once, not repeatedly.
+2>This is the only way to 'start' a database transaction in Java, 
+even though the name might sound a bit off. setAutoCommit(true) makes 
+sure that every single SQL statement automatically gets wrapped in 
+its own transaction and setAutoCommit(false) is the opposite: You 
+are the master of the transaction(s) and you’ll need to start calling 
+commit and friends. Do note, the autoCommit flag is valid for the 
+whole time your connection is open, which means you only need to call 
+the method once, not repeatedly.
 
 3>Let’s commit our transaction…​
 
 4>Or, rollback our changes, if there was an exception.
 
-yes, these 4 lines are (oversimplified) everything that Spring does whenever you are using the @Transactional annotation. In the next chapter you’ll find out how that works. But before we go there, there’s a tiny bit more you need to learn.
+yes, these 4 lines are (oversimplified) everything that Spring does 
+whenever you are using the @Transactional annotation. In the next 
+chapter you’ll find out how that works. But before we go there, 
+there’s a tiny bit more you need to learn.
 
-(A quick note for smarty-pants: Connection pool libraries like HikariCP might toggle the autocommit mode automatically for you, depending on the configuration. But that is an advanced topic.)
+(A quick note for smarty-pants: Connection pool libraries like HikariCP 
+might toggle the autocommit mode automatically for you, depending on 
+the configuration. But that is an advanced topic.)
 
 
 //////////////////////////
 
 How to use JDBC isolation levels and savepoints
 
-If you already played with Spring’s @Transactional annotation you might have encountered something like this:
+If you already played with Spring’s @Transactional annotation you might 
+have encountered something like this:
 
 @Transactional(propagation=TransactionDefinition.NESTED,
-               isolation=TransactionDefinition.ISOLATION_READ_UNCOMMITTED)
+	isolation=TransactionDefinition.ISOLATION_READ_UNCOMMITTED)
 
-We will cover nested Spring transactions and isolation levels later in more detail, but again it helps to know that these parameters all boil down to the following, basic JDBC code:
+We will cover nested Spring transactions and isolation levels later in 
+more detail, but again it helps to know that these parameters all boil 
+down to the following, basic JDBC code:
 
 import java.sql.Connection;
 
@@ -80,29 +107,38 @@ Savepoint savePoint = connection.setSavepoint(); // (2)
 ...
 connection.rollback(savePoint);
 
-1>This is how Spring sets isolation levels on a database connection. Not exactly rocket science, is it?
+1>This is how Spring sets isolation levels on a database connection. Not exactly 
+rocket science, is it?
 
-2>Nested transactions in Spring are just JDBC / database savepoints. If you don’t know what a savepoint is, have a look at this tutorial, for example. Note that savepoint support is dependent on your JDBC driver/database.
+2>Nested transactions in Spring are just JDBC / database savepoints. If you 
+don’t know what a savepoint is, have a look at this tutorial, for example. 
+Note that savepoint support is dependent on your JDBC driver/database.
 
 ///////////////////////
 
 How Spring’s or Spring Boot’s Transaction Management works
 
-As you now have a good JDBC transaction understanding, let’s have a look at how plain, core Spring manages transactions. Everything here applies 1:1 to Spring Boot and Spring MVC, but more about that a bit later..
+As you now have a good JDBC transaction understanding, let’s have a look at 
+how plain, core Spring manages transactions. Everything here applies 1:1 
+to Spring Boot and Spring MVC, but more about that a bit later..
 
-What actually is Spring’s transaction management or its (rather confusingly named) transaction abstraction framework?
+What actually is Spring’s transaction management or its (rather confusingly 
+named) transaction abstraction framework?
 
-Remember, transaction management simply means: How does Spring start, commit or rollback JDBC transactions? Does this sound in any way familiar from above?
+Remember, transaction management simply means: How does Spring start, 
+commit or rollback JDBC transactions? Does this sound in any way familiar from above?
 
-Here’s the catch: Whereas with plain JDBC you only have one way (setAutocommit(false)) to manage transactions, Spring offers you many different, more convenient ways to achieve the same.
-
+Here’s the catch: Whereas with plain JDBC you only have one way 
+(setAutocommit(false)) to manage transactions, Spring offers you 
+many different, more convenient ways to achieve the same.
 
 ///////////////////////////
 
-
 How to use Spring’s Programmatic Transaction Management?
 
-The first, but rather sparingly used way to define transactions in Spring is programmatically: Either through a TransactionTemplate or directly through the PlatformTransactionManager. Code-wise, it looks like this:
+The first, but rather sparingly used way to define transactions in Spring 
+is programmatically: Either through a TransactionTemplate or directly 
+through the PlatformTransactionManager. Code-wise, it looks like this:
 
 @Service
 public class UserService {
