@@ -1,0 +1,334 @@
+
+Most Commonly Asked Spring Interview Questions and Answers
+
+Q1. Explain the main modules of Spring Framework
+
+    Spring AOP: This is one of the key components of Spring. It is used for providing declarative enterprise services.
+    Spring ORM: This is related to database access, and it provides integration layers for popular object-relational mapping APIs, including JDO, Hibernate, and iBatis.
+    Spring Web: This is part of Spring’s web application development stack.
+    Spring DAO: The DAO (Data Access Object) support helps standardize the data access work using JDBC, Hibernate, or JDO.
+    Spring Context: This builds on the beans package to support message sources and the Observer design pattern.
+    Spring Web MVC: This provides the MVC implementations for the web applications.
+    Spring Core: The most crucial component of the Spring Framework. It provides Dependency Injection features.
+
+Q3. Explain the difference between singleton and prototype bean.
+
+Singleton refers to a single object instance per Spring IOC container. On the other hand, Prototype refers to a single bean definition to any number of object instances.
+
+Q4. What can you do in Spring java based configuration?
+
+You can inject all dependencies using java class only, using @Configuaration and @Bean annotations.
+
+Q5. Explain the bean lifecycle in the Spring bean Factory container?
+
+    The Spring container instantiates the bean from the bean’s definition in the XML file, and Spring populates the properties using the dependency injection.
+    By passing the bean’s ID, the factory calls setBeanName() if the bean implements the BeanNameAware interface.
+    If the bean implements the BeanFactoryAware interface, the factory calls setBeanFactory() by passing an instance of itself.
+    preProcessBeforeInitialization() methods are carried out if any BeanPostProcessors are associated with the bean.
+    Finally, postProcessAfterInitialization() methods are carried out if any BeanPostProcessors are associated with the bean.
+
+Q6. Explain bean wiring.
+
+Bean wiring refers to when beans are combined within the Spring container. The Spring container needs to know what beans are needed and how dependency injection should wire the beans.
+
+Q7. What are the ways by which Hibernate can be accessed using Spring?
+
+There are two ways to access Hibernate using Spring:
+
+    Inversion of Control with a Hibernate Template and Callback
+    Extending HibernateDAOSupport and Applying an AOP Interceptor node
+
+Q8. Explain JoinPoint.
+
+A point during the execution of a program is called JoinPoint. In Spring AOP, a joinpoint always indicates a method execution.
+
+Q9. What is Spring Configuration File?
+
+Spring Configuration File is an XML file that contains all the information about classes and their configuration process and how the classes have interacted with the other classes.
+
+Q10. Explain weaving in the Spring framework.
+
+It refers to linking an aspect with other application types or objects to create an advised object is called Weaving. In Spring AOP, this process is performed at runtime.
+
+///////////////////////////
+
+Spring Boot Interview Questions and Answers
+
+Q1. What are the features of Spring Boot?
+
+    Starter dependency
+    Auto-configuration
+    Spring initializer
+
+Q2. Explain RAD Model.
+
+RAD or Rapid Application Development refers to adopting the waterfall model to target developing software in a short period. It follows the iterative SDLC. It has the following phases:
+
+    Business Modeling
+    Data Modeling
+    Process Modeling
+    Application Generation
+    Testing and Turnover
+
+Q3. What is a Spring Boot starter, and how is it useful?
+
+There are many starters in Spring Boot that act as a set of convenient dependency descriptors. They allow you to include these descriptors in your pom.xml.
+
+Q4. What are the components of Spring Boot?
+
+    Spring Boot Starter
+    Spring Boot autoconfiguration
+    Spring Boot Actuator
+    Spring Boot CLI
+
+Q5. What is a Spring Boot Actuator?
+
+It allows you to monitor and manage your application when you want to push it for production and helps you to control your application by using HTTP endpoints.
+
+Q6. How will you connect Spring Boot to the database using JPA?
+
+As the Spring Boot supports spring-boot-data-JPA start, it helps you connect spring applications with a relational database.
+
+Q7. Explain the main differences between JPA and Hibernate?
+
+The main difference is that JPA is a  specification/Interface, whereas Hibernate is only a JPA implementation.
+
+Q8. What is a shutdown in the actuator?
+
+A shutdown refers to the endpoint that helps the application shut down properly. It is not available by default and must be set using a command.
+
+Q9. What is Swagger2?
+
+Swagger is used to describe the structure of APIs. Swagger 2 refers to open-source services provided in Spring Boot and makes it easier for the machines to discover the structure of RESTful Web services.
+
+Q10. Explain the use of profiles in Spring Boot?
+
+Profiles are useful for separating various parts of a spring application configuration and making it available only in certain environments.
+
+///////////////////
+
+Some More Spring Boot Interview Questions
+
+    What are the advantages of using Spring Boot?
+    Why Spring Boot over Spring?
+    How does Spring Boot work?
+    Define starter dependencies.
+    What is Spring Boot CLI, and what are its benefits?
+    What are the most common Spring Boot CLI commands?
+    Is it possible to create a non-web application in Spring Boot?
+    Is it possible to disable the default web server in the Spring boot application?
+    Can you describe the flow of HTTPS requests through the Spring Boot application?
+    What is the use of Profiles in spring boot?
+
+/////////////////////////
+
+Spring Boot Testing Interview Questions
+
+    What is Spring Boot?
+    How to create a Spring Boot application using Maven?
+    What is Spring Boot dependency management?
+    What is thymeleaf, and how to use it?
+    How to connect a Spring Boot application to a database using JDBC?
+    How to create a Spring Boot application using Spring Starter Project Wizard?
+    How to connect Spring Boot to the database using JPA?
+    Explain Spring Actuator and its advantages.
+    What is Spring Boot CLI, and how to execute the Spring Boot project using boot CLI?
+    How can we create a custom endpoint in Spring Boot Actuator?
+
+Take a look at some more popular Spring Boot Interview Questions for your interview prep here.
+
+////////////////////////////
+
+Spring AOP Interview Questions
+
+    Explain the difference between concern and crosscutting concern in Spring AOP?
+    Explain the different advice types in spring?
+    What is Spring AOP Proxy?
+    What is Weaving?
+    Name three typical cross-cutting concerns.
+    How does Spring solve (implement) a cross-cutting concern?
+    What visibility must Spring bean methods have to be proxied using Spring AOP?
+    Explain the need for a JoinPoint argument.
+    Name some popular Aspect-oriented programming libraries?
+    Which problems does AOP solve?
+
+////////////////////////////
+
+Spring JDBC Interview Questions
+
+    What are classes for spring JDBC API?
+    Explain the advantages of NamedParameterJdbcTemplate.
+    What is JDBC exception handling?
+    Can you fetch records by spring JdbcTemplate?
+    Tell us how JDBC can be used more efficiently in the Spring framework.
+    What is the difference between JDBC and Spring JDBC?
+    What is native NativeJdbcExtractor in Spring?
+    What annotation is used to configure DAO in Spring?
+    Explain the advantages of Spring JDBC Template over standard JDBC.
+    What are JDBC abstraction and DAO modules?
+
+
+/////////////////////////////
+
+Spring MVC Interview Questions
+
+    What is Spring MVC?
+    What is the front controller of Spring MVC?
+    What is an InternalResourceViewResolver in Spring MVC?
+    How to map a controller class and its methods with URL?
+    What is the purpose of @PathVariable annotation in Spring MVC?
+    What is the role of the Model interface in Spring MVC?
+    Discuss the different ways of reading data from the form in Spring MVC?
+    What is the purpose of BindingResult in Spring MVC validations?
+    Can you validate the user input in a particular sequence in Spring MVC? Explain the process.
+    Explain Spring MVC Tiles.
+
+https://interviewkickstart.com/blogs/interview-questions/spring-mvc-interview-questions
+
+////////////////////
+
+Spring Core Interview Questions
+
+    What is the default scope of bean in the Spring framework?
+    What is the Dependency Injection design pattern?
+    What types of dependency injection are supported by Spring Framework?
+    Why should Java programmers use the Spring framework?
+    Are Spring singleton beans thread-safe?
+    What experience do you have working with Spring? ·
+    What Spring framework models have you used?
+    What are Spring IOC containers?
+    What are the different IOC containers available in Spring?
+    What beans scopes Spring supports?
+
+///////////////////////
+
+Spring IoC Interview Questions
+
+    What are IoC and DI in Spring?
+    What is the use of IoC containers?
+    What is autowiring, and name the different modes of it?
+    What is DispatcherServlet in Spring MVC? In other words, can you explain the Spring MVC architecture?
+    Which method is used for shutting down IoC containers in Spring?
+    What is the implementation of List that is used when you use the <list> tag in a bean definition?
+    How do you use a particular implementation of collection in your bean definition?
+    Are singleton beans in Spring a regular singleton object?
+    If an inner bean is defined with an id, can you use this id to fetch the bean from the container?
+    What are the actuator-provided endpoints used for monitoring the Spring boot application?
+
+
+//////////////////////////
+
+Spring Hibernate Interview Questions
+
+    What are the ways to access Hibernate by using Spring?
+    What is the hibernate configuration file?
+    What is hibernate mapping file?
+    What is the difference between the Hibernate Session get() and load() method?
+    What is hibernate caching? Explain Hibernate first-level cache?
+    What will happen if we don’t have a no-args constructor in Entity bean?
+    Explain the difference between sorted collection and ordered collection. Which one is better, in your opinion?
+    Are there any collection types in Hibernate?
+    Is it possible to execute a native SQL query in hibernate?
+
+10.  What is the benefit of native SQL query support in hibernate?
+
+/////////////////////////
+
+Spring Data Access Interview Questions
+
+    Explain DataAccessException in Spring.
+    Can Spring transactional annotation be applied only for public methods?
+    What is BatchPreparedStatementSetter in Spring Data?
+    What is Spring Data JPA?
+    What is Dirty Read?
+    What are the ways to access Hibernate by using Spring?
+    How can we integrate Spring and Hibernate using HibernateDaoSupport?
+    What are the types of transaction management in Spring support?
+    What are the benefits of the Spring Framework’s transaction management?
+    Which Transaction management type is preferable?
+
+/////////////////////////
+
+Spring Data JPA Interview Questions
+
+    What is JPA, and what are the advantages?
+    Why is an interface not a class?
+    How can we create a custom repository in Spring data JPA?
+    Give an example of using @Query annotation with JPQL.
+    What is PlatformTransactionMangaer?
+    Is it possible to perform actual tasks like access, persist, and manage data with JPA?
+    What do you have to configure to use JPA with Spring? How does Spring Boot make this easier?
+    According to you, what are the important predefined repository interfaces and classes in Spring Data JPA?
+    Name the important methods of Crudrepository to perform CRUD operations in Spring Data JPA?
+    Define a simple repository method that returns all records/entities for a given name?
+
+
+////////////////////////////
+
+Spring Annotations Interview Questions
+
+    How can annotation wiring be turned on in Spring?
+    Explain @Required annotation?
+    What does @RequestMapping annotation mean?
+    What do you understand from @Autowired annotation?
+    Explain the differences between JSR-250 Annotations and @Qualifier annotations.
+    Explain the Annotation-based container configuration.
+    Highlight the role of @SpringBootApplication.
+    Is it possible to send an Object as the response of the Controller handler method?
+    Explain @ModelAttribute?
+    Tell us the difference between the Configuration types XML and Annotation?
+
+
+//////////////////////////////
+
+Spring Beans Interview Questions
+
+    Explain default scope in spring bean
+    What is a bean in spring
+    What do you mean by bean autowiring in Spring?
+    How many bean scopes are supported by Spring Framework?
+    Please explain the Bean lifecycle in Spring Bean Factory Container?
+    Can you differentiate between ApplicationContext and BeanFactory in Spring?
+    What is Bean Class and Bean Configuration?
+
+////////////////////////////////////
+
+Spring Security Interview Questions
+
+    What is the security filter chain in Spring Security?
+    Describe some of the predefined filters used by Spring Security. What are their functions, and in which order do they occur?
+    How will you implement a custom filter in Spring Security?
+    Is security a cross-cutting concern? How is it implemented?
+    Explain which security annotations are allowed to use SpEL.
+    Explain the differences between authorization and authentication.
+    Why do we need intercept-URL?
+    Explain security context.
+    Who is responsible for managing the life-cycle of filter bean in Spring?
+    What is delegating filter proxy in Spring Security?
+
+Spring interview questions cover a wide range of Spring concepts. You must be familiar with all of them to pass the interview. We hope that these sample Spring interview questions will help you with your preparations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
