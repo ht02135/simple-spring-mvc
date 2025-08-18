@@ -341,7 +341,9 @@ are talking to a proxy, and not the real thing.
 
 Quick Exam
 
-Have a look at the following source code and tell me what type of UserService Spring automatically constructs, assuming it is marked with @Transactional or has a @Transactional method.
+Have a look at the following source code and tell me what type of 
+UserService Spring automatically constructs, assuming it is marked 
+with @Transactional or has a @Transactional method.
 
 @Configuration
 @EnableTransactionManagement
@@ -353,17 +355,27 @@ public static class MyAppConfig {
     }
 }
 
-1>Correct. Spring constructs a dynamic CGLib proxy of your UserService class here that can open and close database transactions for you. You or any other beans won’t even notice that it is not your UserService, but a proxy wrapping your UserService.
+1>Correct. Spring constructs a dynamic CGLib proxy of your UserService 
+class here that can open and close database transactions for you. You 
+or any other beans won’t even notice that it is not your UserService, 
+but a proxy wrapping your UserService.
 
 For what do you need a Transaction Manager (like PlatformTransactionManager)?
 
-Now there’s only one crucial piece of information missing, even though we have mentioned it a couple of times already.
+Now there’s only one crucial piece of information missing, even though 
+we have mentioned it a couple of times already.
 
-Your UserService gets proxied on the fly, and the proxy manages transactions for you. But it is not the proxy itself handling all this transactional state (open, commit, close), the proxy delegates that work to a transaction manager.
+Your UserService gets proxied on the fly, and the proxy manages 
+transactions for you. But it is not the proxy itself handling all 
+this transactional state (open, commit, close), the proxy delegates 
+that work to a transaction manager.
 
-Spring offers you a PlatformTransactionManager / TransactionManager interface, which, by default, comes with a couple of handy implementations. One of them is the datasource transaction manager.
+Spring offers you a PlatformTransactionManager / TransactionManager 
+interface, which, by default, comes with a couple of handy implementations. 
+One of them is the datasource transaction manager.
 
-It does exactly what you did so far to manage transactions, but first, let’s look at the needed Spring configuration:
+It does exactly what you did so far to manage transactions, but first, 
+let’s look at the needed Spring configuration:
 
 @Bean
 public DataSource dataSource() {
@@ -375,13 +387,15 @@ public PlatformTransactionManager txManager() {
     return new DataSourceTransactionManager(dataSource()); // (2)
 }
 
-1>You create a database-specific or connection-pool specific datasource here. MySQL is being used for this example.
+1>You create a database-specific or connection-pool specific datasource 
+here. MySQL is being used for this example.
 
-2>Here, you create your transaction manager, which needs a data source to be able to manage transactions.
+2>Here, you create your transaction manager, which needs a data source 
+to be able to manage transactions.
 
-
-
-Simple as. All transaction managers then have methods like "doBegin" (for starting a transaction) or "doCommit", which look like this - taken straight from Spring’s source code and simplified a bit:
+Simple as. All transaction managers then have methods like "doBegin" 
+(for starting a transaction) or "doCommit", which look like this - 
+taken straight from Spring’s source code and simplified a bit:
 
 public class DataSourceTransactionManager implements PlatformTransactionManager {
 
@@ -405,22 +419,23 @@ public class DataSourceTransactionManager implements PlatformTransactionManager 
     }
 }
 
-So, the datasource transaction manager uses exactly the same code that you saw in the JDBC section, when managing transactions.
+So, the datasource transaction manager uses exactly the same code that you 
+saw in the JDBC section, when managing transactions.
 
 With this in mind, let’s extend our picture from above:
 
-
-
 To sum things up:
 
-1>If Spring detects the @Transactional annotation on a bean, it creates a dynamic proxy of that bean.
+1>If Spring detects the @Transactional annotation on a bean, it creates a 
+dynamic proxy of that bean.
 
-2>The proxy has access to a transaction manager and will ask it to open and close transactions / connections.
+2>The proxy has access to a transaction manager and will ask it to open 
+and close transactions / connections.
 
-3>The transaction manager itself will simply do what you did in the plain Java section: Manage a good, old JDBC connection.
+3>The transaction manager itself will simply do what you did in the plain 
+Java section: Manage a good, old JDBC connection.
 
 ///////////////////////////
-
 
 What is the difference between physical and logical transactions?
 
@@ -448,11 +463,18 @@ public class InvoiceService {
     }
 }
 
-UserService has a transactional invoice() method. Which calls another transactional method, createPdf() on the InvoiceService.
+UserService has a transactional invoice() method. Which calls another 
+transactional method, createPdf() on the InvoiceService.
 
-Now in terms of database transactions, this should really just be one database transaction. (Remember: getConnection(). setAutocommit(false). commit().) Spring calls this physical transaction, even though this might sound a bit confusing at first.
+Now in terms of database transactions, this should really just be one 
+database transaction. (Remember: getConnection(). setAutocommit(false). 
+commit().) Spring calls this physical transaction, even though this might 
+sound a bit confusing at first.
 
-From Spring’s side however, there’s two logical transactions happening: First in UserService, the other one in InvoiceService. Spring has to be smart enough to know that both @Transactional methods, should use the same underlying, physical database transaction.
+From Spring’s side however, there’s two logical transactions happening: 
+First in UserService, the other one in InvoiceService. Spring has to be 
+smart enough to know that both @Transactional methods, should use the 
+same underlying, physical database transaction.
 
 How would things be different, with the following change to InvoiceService?
 
@@ -465,15 +487,23 @@ public class InvoiceService {
     }
 }
 
-Changing the propagation mode to requires_new is telling Spring that createPDF() needs to execute in its own transaction, independent of any other, already existing transaction. Thinking back to the plain Java section of this guide, did you see a way to "split" a transaction in half? Neither did I.
+Changing the propagation mode to requires_new is telling Spring that 
+createPDF() needs to execute in its own transaction, independent of 
+any other, already existing transaction. Thinking back to the plain 
+Java section of this guide, did you see a way to "split" a transaction 
+in half? Neither did I.
 
-Which basically means your code will open two (physical) connections/transactions to the database. (Again: getConnection() x2. setAutocommit(false) x2. commit() x2) Spring now has to be smart enough that the two logical transactional pieces (invoice()/createPdf()) now also map to two different, physical database transactions.
+Which basically means your code will open two (physical) connections/transactions 
+to the database. (Again: getConnection() x2. setAutocommit(false) x2. 
+commit() x2) Spring now has to be smart enough that the two logical 
+transactional pieces (invoice()/createPdf()) now also map to two different, 
+physical database transactions.
 
 So, to sum things up:
 
-    Physical Transactions: Are your actual JDBC transactions.
+1>Physical Transactions: Are your actual JDBC transactions.
 
-    Logical Transactions: Are the (potentially nested) @Transactional-annotated (Spring) methods.
+2>Logical Transactions: Are the (potentially nested) @Transactional-annotated (Spring) methods.
 
 This leads us to covering propagation modes in more detail.
 
@@ -482,7 +512,8 @@ This leads us to covering propagation modes in more detail.
 
 What are @Transactional Propagation Levels used for?
 
-When looking at the Spring source code, you’ll find a variety of propagation levels or modes that you can plug into the @Transactional method.
+When looking at the Spring source code, you’ll find a variety of 
+propagation levels or modes that you can plug into the @Transactional method.
 
   @Transactional(propagation = Propagation.REQUIRED)
 
@@ -509,27 +540,40 @@ The full list:
 
 Exercise:
 
-In the plain Java section, I showed you everything that JDBC can do when it comes to transactions. Take a minute to think about what every single Spring propagation mode at the end REALLY does to your datasource or rather, your JDBC connection.
+In the plain Java section, I showed you everything that JDBC can do when 
+it comes to transactions. Take a minute to think about what every single 
+Spring propagation mode at the end REALLY does to your datasource or 
+rather, your JDBC connection.
 
 Then have a look at the following answers.
 
 Answers:
 
-    Required (default): My method needs a transaction, either open one for me or use an existing one → getConnection(). setAutocommit(false). commit().
+    Required (default): My method needs a transaction, either open one 
+    for me or use an existing one → getConnection(). setAutocommit(false). 
+    commit().
 
-    Supports: I don’t really care if a transaction is open or not, i can work either way → nothing to do with JDBC
+    Supports: I don’t really care if a transaction is open or not, i 
+    can work either way → nothing to do with JDBC
 
-    Mandatory: I’m not going to open up a transaction myself, but I’m going to cry if no one else opened one up → nothing to do with JDBC
+    Mandatory: I’m not going to open up a transaction myself, but I’m 
+    going to cry if no one else opened one up → nothing to do with JDBC
 
-    Require_new: I want my completely own transaction → getConnection(). setAutocommit(false). commit().
+    Require_new: I want my completely own transaction → getConnection(). 
+    setAutocommit(false). commit().
 
-    Not_Supported: I really don’t like transactions, I will even try and suspend a current, running transaction → nothing to do with JDBC
+    Not_Supported: I really don’t like transactions, I will even try and 
+    suspend a current, running transaction → nothing to do with JDBC
 
-    Never: I’m going to cry if someone else started up a transaction → nothing to do with JDBC
+    Never: I’m going to cry if someone else started up a transaction → 
+    nothing to do with JDBC
 
-    Nested: It sounds so complicated, but we are just talking savepoints! → connection.setSavepoint()
+    Nested: It sounds so complicated, but we are just talking savepoints! → 
+    connection.setSavepoint()
 
-As you can see, most propagation modes really have nothing to do with the database or JDBC, but more with how you structure your program with Spring and how/when/where Spring expects transactions to be there.
+As you can see, most propagation modes really have nothing to do with the 
+database or JDBC, but more with how you structure your program with Spring 
+and how/when/where Spring expects transactions to be there.
 
 Look at this example:
 
@@ -542,15 +586,18 @@ public class UserService {
 
 }
 
-In this case, Spring will expect a transaction to be open, whenever you call myMethod() of the UserService class. It does not open one itself, instead, if you call that method without a pre-existing transaction, Spring will throw an exception. Keep this in mind as additional points for "logical transaction handling".
-
+In this case, Spring will expect a transaction to be open, whenever 
+you call myMethod() of the UserService class. It does not open one 
+itself, instead, if you call that method without a pre-existing 
+transaction, Spring will throw an exception. Keep this in mind as 
+additional points for "logical transaction handling".
 
 /////////////////////////
 
-
 What are @Transactional Isolation Levels used for?
 
-This is almost a trick question at this point, but what happens when you configure the @Transactional annotation like so?
+This is almost a trick question at this point, but what happens when 
+you configure the @Transactional annotation like so?
 
 @Transactional(isolation = Isolation.REPEATABLE_READ)
 
@@ -558,10 +605,13 @@ Yes, it does simply lead to this:
 
 connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 
-Database isolation levels are, however, a complex topic, and you should take some time to fully grasp them. A good start is the official Postgres Documentation and their section on isolation levels.
+Database isolation levels are, however, a complex topic, and you should 
+take some time to fully grasp them. A good start is the official Postgres 
+Documentation and their section on isolation levels.
 
-Also note, that when it comes to switching isolation levels during a transaction, you must make sure to consult with your JDBC driver/database to understand which scenarios are supported and which not.
-
+Also note, that when it comes to switching isolation levels during a 
+transaction, you must make sure to consult with your JDBC driver/database 
+to understand which scenarios are supported and which not.
 
 ////////////////////////////
 
