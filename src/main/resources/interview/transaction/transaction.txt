@@ -717,7 +717,8 @@ There is one huge problem with the above code, however:
 
     Spring’s @Transactional would not know anything about Hibernate’s transaction.
 
-But we’d actually love for Spring and Hibernate to integrate seamlessly, meaning that they know about each others' transactions.
+But we’d actually love for Spring and Hibernate to integrate seamlessly, 
+meaning that they know about each others' transactions.
 
 In plain code:
 
@@ -736,7 +737,8 @@ public class UserService {
 
     The same SessionFactory as before
 
-    But no more manual state management. Instead, getCurrentSession() and @Transactional are in sync.
+    But no more manual state management. Instead, getCurrentSession() 
+    and @Transactional are in sync.
 
 How to get there?
 
@@ -747,15 +749,21 @@ Using the HibernateTransactionManager
 
 There is a very simple fix for this integration problem:
 
-Instead of using a DataSourcePlatformTransactionManager in your Spring configuration, you will be using a HibernateTransactionManager (if using plain Hibernate) or JpaTransactionManager (if using Hibernate through JPA).
+Instead of using a DataSourcePlatformTransactionManager in your 
+Spring configuration, you will be using a HibernateTransactionManager 
+(if using plain Hibernate) or JpaTransactionManager (if using Hibernate 
+through JPA).
 
 The specialized HibernateTransactionManager will make sure to:
 
     Manage transactions through Hibernate, i.e. the SessionFactory.
 
-    Be smart enough to allow Spring to use that very same transaction in non-Hibernate, i.e. @Transactional Spring code.
+    Be smart enough to allow Spring to use that very same transaction in 
+    non-Hibernate, i.e. @Transactional Spring code.
 
-As always, a picture might be simpler to understand (though note, the flow between the proxy and real service is only conceptually right and oversimplified).
+As always, a picture might be simpler to understand (though note, the 
+flow between the proxy and real service is only conceptually right and 
+oversimplified).
 
 
 
