@@ -634,41 +634,51 @@ public class UserService {
     }
 }
 
-You have a UserService class with a transactional invoice method. Which calls createPDF(), which is also transactional.
+You have a UserService class with a transactional invoice method. Which calls 
+createPDF(), which is also transactional.
 
 How many physical transactions would you expect to be open, once someone calls invoice()?
 
 Nope, the answer is not two, but one. Why?
 
-Let’s go back to the proxies' section of this guide. Spring creates that transactional UserService proxy for you, but once you are inside the UserService class and call other inner methods, there is no more proxy involved. This means, no new transaction for you.
+Let’s go back to the proxies' section of this guide. Spring creates that 
+transactional UserService proxy for you, but once you are inside the UserService 
+class and call other inner methods, there is no more proxy involved. This means, 
+no new transaction for you.
 
 Let’s have a look at it with a picture:
 document3
 
-There’s some tricks (like self-injection), which you can use to get around this limitation. But the main takeaway is: always keep the proxy transaction boundaries in mind.
-
+There’s some tricks (like self-injection), which you can use to get around this 
+limitation. But the main takeaway is: always keep the proxy transaction boundaries in mind.
 
 ////////////////////////
 
-
 How to use @Transactional with Spring Boot or Spring MVC
 
-So far, we have only talked about plain, core Spring. But what about Spring Boot? Or Spring Web MVC? Do they handle transactions any differently?
+So far, we have only talked about plain, core Spring. But what about Spring Boot? Or 
+Spring Web MVC? Do they handle transactions any differently?
 
 The short answer is: No.
 
-With either frameworks (or rather: all frameworks in the Spring ecosystem), you will always use the @Transactional annotation, combined with a transaction manager and the @EnableTransactionManagement annotation. There is no other way.
+With either frameworks (or rather: all frameworks in the Spring ecosystem), you will 
+always use the @Transactional annotation, combined with a transaction manager 
+and the @EnableTransactionManagement annotation. There is no other way.
 
-The only difference with Spring Boot is, however, that it automatically sets the @EnableTransactionManagement annotation and creates a PlatformTransactionManager for you - with its JDBC auto-configurations. Learn more about auto-configurations here.
+The only difference with Spring Boot is, however, that it automatically sets 
+the @EnableTransactionManagement annotation and creates a PlatformTransactionManager 
+for you - with its JDBC auto-configurations. Learn more about auto-configurations here.
 
 ////////////////////////////
 
 How Spring and JPA / Hibernate Transaction Management works
 The goal: Syncing Spring’s @Transactional and Hibernate / JPA
 
-At some point, you will want your Spring application to integrate with another database library, such as Hibernate (a popular JPA-implementation) or Jooq etc.
+At some point, you will want your Spring application to integrate with another 
+database library, such as Hibernate (a popular JPA-implementation) or Jooq etc.
 
-Let’s take plain Hibernate as an example (note: it does not matter if you are using Hibernate directly,or Hibernate via JPA).
+Let’s take plain Hibernate as an example (note: it does not matter if you are 
+using Hibernate directly,or Hibernate via JPA).
 
 Rewriting the UserService from before to Hibernate would look like this:
 
