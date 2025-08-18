@@ -177,9 +177,14 @@ all about declarative transaction management. Let’s find out what that is.
 
 How to use Spring’s XML Declarative Transaction Management?
 
-Back in the day, when XML configuration was the norm for Spring projects, you could configure transactions directly in XML. Apart from a couple of legacy, enterprise projects, you won’t find this approach anymore in the wild, as it has been superseded with the much simpler @Transactional annotation.
+Back in the day, when XML configuration was the norm for Spring projects, you 
+could configure transactions directly in XML. Apart from a couple of legacy, 
+enterprise projects, you won’t find this approach anymore in the wild, as it 
+has been superseded with the much simpler @Transactional annotation.
 
-We will not go into detail on XML configuration in this guide, but you can use this example as a starting point to dive deeper into it - if needed (taken straight from the official Spring documentation):
+We will not go into detail on XML configuration in this guide, but you can 
+use this example as a starting point to dive deeper into it - if needed 
+(taken straight from the official Spring documentation):
 
 <!-- the transactional advice (what 'happens'; see the <aop:advisor/> bean below) -->
     <tx:advice id="txAdvice" transaction-manager="txManager">
@@ -192,7 +197,8 @@ We will not go into detail on XML configuration in this guide, but you can use t
         </tx:attributes>
     </tx:advice>
 
-You are specifying an AOP advice (Aspect Oriented Programming) with the above XML block, that you can then apply to your UserService bean like so:
+You are specifying an AOP advice (Aspect Oriented Programming) with the above XML block, 
+that you can then apply to your UserService bean like so:
 
 <aop:config>
     <aop:pointcut id="userServiceOperation" expression="execution(* x.y.service.UserService.*(..))"/>
@@ -212,10 +218,12 @@ public class UserService {
     }
 }
 
-From a Java code perspective, this declarative transaction approach looks a lot simpler than the programmatic approach. But it leads to a lot of complicated, verbose XML, with the pointcut and advisor configurations.
+From a Java code perspective, this declarative transaction approach looks a lot 
+simpler than the programmatic approach. But it leads to a lot of complicated, 
+verbose XML, with the pointcut and advisor configurations.
 
-So, this leads to the question: Is there a better way for declarative transaction management instead of XML? Yes, there is: The @Transactional annotation.
-
+So, this leads to the question: Is there a better way for declarative transaction 
+management instead of XML? Yes, there is: The @Transactional annotation.
 
 //////////////////////////
 
@@ -234,13 +242,19 @@ public class UserService {
     }
 }
 
-How is this possible? There is no more XML configuration and there’s also no other code needed. Instead, you now need to do two things:
+How is this possible? There is no more XML configuration and there’s also 
+no other code needed. Instead, you now need to do two things:
 
-    Make sure that your Spring Configuration is annotated with the @EnableTransactionManagement annotation (In Spring Boot this will be done automatically for you).
+1>Make sure that your Spring Configuration is annotated with the 
+@EnableTransactionManagement annotation (In Spring Boot this will 
+be done automatically for you).
 
-    Make sure you specify a transaction manager in your Spring Configuration (this you need to do anyway).
+2>Make sure you specify a transaction manager in your Spring 
+Configuration (this you need to do anyway).
 
-    And then Spring is smart enough to transparently handle transactions for you: Any bean’s public method you annotate with the @Transactional annotation, will execute inside a database transaction (note: there are some pitfalls).
+3>And then Spring is smart enough to transparently handle transactions for 
+you: Any bean’s public method you annotate with the @Transactional annotation, 
+will execute inside a database transaction (note: there are some pitfalls).
 
 So, to get the @Transactional annotation working, all you need to do is this:
 
@@ -255,9 +269,11 @@ public class MySpringConfig {
 
 }
 
-Now, when I say Spring transparently handles transactions for you. What does that really mean?
+Now, when I say Spring transparently handles transactions for you. What does 
+that really mean?
 
-Armed with the knowledge from the JDBC transaction example, the @Transactional UserService code above translates (simplified) directly to this:
+Armed with the knowledge from the JDBC transaction example, the @Transactional 
+UserService code above translates (simplified) directly to this:
 
 public class UserService {
 
@@ -277,11 +293,14 @@ public class UserService {
     }
 }
 
-1>This is all just standard opening and closing of a JDBC connection. That’s what Spring’s transactional annotation does for you automatically, without you having to write it explicitly.
+1>This is all just standard opening and closing of a JDBC connection. That’s 
+what Spring’s transactional annotation does for you automatically, without 
+you having to write it explicitly.
 
 2>This is your own code, saving the user through a DAO or something similar.
 
-This example might look a bit magical, but let’s have a look at how Spring inserts this connection code for you.
+This example might look a bit magical, but let’s have a look at how Spring 
+inserts this connection code for you.
 
 /////////////////////////
 
