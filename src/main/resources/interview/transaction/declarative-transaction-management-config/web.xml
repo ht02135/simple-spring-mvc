@@ -1,0 +1,54 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+         
+    <!-- 
+    If you’re using classic Spring MVC (non-Boot), you’ll need 
+    a web.xml and DispatcherServlet setup:
+    ////////////////////
+    Example API calls (JSON)
+    1>Create User
+    POST /users
+	Content-Type: application/json
+	{
+  		"name": "Alice"
+	}
+	2>Get User
+	GET /users/1
+	3>Create Course
+	POST /courses
+	Content-Type: application/json
+	{
+  	"title": "Spring Framework Basics"
+	}
+	4>Get Course
+	GET /courses/100
+	////////////////////////////
+	UserService & CourseService with @Transactional.
+	UserController & CourseController exposing REST endpoints.
+	Config works with both Spring Boot or classic Spring MVC setup.
+    -->
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>
+                org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>x.y.config.MySpringConfig</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -306,30 +306,38 @@ inserts this connection code for you.
 
 CGlib & JDK Proxies - @Transactional under the covers
 
-Spring cannot really rewrite your Java class, like I did above, to insert the connection code (unless you are using advanced techniques like bytecode weaving, but we are ignoring that for now).
+Spring cannot really rewrite your Java class, like I did above, to insert 
+the connection code (unless you are using advanced techniques like bytecode 
+weaving, but we are ignoring that for now).
 
-Your registerUser() method really just calls userDao.save(user), there’s no way to change that on the fly.
+Your registerUser() method really just calls userDao.save(user), there’s 
+no way to change that on the fly.
 
-But Spring has an advantage. At its core, it is an IoC container. It instantiates a UserService for you and makes sure to autowire that UserService into any other bean that needs a UserService.
+But Spring has an advantage. At its core, it is an IoC container. It 
+instantiates a UserService for you and makes sure to autowire that UserService 
+into any other bean that needs a UserService.
 
-Now whenever you are using @Transactional on a bean, Spring uses a tiny trick. It does not just instantiate a UserService, but also a transactional proxy of that UserService.
+Now whenever you are using @Transactional on a bean, Spring uses a tiny 
+trick. It does not just instantiate a UserService, but also a transactional 
+proxy of that UserService.
 
-It does that through a method called proxy-through-subclassing with the help of the Cglib library. There are also other ways to construct proxies (like Dynamic JDK proxies), but let’s leave it at that for the moment.
+It does that through a method called proxy-through-subclassing with the 
+help of the Cglib library. There are also other ways to construct proxies 
+(like Dynamic JDK proxies), but let’s leave it at that for the moment.
 
 Let’s see proxies in action in this picture:
 document1
 
 As you can see from that diagram, the proxy has one job.
 
-    Opening and closing database connections/transactions.
+Opening and closing database connections/transactions.
 
-    And then delegating to the real UserService, the one you wrote.
+And then delegating to the real UserService, the one you wrote.
 
-    And other beans, like your UserRestController will never know that they are talking to a proxy, and not the real thing.
+And other beans, like your UserRestController will never know that they 
+are talking to a proxy, and not the real thing.
 
 /////////////////////
-
-
 
 Quick Exam
 
