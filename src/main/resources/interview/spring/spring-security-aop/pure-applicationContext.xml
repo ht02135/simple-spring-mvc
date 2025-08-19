@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+           
+    <!--  
+    my previous example was hybrid (aspect declared with annotations + wired in XML).
+    
+    If you want pure XML-based AOP configuration (no annotations at all in the 
+    aspect class), then we remove all @Aspect and @Before annotations and define 
+    everything directly in XML.
+    -->
+
+    <!-- Business Bean -->
+    <bean id="reportService" class="com.example.service.ReportServiceImpl"/>
+
+    <!-- Security Aspect Bean -->
+    <bean id="securityAspect" class="com.example.aspect.SecurityAspect">
+        <!-- Change this to ADMIN or USER to test -->
+        <property name="userRole" value="ADMIN"/>
+    </bean>
+
+    <!-- PURE XML AOP Configuration -->
+    <aop:config>
+        <!-- Define the cross-cutting concern -->
+        <!-- Aspect: Security cross-cutting concern -->
+        <aop:aspect id="security" ref="securityAspect">
+            <!--  
+                 Advisor = Combines a Pointcut + Advice into a single unit
+                 Advice = The actual action to take at a join point (before, after, around).
+                 Pointcut = An expression that selects join points (specific places in code 
+				 where advice applies).
+                 ////////////////////////////////
+                 Advisor = Pointcut + Advice
+                 checkAccess() is the advice method.
+                 pointcut is Pointcut 
+            -->
+            <aop:before 
+            	method="checkAccess"  
+                pointcut="execution(* com.example.service.ReportService.generateReport(..))"/> 
+        </aop:aspect>
+    </aop:config>
+
+</beans>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+           
+    <!--  
+    Spring XML Configuration (applicationContext.xml)
+    -->
+
+    <!-- Business Bean -->
+    <bean id="reportService" class="com.example.service.ReportServiceImpl"/>
+
+    <!-- Security Aspect -->
+    <bean id="securityAspect" class="com.example.aspect.SecurityAspect">
+        <!-- Change this to ADMIN or USER to test -->
+        <property name="userRole" value="ADMIN"/>
+    </bean>
+
+    <!-- Enable AOP -->
+    <aop:config>
+        <aop:aspect ref="securityAspect">
+            <aop:before method="checkAccess" pointcut="execution(* com.example.service.ReportService.generateReport(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
