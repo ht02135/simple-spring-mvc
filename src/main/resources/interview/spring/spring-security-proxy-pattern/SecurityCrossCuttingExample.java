@@ -45,40 +45,6 @@ security logic. It intercepts the generateReport() method call and applies the
 security check before delegating the call to the actual ReportServiceImpl. The 
 business logic remains clean and unaware of the security implementation.
 */
-// 1. The business interface
-public interface ReportService {
-    void generateReport();
-}
-
-// 2. The concrete business implementation
-public class ReportServiceImpl implements ReportService {
-    @Override
-    public void generateReport() {
-        System.out.println("Generating the financial report...");
-    }
-}
-
-// 3. The Security Proxy (the aspect)
-public class SecuredReportServiceProxy implements ReportService {
-    private ReportService target;
-    private String userRole;
-
-    public SecuredReportServiceProxy(ReportService target, String userRole) {
-        this.target = target;
-        this.userRole = userRole;
-    }
-
-    @Override
-    public void generateReport() {
-        // This is the cross-cutting security logic
-        if ("ADMIN".equals(userRole)) {
-            target.generateReport();
-        } else {
-            System.out.println("Access Denied! You do not have permission to generate this report.");
-        }
-    }
-}
-
 // 4. Usage
 public class Client {
     public static void main(String[] args) {

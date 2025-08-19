@@ -83,8 +83,6 @@ the order of the filters.
 
 4>Is security a cross-cutting concern? How is it implemented? and java example 
 
-SecurityCrossCuttingExample.java
-
 Yes, security is a cross-cutting concern. A cross-cutting concern is a feature 
 or aspect of a software system that affects multiple parts of the application 
 but can't be cleanly separated into a single, isolated module. Security, like 
@@ -104,8 +102,10 @@ The implementation often follows these steps:
 1>Interception: The application intercepts requests or method calls at specific 
 points. These points, called join points, are where the security logic needs 
 to be applied.
+
 2>Aspects: A dedicated module or class, the aspect, contains the security logic. 
 This could be a set of rules for authentication or a check for user permissions.
+
 3>Weaving: The aspect is then "woven" into the application's code at the join 
 points. This weaving can happen at different stages:
 a>Compile-time: The security code is injected directly into the bytecode.
@@ -130,6 +130,9 @@ business logic remains clean and unaware of the security implementation.
 ///////////////////////////////////////
 
 5>Explain which security annotations are allowed to use SpEL.
+
+///////////////////////////////////////
+
 6>Explain the differences between authorization and authentication.
 7>Why do we need intercept-URL?
 8>Explain security context.
