@@ -10,6 +10,34 @@
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd">
 
+	<!--
+	a piece of configuration that enables method-level security. This allows 
+	developers to control access to specific methods in their Java application.
+	///////////////
+	This configuration snippet enables three different types of annotations for 
+	method security in a Spring application:
+	/////////////
+    1>pre-post-annotations="enabled": This enables Spring's @PreAuthorize and 
+    @PostAuthorize annotations.
+    1a>@PreAuthorize: This is a powerful annotation that checks security rules before 
+    a method is executed. For example, you could check if a user has a specific role 
+    (@PreAuthorize("hasRole('ADMIN')")) or if they own the resource they're trying to access.
+    1b>@PostAuthorize: This annotation checks security rules after a method has been 
+    executed. It's often used to filter or sanitize the return value of a method. 
+    For example, you might return a list of items and then filter out any that the 
+    user isn't allowed to see.
+    /////////////
+    2>secured-annotations="enabled": This enables the use of the @Secured annotation. 
+    This is a simpler, role-based security model. You can specify a list of roles 
+    that are allowed to access a method, like @Secured({"ROLE_ADMIN", "ROLE_USER"}). 
+    This is a more basic option compared to @PreAuthorize but is often sufficient for 
+    simple role-based access control.
+    /////////////
+    3>jsr250-annotations="enabled": This enables support for the standard Java 
+    @RolesAllowed annotation, which is part of the JSR-250 specification. Similar 
+    to @Secured, it's used for simple role-based access control, but it's a standard 
+    Java annotation, making your code less dependent on the Spring Framework.
+	-->
     <!-- Enable method level security -->
     <global-method-security pre-post-annotations="enabled" 
                            secured-annotations="enabled" 
@@ -42,6 +70,33 @@
                delete-cookies="JSESSIONID"
                invalidate-session="true" />
 
+	<!--
+	It defines how a web application handles user sessions.
+	This configuration controls two key aspects of session management:
+	/////////////
+    1>session-fixation-protection="changeSessionId": This is a security 
+    feature that prevents session fixation attacks. In a session fixation 
+    attack, an attacker tricks a user into logging in with a session ID the 
+    attacker already knows. This configuration combats this by changing the 
+    user's session ID after they successfully log in.
+    /////////////
+    2>concurrency-control: This section manages how many concurrent sessions 
+    a single user can have.
+    2a>max-sessions="1": This is the most significant part of the code. It 
+    restricts a single user to only one active session at a time. For example, 
+    if a user logs in on a laptop, and then tries to log in on a desktop, the 
+    new login will affect the first one.
+    2b>error-if-maximum-exceeded="false": This specifies what happens when a 
+    user attempts to exceed the max-sessions limit. By setting this to false, 
+    the system will invalidate the user's older session and allow the new 
+    session to proceed. If it were true, the new login attempt would be 
+    rejected with an error.
+    /////////////
+	3>expired-url="/login?expired=true": This defines the URL to which the 
+	user is redirected when their session expires or is invalidated (e.g., 
+	by a new login). The user will be sent back to the login page, often 
+	with a message indicating their session has ended.
+	-->
         <!-- Session Management -->
         <session-management session-fixation-protection="changeSessionId">
             <concurrency-control max-sessions="1" 
@@ -52,6 +107,30 @@
         <!-- CSRF Protection -->
         <csrf disabled="false"/>
 
+		<!--
+		It allows a user to stay logged in to a web application even after closing 
+		their browser.  
+		//////////////////
+		The configuration sets up the following key behaviors:
+    	1>key="uniqueAndSecret": This is a required and very important part of the 
+    	configuration. The key is a private secret used to generate a unique token 
+    	for the "Remember Me" cookie. This is a security measure to prevent tampering 
+    	with the cookie. You should use a strong, unique, and secret value for this 
+    	key in a production environment.
+    	2>token-validity-seconds="86400": This determines how long the "Remember Me" 
+    	cookie remains valid, in seconds. In this example, 86,400 seconds is 
+    	equivalent to 24 hours. This means a user will stay logged in for up to 
+    	one day without having to re-enter their credentials.
+    	3>user-service-ref="userDetailsService": This attribute references the 
+    	UserDetailsService bean in your Spring application. The UserDetailsService 
+    	is responsible for loading a user's details (like their username, password, 
+    	and roles) from a data source (e.g., a database). When a user returns with 
+    	a valid "Remember Me" cookie, Spring Security uses this service to 
+    	automatically log them back in.
+    	4>Essentially, this snippet creates a persistent, secure way for users to 
+    	maintain their authenticated session, improving user convenience while 
+    	managing the associated security risks.
+		-->
         <!-- Remember Me -->
         <remember-me key="uniqueAndSecret" 
                     token-validity-seconds="86400"
