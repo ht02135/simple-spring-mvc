@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security
+        https://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+        
+    <!--  
+    applicationContext-security.xml (XML config for AOP & security)
+	If you want XML equivalent, here’s how you’d wire it:
+    -->
+
+    <!-- Enable Spring Security annotations -->
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+    <!-- Example AOP setup -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- Define service bean -->
+    <bean id="orderService" class="com.example.securityaopdemo.service.OrderService"/>
+</beans>
