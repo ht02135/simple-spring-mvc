@@ -70,6 +70,37 @@
         </headers>
     </http>
 
+    <!--
+    Summary of Authentication Provider Usage
+	The key points about multiple authentication providers:
+	////////////////////
+	1>Sequential Processing: Spring Security tries each provider in the exact 
+	order they appear in the XML configuration
+	2>First Success Wins: Once a provider successfully authenticates a user, 
+	the authentication chain stops - subsequent providers are ignored
+	3>Fallback on Failure: If a provider fails authentication (throws 
+	AuthenticationException), Spring moves to the next provider
+	4>Common Use Cases:
+	4a>Development vs Production: In-memory for dev, database for prod
+	4b>Enterprise Multi-Source: LDAP for employees, database for customers
+	4c>Gradual Migration: Old system fallback while migrating to new auth
+	4d>Emergency Access: Backup authentication method for critical situations
+	5>Real-World Example Flow:
+		User Login → Custom Provider (LDAP) → Success? → Done
+                  ↓ (Failed)
+           Database Provider → Success? → Done
+                  ↓ (Failed)
+           In-Memory Provider → Success/Fail → Done
+    //////////////////////////////
+    Best Practice: In production, typically use only ONE authentication provider 
+    for clarity and security. Multiple providers are mainly useful for:
+	Environment-specific configurations (dev/test/prod)
+	Migration scenarios
+	Enterprise environments with multiple user sources
+	The updated documentation now clearly shows when and why you'd use each provider 
+	type, with practical examples and debugging guidance.
+    -->
+    
     <!-- Authentication Manager with Multiple Providers -->
     <!-- 
     IMPORTANT: Spring Security tries authentication providers in the ORDER they are declared.

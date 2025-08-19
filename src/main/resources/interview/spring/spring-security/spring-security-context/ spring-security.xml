@@ -99,6 +99,7 @@
 	The updated documentation now clearly shows when and why you'd use each provider 
 	type, with practical examples and debugging guidance.
     -->
+    
     <!-- SCENARIO 2: Multiple Providers (Fallback Chain) -->
     <!-- This configuration tries providers in sequence until one succeeds -->
     <!-- Authentication Manager -->
