@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/data/jpa
+           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <!-- Component Scan -->
+    <context:component-scan base-package="com.example">
+        <context:exclude-filter type="annotation" 
+                               expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <!-- Property Placeholder -->
+    <context:property-placeholder location="classpath:application.properties" />
+
+    <!-- Data Source -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <!-- JPA Entity Manager Factory -->
+    <bean id="entityManagerFactory" 
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="com.example.entity" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="generateDdl" value="true" />
+                <property name="databasePlatform" value="${hibernate.dialect}" />
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <!-- Enable JPA Repositories -->
+    <jpa:repositories base-package="com.example.repository" />
+
+    <!-- Enable Transaction Management -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- Security related beans -->
+    <bean id="userService" class="com.example.service.UserService" />
+    <bean id="roleService" class="com.example.service.RoleService" />
+
+    <!-- JWT Token Provider (if using JWT) -->
+    <bean id="jwtTokenProvider" class="com.example.security.JwtTokenProvider">
+        <property name="secretKey" value="${jwt.secret}" />
+        <property name="validityInMilliseconds" value="${jwt.expiration}" />
+    </bean>
+
+    <!-- Security Context Repository -->
+    <bean id="securityContextRepository"
+          class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
+
+</beans>
