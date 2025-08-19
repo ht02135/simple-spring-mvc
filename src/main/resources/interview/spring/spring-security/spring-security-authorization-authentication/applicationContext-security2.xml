@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="
+              http://www.springframework.org/schema/security
+              https://www.springframework.org/schema/security/spring-security.xsd
+              http://www.springframework.org/schema/beans
+              https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  
+    applicationContext-security.xml
+	This is the XML-based Spring Security config that enables annotation-based 
+	method security.
+	//////////////////
+	{noop} means "plain text password" (no encoding) for demo purposes.
+	Both in-XML user definitions and your CustomUserDetailsService will work, 
+	but here I showed the in-memory config. You can swap it with DB + 
+	UserDetailsService as below.
+    -->
+
+    <!-- Enable @PreAuthorize / @PostAuthorize -->
+    <global-method-security pre-post-annotations="enabled" />
+
+	<!--  
+	Flow in Action
+	1>User sends credentials (/login form or Basic Auth).
+	2>Spring Security → DaoAuthenticationProvider.
+	3>Provider calls your CustomUserDetailsService.loadUserByUsername(username).
+	4>Password compared via BCryptPasswordEncoder.
+	5>On success → SecurityContextHolder stores the authenticated principal.
+	6>@PreAuthorize checks use authentication.name and roles.
+	/////////////////////////
+	You must tell Spring Security to use your bean customUserDetailsService 
+	instead of the inline <user-service>.
+	/////////////////////////
+	Here you are telling Spring Security:
+	“Instead of using the in-memory UserDetailsService, please use my 
+	bean with id=customUserDetailsService.”
+	That bean must exist — either defined as
+	/////////////////////////
+	Where do name="admin" / name="user" come from?
+	In Case 2: they do not exist anymore. Users must come from your database 
+	(via CustomUserDetailsService).
+	Case 2 = custom service is called, users must come from DB.
+	-->
+    <!-- Hook your CustomUserDetailsService into authentication manager -->
+    <authentication-manager>
+        <authentication-provider user-service-ref="customUserDetailsService">
+            <password-encoder ref="passwordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+	<!--
+	We need <intercept-url> to define which URLs (or web resources) are protected 
+	and what authorization rules apply to them. It's a fundamental part of a 
+	security framework like Spring Security, allowing you to create a security 
+	policy by mapping specific URL patterns to required access permissions.
+    /////////////////////////////////
+	How it Works
+	The <intercept-url> element acts as a security filter. When an incoming 
+	request matches a defined URL pattern, the framework checks the associated 
+	access rule.
+
+	1>URL Matching: The pattern attribute specifies the URL path to be secured 
+	(e.g., /api/v1/resources/admin).
+	2>Access Control: The access attribute specifies the permissions required 
+	to access that URL. This typically uses expressions like hasRole() or 
+	isAuthenticated(). If the user's roles or permissions don't match, the 
+	request is blocked, and the user is denied authorization.
+	/////////////////////////////////
+	Why it's Necessary
+	Without <intercept-url>, all your application's URLs would be either 
+	completely open or completely locked down, with no granularity. It enables 
+	you to implement a fine-grained security model, such as:
+
+	1>Restricting Admin Access: As in your example, only users with the 
+	ADMIN role can access /api/v1/resources/admin.
+	2>Controlling User-Level Access: Allowing both ADMIN and USER roles 
+	to access /api/v1/resources/public.
+	3>Allowing Public Access: You could specify access="permitAll" for public 
+	pages like a home page or login form, which don't require any authentication.  
+	-->
+    <!-- HTTP security rules -->
+    <http>
+        <intercept-url pattern="/api/v1/resources/admin" access="hasRole('ADMIN')" />
+        <intercept-url pattern="/api/v1/resources/public" access="hasAnyRole('ADMIN','USER')" />
+        <form-login />
+        <http-basic />
+        <logout />
+    </http>
+
+    <!-- Expose CustomUserDetailsService bean -->
+    <beans:bean id="customUserDetailsService"
+                class="com.example.security.service.CustomUserDetailsService"/>
+
+    <!-- Password encoder (BCrypt is recommended) -->
+    <beans:bean id="passwordEncoder"
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+</beans:beans>
