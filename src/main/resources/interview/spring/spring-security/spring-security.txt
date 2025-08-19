@@ -1,0 +1,97 @@
+
+Spring Security Interview Questions
+
+spring-security.txt
+
+///////////////////////////////////////
+
+1>What is the security filter chain in Spring Security? and java example 
+
+The security filter chain in Spring Security is a series of filters 
+that process incoming HTTP requests to apply security measures. 
+
+Each filter in the chain has a specific purpose, such as authentication, 
+authorization, or handling exceptions. When an HTTP request arrives, 
+it passes through this chain of filters in a predefined order. 
+
+If a filter determines that the request is not authorized or authenticated, 
+it can reject the request, preventing it from reaching the application's 
+resources.
+
+///////////////////////////////////////
+
+2>Describe some of the predefined filters used by Spring Security. What are 
+their functions, and in which order do they occur? and java example 
+
+Spring Security uses a chain of filters to handle a request's security aspects, 
+like authentication and authorization. Each filter in the chain has a specific 
+purpose and operates in a predetermined order. While you can customize and add 
+your own, here are some key predefined filters and their functions:
+
+Predefined Filters and Functions
+
+1>SecurityContextPersistenceFilter: This is typically the first filter in the 
+chain. Its job is to populate the SecurityContextHolder with the user's 
+authentication information, usually from the HTTP session. It ensures the 
+security context is available to other filters and components for the duration 
+of the request.
+
+2>UsernamePasswordAuthenticationFilter: This filter processes form-based logins. 
+It extracts the username and password from the request and attempts to authenticate 
+the user. If successful, it creates an Authentication object and stores it in 
+the SecurityContextHolder.
+
+3>LogoutFilter: This filter handles logout requests. It's responsible for invalidating 
+the session, clearing the SecurityContext, and redirecting the user to a specified 
+logout success URL.
+
+4>ExceptionTranslationFilter: This filter is crucial for handling security-related 
+exceptions. It catches AuthenticationException and AccessDeniedException and then 
+either redirects the user to an authentication entry point (like a login page) 
+or invokes an AccessDeniedHandler to handle the error.
+
+5>FilterSecurityInterceptor: This is one of the last filters in the chain. It 
+enforces authorization rules. It inspects the request and checks if the authenticated 
+user has the necessary permissions to access the requested resource. If not, it 
+throws an AccessDeniedException.
+    
+///////////////////////////////////////
+
+3>How will you implement a custom filter in Spring Security? and java example 
+
+To implement a custom filter in Spring Security, you'll need to create a 
+filter class, configure it to be managed by Spring, and then add it to 
+the filter chain at the appropriate position. A custom filter is essential 
+when you need to perform actions like API key validation, token-based 
+authentication, or logging before the request reaches the application's endpoints.
+
+Step 1: Create the Custom Filter Class
+First, create a class that extends OncePerRequestFilter. This abstract class 
+guarantees that your filter's doFilterInternal method will only be called 
+once per request, which prevents redundant processing.
+
+This example filter CustomAuthenticationFilter checks for a header named X-API-Key. If the header 
+exists and its value is "my-secret-key", the filter allows the request 
+to proceed. Otherwise, it sends an HTTP 401 Unauthorized response.
+
+Step 2: Configure the Filter in Spring Security
+Next, you need to register your custom filter CustomAuthenticationFilterConfig.java with Spring's security 
+configuration. You'll use the SecurityFilterChain bean to define 
+the order of the filters.
+
+///////////////////////////////////////
+
+4>Is security a cross-cutting concern? How is it implemented? and java example
+
+///////////////////////////////////////
+
+5>Explain which security annotations are allowed to use SpEL.
+6>Explain the differences between authorization and authentication.
+7>Why do we need intercept-URL?
+8>Explain security context.
+9>Who is responsible for managing the life-cycle of filter bean in Spring?
+10>What is delegating filter proxy in Spring Security?
+
+Spring interview questions cover a wide range of Spring concepts. You must be familiar with all of them to pass the interview. We hope that these sample Spring interview questions will help you with your preparations.
+
+

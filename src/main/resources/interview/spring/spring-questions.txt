@@ -293,22 +293,6 @@ Spring Beans Interview Questions
 
 ////////////////////////////////////
 
-Spring Security Interview Questions
-
-    What is the security filter chain in Spring Security?
-    Describe some of the predefined filters used by Spring Security. What are their functions, and in which order do they occur?
-    How will you implement a custom filter in Spring Security?
-    Is security a cross-cutting concern? How is it implemented?
-    Explain which security annotations are allowed to use SpEL.
-    Explain the differences between authorization and authentication.
-    Why do we need intercept-URL?
-    Explain security context.
-    Who is responsible for managing the life-cycle of filter bean in Spring?
-    What is delegating filter proxy in Spring Security?
-
-Spring interview questions cover a wide range of Spring concepts. You must be familiar with all of them to pass the interview. We hope that these sample Spring interview questions will help you with your preparations.
-
-
 
 
 
