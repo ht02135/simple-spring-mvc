@@ -200,22 +200,6 @@ Spring Core Interview Questions
     What are the different IOC containers available in Spring?
     What beans scopes Spring supports?
 
-///////////////////////
-
-Spring IoC Interview Questions
-
-    What are IoC and DI in Spring?
-    What is the use of IoC containers?
-    What is autowiring, and name the different modes of it?
-    What is DispatcherServlet in Spring MVC? In other words, can you explain the Spring MVC architecture?
-    Which method is used for shutting down IoC containers in Spring?
-    What is the implementation of List that is used when you use the <list> tag in a bean definition?
-    How do you use a particular implementation of collection in your bean definition?
-    Are singleton beans in Spring a regular singleton object?
-    If an inner bean is defined with an id, can you use this id to fetch the bean from the container?
-    What are the actuator-provided endpoints used for monitoring the Spring boot application?
-
-
 //////////////////////////
 
 Spring Hibernate Interview Questions
@@ -264,22 +248,6 @@ Spring Data JPA Interview Questions
 
 
 ////////////////////////////
-
-Spring Annotations Interview Questions
-
-    How can annotation wiring be turned on in Spring?
-    Explain @Required annotation?
-    What does @RequestMapping annotation mean?
-    What do you understand from @Autowired annotation?
-    Explain the differences between JSR-250 Annotations and @Qualifier annotations.
-    Explain the Annotation-based container configuration.
-    Highlight the role of @SpringBootApplication.
-    Is it possible to send an Object as the response of the Controller handler method?
-    Explain @ModelAttribute?
-    Tell us the difference between the Configuration types XML and Annotation?
-
-
-//////////////////////////////
 
 Spring Beans Interview Questions
 

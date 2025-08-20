@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           
+    <!--
+    In Spring, IoC (Inversion of Control) and DI (Dependency Injection) are 
+    fundamental concepts that help build loosely coupled and modular applications. 
+    IoC is the principle, and DI is a specific design pattern that implements 
+    that principle.
+	/////////////////////////
+	Inversion of Control (IoC)
+	IoC is a design principle where the framework, rather than the application code, 
+	takes control of object creation, configuration, and lifecycle management. 
+	Traditionally, you'd create objects within your code using the new keyword. 
+	With IoC, the Spring container "inverts" this control, handling the instantiation 
+	and wiring of objects (beans) for you.  This means your code focuses on 
+	its business logic, delegating the object management responsibilities to 
+	the framework.  
+	hung: ioc is spring framework manage pojo obj lifecycle.
+    /////////////////////////
+    Dependency Injection (DI)
+	DI is the most common implementation of IoC in Spring. It's a design pattern 
+	where an object receives its dependencies (other objects it needs to function) 
+	from an external source, rather than creating them itself. Instead of a class 
+	looking up or creating its dependencies, the Spring container "injects" them 
+	into the class. The dependencies are typically provided through a constructor, 
+	setter method, or field.
+	hung: di is pojo obj receive its dependencies from externaal source.
+	/////////////////////////
+    1>Constructor Injection: Dependencies are provided through the class's constructor. 
+    This is the preferred method as it ensures the object is created with all 
+    its necessary dependencies and makes the object immutable.
+	2>Setter Injection: Dependencies are provided through setter methods. This is 
+	useful for optional dependencies or for classes that need to be reconfigured 
+	at runtime.
+	3>Field Injection: Dependencies are injected directly into a field using 
+	annotations. While convenient, it's generally discouraged in favor of 
+	constructor injection because it hides dependencies and makes the class harder to test.
+    /////////////////////////
+    In this code, the NotificationService doesn't create a MessageService instance 
+    itself. Instead, it declares its dependency in the constructor. Spring's 
+    @Autowired annotation tells the container to find a bean that implements 
+    the MessageService interface (in this case, EmailService) and inject it.
+    
+    1><beans>: This is the root element of the Spring configuration file. It 
+    contains the definitions for all your beans.
+	2><bean>: This element defines a single bean. The id attribute is the 
+	unique name of the bean, and the class attribute specifies the fully 
+	qualified class name.
+	3><constructor-arg>: This element is used to inject a dependency into a 
+	bean's constructor. The ref attribute points to the ID of another bean 
+	(emailService in this case) that will be passed into the constructor of 
+	the notificationService bean. This is how Dependency Injection is 
+	configured in XML.
+	4><property>: An alternative to <constructor-arg>, this element is used 
+	for setter injection. You would use it like <property name="messageService" 
+	ref="emailService"/> if NotificationService had a setMessageService method.
+    -->
+
+    <bean id="emailService" class="com.example.EmailService"/>
+
+    <bean id="notificationService" class="com.example.NotificationService">
+        <constructor-arg ref="emailService"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,20 @@
+
+spring-annotation
+spring-annotation.txt
+
+Spring Annotations Interview Questions
+
+/////////////////
+
+1>How can annotation wiring be turned on in Spring?
+2>Explain @Required annotation?
+3>What does @RequestMapping annotation mean?
+4>What do you understand from @Autowired annotation?
+5>Explain the differences between JSR-250 Annotations and @Qualifier annotations.
+6>Explain the Annotation-based container configuration.
+7>Highlight the role of @SpringBootApplication.
+8>Is it possible to send an Object as the response of the Controller handler method?
+9>Explain @ModelAttribute?
+10>Tell us the difference between the Configuration types XML and Annotation?
+    
+/////////////////

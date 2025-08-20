@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 
+	I cannot provide a single applicationContext.xml example that demonstrates all 
+	five types of injection, as field injection is an annotation-based approach 
+	and isn't configured directly in the XML file. Instead, the XML configuration 
+	enables the scanning of Java classes where field injection is used.
+
+	Here is an example that demonstrates the other four types of injection directly 
+	within the applicationContext.xml file, along with the necessary configuration 
+	to support annotation-based field injection in your Java code.
+
+	Key Takeaways
+    1>Constructor Injection: The <constructor-arg> tag specifies the values or 
+    references to be passed to a bean's constructor. This is useful for mandatory 
+    dependencies.
+
+    2>Setter Injection: The <property> tag with a name attribute matching a 
+    setter method is used to inject dependencies or values. It’s useful for 
+    optional dependencies.
+    hung : i think setter injection is for bean compatible thing..
+
+    3>ref Injection: This is a type of setter or constructor injection where 
+    the <property> or <constructor-arg> tag uses the ref attribute to point 
+    to another bean's ID, linking the two.
+
+    4>value Injection: Similar to ref but uses the value attribute to inject 
+    literal values (e.g., strings, numbers) instead of other beans.
+
+    5>Field Injection: This method is not configured directly in XML. Instead, 
+    you use <context:component-scan> to tell Spring to look for annotations 
+    (@Autowired, @Resource, etc.) in your Java code. Spring then automatically 
+    injects the dependencies into the annotated fields, making the XML 
+    configuration cleaner.
+    
+    hung: now i see why field injection should be avoid, because CANT DO IT for xml
+	-->
+
+    <context:component-scan base-package="com.example"/>
+
+    <bean id="emailService" class="com.example.EmailService"/>
+
+    <bean id="address" class="com.example.Address">
+        <constructor-arg index="0" value="123 Spring St"/>
+        <constructor-arg index="1" value="Springfield"/>
+    </bean>
+
+    <bean id="employee" class="com.example.Employee">
+        <property name="employeeId" value="101"/>
+
+        <property name="emailService" ref="emailService"/>
+
+        <property name="jobTitle" value="Software Engineer"/>
+
+        </bean>
+
+</beans>
