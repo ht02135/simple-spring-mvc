@@ -1,0 +1,44 @@
+Hung En Tsai Phone: (617) 783-6370 | E-mail: ht02135@yahoo.com
+
+OBJECTIVE:	Seeking full-time software related position.
+
+EDUCATION:	B.S., Computer Science, University of Massachusetts at Boston, 1997
+
+COMPUTER SKILLS:
+Concept: 	OOA/OOD, Design Patterns, Network, Scrum
+Framework: 	Spring (MVC, Batch), Hibernate/JPA, iBATIS, RESTful (SpringMVC, Jersey 		JAX-RS)
+Language: 	Java, C, C++, C#, VB/.NET ASP, JavaScript, SQL, PL-SQL, T-SQL, Perl, Lisp, 		Pascal
+Web: 		J2EE (JDBC, JTA, EJB, JSP/Servlet/JSTL/JSF, JMS, JavaMail), Struts, Java 		Beans, Swing, POJO, HTML, CSS, DOM, XML, JSON, Ajax, JQuery, 			KnockoutJS, AngularJS, Flex 3
+Software: 	Direxxis dmEDGE, Sungard Asset Arena, CentraOne Live, SiteMinder, MIIS, 		Visual Age, Visual Café, Visual C++, Visual Basic, Visual Test, LotusScript, 		Lotus Notes
+Systems: 	Android, Windows 7/8/10/11, UNIX 4.3+BSD
+Test: 		Jira, JUnit, EasyMock, Mockito, DBUnit, Selenium, JMeter, JUnitPerf, 			Cobertura, HttpUnit, JVisualVM, Eclipse Memory Analyzer, Visual Test
+Tools: 	STS, Eclipse, Maven, Ant, Git, SVN, CVS, ClearCase, Jenkins, Bamboo, 			Apache Tomcat, Load Balancer, Solr, Archiva, ActiveMQ, MySQL, Sybase, 		Microsoft SQL Server, Oracle, DB2
+Cloud/: 	AWS (EC2, ECS), Docker
+
+WORK EXPERIENCES:
+Implementation Engineer | Broadridge, NY | Jan 2013 – Jul 2025 | broadridge.com
+- Implemented client marketing portal content (programs, filters, documents, payments) using jQuery, Knockout.js, Flex 3, Spring, and Hibernate. 
+- Configured portal landing pages, workflow screens, batch schedules, jobs, and Docker services. 
+- Performed AWS deployments (EC2, ECS microservices) for major clients (Allstate, Humana, New York Life, Wells Fargo) using Jenkins and in-house JSON/YAML automation. 
+- Managed on-premise deployments (pre-AWS migration) for clients including Ameriprise, AXA, Guardian, Mass Mutual, Schwab, and others.
+
+Software Engineer | Sungard Asset Arena, MA | Sep 2006 – Dec 2012 | sungard.com
+- Served as Scrum Master, leading daily scrums, sprint planning, backlog grooming, and impediment management. 
+- Designed and implemented financial components including blotter widgets, settlement calculation, classification, and middleware integration using Spring, POJO, CCL API, and EJB. 
+- Developed Asset Arena Manager (instrument/instruction/benchmark creation) using JPA, Spring, and Design Patterns. 
+- Built Asset Arena Trader components (execution, transaction, validation) using Swing, WebLogic, and J2EE design patterns. 
+- Supported legacy Asset Arena Manager and batch/ connectivity services.        
+
+Software Engineer | Saba Software, MA | Sep 2000 – Sep 2006 | saba.com
+- Developed client/server components for Centra Knowledge Center integration and Centra Live security enhancements using VB/.NET ASP, PL-SQL/T-SQL, and Centra API Toolkit. 
+- Implemented SiteMinder SSO integration with Centra Live servers using custom agents (C & Java). 
+- Built client playback, installation, and upgrade processes using ActiveX DLLs, JSP, and EJB. 
+- Developed user interfaces and server-side components using MVC patterns, PL-SQL, JSP, Servlets, and EJB.
+        
+Software Quality Engineer II | Lotus, MA | Jan 1997 – Aug 2000 | lotus.com
+- Tested Lotus LearningSpace integration with MIIS, Microsoft SQL Server, Oracle, DB2, SameTime, and Domino. 
+- Developed automated test suites for Lotus eSuite (Java-based applications) using Visual Age, Lotus Notes, JScript, and in-house tools. 
+- Built test frameworks for Lotus SmartSuite with ActiveX OLE Controls, Visual C++/Basic, MFC, and LotusScript.
+        
+REFERENCE:	Available on request
+  
