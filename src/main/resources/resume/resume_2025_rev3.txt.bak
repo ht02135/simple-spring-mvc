@@ -18,10 +18,10 @@ Cloud/: 	AWS (EC2, ECS), Docker
 WORK EXPERIENCES:
 Implementation Engineer | Broadridge, NY | Jan 2013 – Jul 2025 | broadridge.com
 - Configured and customized client marketing portal implementations including content management (programs, filters, documents, accounts, payments), landing pages, workflow screens, and core functionalities using jQuery, Knockout.js, Flex 3, XML, Spring Framework, and ibatis for enterprise financial services clients
-- Configured and customized Spring Batch processing implementations including job scheduling, batch processes, and data pipeline configurations using Spring Framework, Spring Batch 1.0/2.0, and iBATIS data mapping, plus Docker containerization services for clients extract processses
+- Configured and customized Spring Batch processing implementations including job scheduling, batch processes, and data pipeline configurations using Spring Framework, Spring Batch 1.0/2.0, and iBATIS data mapping, plus Docker containerization services for scalable deployment architectures
 - Managed comprehensive project lifecycle operations including version upgrade releases, feature enhancements, client-specific Service Enhancement Requests (SER), Business-As-Usual (BAU) maintenance projects, production issue troubleshooting, and critical bug resolution across enterprise client environments
-- Executed AWS DEV/UAT/PROD EC2 (userApp/batchApp) and ECS (microservices) upgrade and enhancement deployments for AWS-migrated clients (Allstate, Humana, New York Life, Wells Fargo) using proprietary JSON/YAML scripts to generate Jenkins build instructions for package creation and deployment to AWS ECS/EC2, including infrastructure health monitoring via AWS Console
-- Managed upgrade and enhancement deployments for on-premises clients (Allstate, Ameriprise, AXA, Erie, Guardian, Humana, Mass Mutual, New York Life, Purina, Schwab, Wells Fargo) prior to AWS migration using on-premises Jenkins automation, Apache Tomcat application servers with load balancers, Apache Solr search platforms, and Docker containerization
+- Led AWS cloud migration and deployment operations for major financial clients (Allstate, Humana, New York Life, Wells Fargo), managing DEV/UAT/PROD environments across EC2 instances (userApp/batchApp) and ECS microservices using proprietary JSON/YAML automation scripts, Jenkins CI/CD pipelines, and AWS Console monitoring for infrastructure health and performance optimization
+- Executed deployment operations for on-premises enterprise clients (Allstate, Ameriprise, AXA, Erie, Guardian, Humana, Mass Mutual, New York Life, Purina, Schwab, Wells Fargo) managing Jenkins automation, Apache Tomcat application servers, load balancer configurations, Apache Solr search platforms, and Docker containerization before cloud migration initiatives
 
 Software Engineer | Sungard Asset Arena, MA | Sep 2006 – Dec 2012 | sungard.com
 - Served as Scrum Master for Client Development team, facilitating daily standups, planning bi-weekly sprints balancing client customization projects (50%, 1-2 weeks) with core product development initiatives (50%, 2-4 weeks), managing product backlog maintenance issues, and resolving project impediments to optimize team performance
@@ -29,7 +29,7 @@ Software Engineer | Sungard Asset Arena, MA | Sep 2006 – Dec 2012 | sungard.co
 - Worked on various enterprise financial software components for Asset Arena Manager/Trader platform, including custom blotter widgets, settlement date calculation engines, import/notification classification systems, and middleware integration with third-party Money Market Instrument (MMI) applications using Spring Framework, POJO architecture, CCL API, SunGard APSYS API, Enterprise JavaBeans (MDB), and XML/JAXB processing
 - Built server-side components for next-generation Asset Arena Manager, implementing new instrument/instruction/benchmark creation workflows with JForm Widget UI integration, leveraging Spring Framework with Java Persistence API (JPA), POJO design patterns, and modern enterprise architecture principles
 - Developed client/server solutions for Asset Arena Trader platform, creating execution, transaction, and validation workflows with Swing UI and WebLogic/J2EE deployment, implementing industry-standard design patterns including Application Controller with Command Handler Strategy, Business Delegate, Service Locator, and Data Access Object patterns
-- Maintained and enhanced legacy Asset Arena Manager and Asset Arena Batch/Connectivity modules using Enterprise JavaBeans (MDB) and proprietary CCL programming language for high-volume financial data processing    
+- Maintained and enhanced legacy Asset Arena Manager and Asset Arena Batch/Connectivity modules using Enterprise JavaBeans (MDB) and proprietary CCL programming language for high-volume financial data processing       
 
 Software Engineer | Saba Software, MA | Sep 2000 – Sep 2006 | saba.com
 - Developed web components for Centra Knowledge Center integration and security enhancements, implementing client/server solutions using VB/.NET ASP, PL-SQL/T-SQL, and Centra API Toolkit with XML processing through JAXP and Enterprise JavaBeans (EJB)
@@ -40,8 +40,8 @@ Software Engineer | Saba Software, MA | Sep 2000 – Sep 2006 | saba.com
         
 Software Quality Engineer II | Lotus, MA | Jan 1997 – Aug 2000 | lotus.com
 - Worked on installation testing for Lotus LearningSpace across enterprise environments, ensuring seamless integration with Microsoft Internet Information Services (MIIS), Microsoft SQL Server, Oracle Database, IBM DB2, Lotus SameTime/Domino, and Symantec Ghost
-- Developed test automation for Lotus eSuite Java-based application suite, including Java Beans/applets testing using JDK, AWT, and Java Foundation Classes, plus web interface validation with Visual Age for Java, Café IDE, Lotus Notes Web Designer, and custom JScript automation
-- Developed test automation for Lotus SmartSuite office suite, specializing in ActiveX/OLE Controls testing with Visual C++/MFC frameworks and advanced OLE Automation/interoperability scripting using Visual Test/Basic and LotusScript
+- Developed test automation frameworks for Lotus eSuite Java-based application suite, including Java Beans/applets testing using JDK, AWT, and Java Foundation Classes, plus web interface validation with Visual Age for Java, Café IDE, Lotus Notes Web Designer, and custom JScript automation
+- Designed and implemented testing methodologies for Lotus SmartSuite office suite, specializing in ActiveX/OLE Controls testing with Visual C++/MFC frameworks and advanced OLE Automation/interoperability scripting using Visual Test/Basic and LotusScript
         
 REFERENCE:	Available on request
   
