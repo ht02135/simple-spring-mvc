@@ -13,11 +13,11 @@ Software: 	Direxxis dmEDGE, Sungard Asset Arena, CentraOne Live, SiteMinder, MII
 Systems: 	Android, Windows 7/8/10/11, UNIX 4.3+BSD
 Test: 		Jira, JUnit, EasyMock, Mockito, DBUnit, Selenium, JMeter, JUnitPerf, 			Cobertura, HttpUnit, JVisualVM, Eclipse Memory Analyzer, Visual Test
 Tools: 	STS, Eclipse, Maven, Ant, Git, SVN, CVS, ClearCase, Jenkins, Bamboo, 			Apache Tomcat, Load Balancer, Solr, Archiva, ActiveMQ, MySQL, Sybase, 		Microsoft SQL Server, Oracle, DB2
-Cloud/: 	AWS (EC2, ECS), Docker
+Cloud: 	AWS (EC2, ECS), Docker
 
 WORK EXPERIENCES:
 Implementation Engineer | Broadridge, NY | Jan 2013 – Jul 2025 | broadridge.com
-- Configured and customized client marketing portal implementations including content management (programs, filters, documents, accounts, payments), landing pages, workflow screens, and core functionalities using jQuery, Knockout.js, Flex 3, XML, Spring Framework, and ibatis for enterprise financial services clients
+- Configured and customized client marketing portal implementations including content management (programs, filters, documents, accounts, payments), landing pages, workflow screens, and core functionalities using jQuery, Knockout.js, Flex 3, XML, Spring Framework, and iBATIS data mapping for enterprise financial services clients
 - Configured and customized Spring Batch processing implementations including job scheduling, batch processes, and data pipeline configurations using Spring Framework, Spring Batch 1.0/2.0, and iBATIS data mapping, plus Docker containerization services for clients extract processses
 - Managed comprehensive project lifecycle operations including version upgrade releases, feature enhancements, client-specific Service Enhancement Requests (SER), Business-As-Usual (BAU) maintenance projects, production issue troubleshooting, and critical bug resolution across enterprise client environments
 - Executed AWS DEV/UAT/PROD EC2 (userApp/batchApp) and ECS (microservices) upgrade and enhancement deployments for AWS-migrated clients (Allstate, Humana, New York Life, Wells Fargo) using proprietary JSON/YAML scripts to generate Jenkins build instructions for package creation and deployment to AWS ECS/EC2, including infrastructure health monitoring via AWS Console
@@ -25,7 +25,7 @@ Implementation Engineer | Broadridge, NY | Jan 2013 – Jul 2025 | broadridge.co
 
 Software Engineer | Sungard Asset Arena, MA | Sep 2006 – Dec 2012 | sungard.com
 - Served as Scrum Master for Client Development team, facilitating daily standups, planning bi-weekly sprints balancing client customization projects (50%, 1-2 weeks) with core product development initiatives (50%, 2-4 weeks), managing product backlog maintenance issues, and resolving project impediments to optimize team performance
-- Served as technical team lead managing complete project lifecycle from requirements analysis through delivery, including effort estimation, technical specification authoring, implementation guidance for offshore development teams, code review coordination with senior engineers, and deployment communication with Software Quality Engineering teams
+- Served as technical team lead managing complete project lifecycle from requirements analysis through delivery, including effort estimation, technical specification authoring, implementation guidance for offshore client development teams, code review coordination with senior engineers, and deployment communication with Software Quality Engineering teams
 - Worked on various enterprise financial software components for Asset Arena Manager/Trader platform, including custom blotter widgets, settlement date calculation engines, import/notification classification systems, and middleware integration with third-party Money Market Instrument (MMI) applications using Spring Framework, POJO architecture, CCL API, SunGard APSYS API, Enterprise JavaBeans (MDB), and XML/JAXB processing
 - Built server-side components for next-generation Asset Arena Manager, implementing new instrument/instruction/benchmark creation workflows with JForm Widget UI integration, leveraging Spring Framework with Java Persistence API (JPA), POJO design patterns, and modern enterprise architecture principles
 - Developed client/server solutions for Asset Arena Trader platform, creating execution, transaction, and validation workflows with Swing UI and WebLogic/J2EE deployment, implementing industry-standard design patterns including Application Controller with Command Handler Strategy, Business Delegate, Service Locator, and Data Access Object patterns
