@@ -320,10 +320,139 @@ SecurityContextHolder clears context after request completion
 
 9>Who is responsible for managing the life-cycle of filter bean in Spring?
 
+The Spring IoC (Inversion of Control) container is responsible for managing 
+the lifecycle of a filter bean. When a filter is defined as a Spring bean, 
+the Spring container handles its instantiation, dependency injection, and 
+destruction, just like it does for any other bean.
+
+The Spring container manages a bean's lifecycle through a series of steps:
+
+1>Instantiation: The container creates an instance of the filter class, 
+typically by calling its default constructor.
+
+2>Dependency Injection: The container injects any dependencies that the 
+filter requires (e.g., using @Autowired).
+
+3>Initialization: After dependencies are set, the container may call 
+initialization methods. This can be done through interfaces like 
+InitializingBean (with the afterPropertiesSet() method), or through 
+annotations like @PostConstruct. This is a good time for a filter to 
+perform any setup tasks.
+
+4>Ready for use: The filter is now fully initialized and ready to be used to process requests.
+
+5>Destruction: When the Spring container is shut down, it calls destruction 
+methods on the bean. This is handled by interfaces like DisposableBean 
+(with the destroy() method) or annotations like @PreDestroy. This is where 
+a filter can perform cleanup tasks.
+
+It's important to note the distinction between 
+a filter managed by the Spring container 
+and one managed by the servlet container. 
+
+    <!--
+    Filter Managed by the Servlet Container
+	You can configure a filter managed by the servlet container using a web.xml 
+	deployment descriptor. This approach is standard for all servlet containers 
+	and doesn't involve Spring at all. You define the filter, map it to a URL 
+	pattern, and specify its initialization parameters.  
+    -->
+    <filter>
+        <filter-name>servletContainerFilter</filter-name>
+        <filter-class>com.example.filters.ServletContainerManagedFilter</filter-class>
+        <init-param>
+            <param-name>param1</param-name>
+            <param-value>value1</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>servletContainerFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+    
+    <!--
+    Filter Managed by the Spring Container
+	To have a filter managed by the Spring container in an XML-based configuration, 
+	you define it as a bean in your Spring application context file 
+	(applicationContext.xml). You then use a special bean, 
+	org.springframework.web.filter.DelegatingFilterProxy, to bridge the servlet 
+	container's filter chain to your Spring-managed filter bean.
+	To use this, you also need to define the DelegatingFilterProxy in your 
+	web.xml:  
+    -->
+	<filter>
+        <filter-name>delegatingFilterProxy</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>delegatingFilterProxy</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+
 ///////////////////////////////////////
 
 10>What is delegating filter proxy in Spring Security?
 
+The DelegatingFilterProxy is a special jakarta.servlet.Filter implementation 
+provided by Spring Security that bridges the gap between the servlet container's 
+lifecycle and the Spring application context. Its primary purpose is to allow 
+a standard servlet filter chain, which is managed by the servlet container, 
+to delegate to a Spring-managed bean that implements the Filter interface.
+
+How it Works
+
+1>Servlet Container Registers DelegatingFilterProxy: In the web.xml or via a 
+FilterRegistrationBean in Spring Boot, you register a DelegatingFilterProxy 
+as a normal servlet filter. This is the only part of the filter chain that 
+the servlet container knows about directly.
+
+2>Request Arrives: When a web request arrives, the servlet container 
+processes its filter chain and eventually calls the doFilter method of the 
+DelegatingFilterProxy.
+
+3>Proxy Delegates: The DelegatingFilterProxy then looks up a bean in the 
+Spring application context that is the actual security filter chain. By 
+default, it looks for a bean named springSecurityFilterChain.
+
+4>Spring Manages the Chain: This springSecurityFilterChain bean is a 
+FilterChainProxy, which is the core of Spring Security's filter management. 
+It contains an ordered list of all the individual security filters 
+(e.g., UsernamePasswordAuthenticationFilter, ExceptionTranslationFilter, 
+FilterSecurityInterceptor).
+
+5>Request is Processed: The DelegatingFilterProxy delegates the request to 
+the FilterChainProxy, which then runs the request through each of the 
+security filters in the correct order.
+    
+This delegation is crucial because it allows the entire Spring Security 
+filter chain to be managed by the Spring container. This means all the 
+security filters can leverage Spring's powerful features like dependency 
+injection, AOP, and lifecycle management, which would not be possible 
+if they were simple servlet filters.
+
+    <bean id="headerFilter" class="com.example.filters.HeaderFilter"/>
+    <bean id="loggingFilter" class="com.example.filters.LoggingFilter"/>
+    <bean id="authenticationFilter" class="com.example.filters.AuthenticationFilter"/>
+
+    <bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.web.DefaultSecurityFilterChain">
+                    <constructor-arg value="/**"/>
+                    <constructor-arg>
+                        <list>
+                            <ref bean="headerFilter"/>
+                            <ref bean="loggingFilter"/>
+                            <ref bean="authenticationFilter"/>
+                        </list>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+    
 ///////////////////////////////////////
 
 Spring interview questions cover a wide range of Spring concepts. You must be familiar with all of them to pass the interview. We hope that these sample Spring interview questions will help you with your preparations.

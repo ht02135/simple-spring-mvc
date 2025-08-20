@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       
+    <!--  
+    2. Spring XML Configuration
+	Next, you need to define these three filters as beans within 
+	your Spring application context file, and combine them into a 
+	single FilterChainProxy bean. This FilterChainProxy will 
+	manage the order of execution.
+    -->
+
+    <bean id="headerFilter" class="com.example.filters.HeaderFilter"/>
+    <bean id="loggingFilter" class="com.example.filters.LoggingFilter"/>
+    <bean id="authenticationFilter" class="com.example.filters.AuthenticationFilter"/>
+
+    <bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.web.DefaultSecurityFilterChain">
+                    <constructor-arg value="/**"/>
+                    <constructor-arg>
+                        <list>
+                            <ref bean="headerFilter"/>
+                            <ref bean="loggingFilter"/>
+                            <ref bean="authenticationFilter"/>
+                        </list>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>
