@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  
+    (1) No Autowiring (default)
+	Explicit wiring:
+    (2) Autowire by Name
+	Spring matches property name (userService) with bean id (userService):
+	(3) Autowire by Type
+	Spring injects based on type (UserService → UserServiceImpl):
+	(4) Autowire by Constructor
+	Injects dependency via constructor:
+	(5) Autodetect
+	First tries constructor injection; if not possible, falls back to byType:
+    -->
+    <!-- Bean definitions -->
+    <bean id="userService" class="com.example.UserServiceImpl"/>
+    
+    <bean id="userController" class="com.example.UserController">
+        <property name="userService" ref="userService"/>
+    </bean>
+
+</beans>

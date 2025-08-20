@@ -100,7 +100,84 @@ Spring IoC Interview Questions
 /////////////////
 
 2>What is the use of IoC containers?
+
+What is the use of IoC containers?
+1>IoC containers are frameworks that manage object creation, configuration, 
+and lifecycle in applications. Their primary uses include:
+2>Dependency Management: IoC containers automatically create and inject 
+dependencies into objects, eliminating the need for manual object 
+instantiation. Instead of objects creating their own dependencies, 
+the container provides them.
+3>Loose Coupling: By managing dependencies externally, IoC containers 
+reduce tight coupling between classes. Objects depend on abstractions 
+(interfaces) rather than concrete implementations, making code more 
+flexible and maintainable.
+4>Configuration Centralization: All dependency configurations are 
+managed in one place (XML files, annotations, or configuration classes), 
+making it easier to modify application behavior without changing source 
+code.
+5>Lifecycle Management: Containers handle object creation, initialization, 
+and destruction, including managing singleton patterns, prototype instances, 
+and cleanup operations.
+6>Testing Enhancement: IoC containers make unit testing easier by allowing 
+easy substitution of mock objects or test implementations for real 
+dependencies.
+
 3>What is autowiring, and name the different modes of it?
+
+What is autowiring, and what are the different modes?
+Autowiring is a feature that automatically injects dependencies into 
+objects without explicit configuration. The container automatically 
+identifies and injects the required dependencies based on various 
+strategies.
+
+The different autowiring modes are:
+1>No Autowiring (default): Dependencies must be explicitly defined 
+through configuration. No automatic injection occurs.
+
+	<bean id="serviceA" class="com.example.ServiceA" />
+	<bean id="clientA" class="com.example.ClientA">
+		<property name="serviceA" ref="serviceA" />
+	</bean>
+	
+2>By Name: The container matches property names with bean names in 
+the configuration. If a property named "userService" exists, it looks 
+for a bean with the same name.
+
+	<bean id="serviceB" class="com.example.ServiceB" />
+	<bean id="clientB" class="com.example.ClientB" autowire="byName" />
+	
+3>By Type: The container injects dependencies based on the property's 
+data type. It searches for beans that match the required type and 
+injects them automatically.
+
+	<bean id="someServiceC" class="com.example.ServiceC" />
+	<bean id="clientC" class="com.example.ClientC" autowire="byType" />
+	
+4>By Constructor: Dependencies are injected through constructor 
+parameters. The container uses reflection to determine constructor
+ parameter types and injects matching beans.
+ 
+	<bean id="serviceD" class="com.example.ServiceD" />
+	<bean id="clientD" class="com.example.ClientD"
+		autowire="constructor" />
+		
+5>Autodetect: The container first attempts constructor autowiring. 
+If no suitable constructor is found, it falls back to autowiring 
+by type for properties.
+
+The autodetect option is deprecated.  so eclipse will alert as error
+
+	<bean id="serviceE" class="com.example.ServiceE" />
+	<bean id="clientE" class="com.example.ClientE"
+		autowire="autodetect" />
+		
+These autowiring modes provide different levels of automation and 
+flexibility, allowing developers to choose the approach that best 
+fits their application's architecture and requirements.
+
+/////////////////
+
 4>What is DispatcherServlet in Spring MVC? In other words, can you explain the Spring MVC architecture?
 5>Which method is used for shutting down IoC containers in Spring?
 6>What is the implementation of List that is used when you use the <list> tag in a bean definition?

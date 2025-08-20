@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 
+    (1) No Autowiring (default)
+	Explicit wiring:
+    (2) Autowire by Name
+	Spring matches property name (userService) with bean id (userService):
+	(3) Autowire by Type
+	Spring injects based on type (UserService → UserServiceImpl):
+	(4) Autowire by Constructor
+	Injects dependency via constructor:
+	(5) Autodetect
+	First tries constructor injection; if not possible, falls back to byType:
+	
+	Priority Order (when resolving dependencies)
+	1>These are explicit modes chosen per-bean in XML — there’s no 
+	global priority unless you use autodetect.
+	2>For autodetect specifically:
+	 2a>Spring first checks for a constructor with dependencies → if 
+	 found, it does constructor autowiring.
+	 2b>If no constructor matches, it falls back to byType (setter/property).
+	-->
+	<bean id="serviceB" class="com.example.ServiceB" />
+	<bean id="clientB" class="com.example.ClientB" autowire="byName" />
+
+</beans>
