@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 
+	Important:
+	<context:annotation-config/> registers post-processors, including RequiredAnnotationBeanPostProcessor.
+	Without it, @Required won’t be enforced. 
+	/////////////////
+	When using @Configuration + @Bean, Spring automatically registers 
+	the required BeanPostProcessors, so you don’t need 
+	@EnableAnnotationConfig explicitly (it’s implied).
+	However, if you’re mixing with component scanning (@ComponentScan), 
+	then the processors come in automatically.
+	////////////////////
+	4. Do we need to enable anything manually?
+	1>XML config: Yes → you need <context:annotation-config/> 
+	  (or <context:component-scan/>).
+	2>Java config: No → AnnotationConfigApplicationContext already registers 
+	the post-processors, so RequiredAnnotationBeanPostProcessor is available automatically.
+	3>RequiredAnnotationBeanPostProcessor: You can declare it manually (rare), 
+	but normally <context:annotation-config/> or @ComponentScan registers it.
+	/////////////////////
+	Summary
+	1>@Required works only if RequiredAnnotationBeanPostProcessor is active.
+	2>In XML, enable it with <context:annotation-config/>.
+	3>In Java Config, it’s already enabled.
+	4>If you forget, Spring won’t enforce the property requirement and 
+	no exception will be thrown.
+	-->
+    <!-- Required to enable @Required and other annotations like @Autowired -->
+    <context:annotation-config/>
+
+    <!-- Bean definition -->
+    <bean id="student" class="com.example.Student">
+        <property name="name" value="John Doe"/> <!-- REQUIRED property -->
+    </bean>
+</beans>
