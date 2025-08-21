@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Root application context - shared beans across all servlets -->
+    
+    <!-- Enable component scanning for shared services -->
+    <context:component-scan base-package="com.example.service" />
+    <context:component-scan base-package="com.example.repository" />
+    <context:component-scan base-package="com.example.config" />
+
+    <!-- Shared service beans -->
+    <bean id="userService" class="com.example.service.UserService" />
+    <bean id="productService" class="com.example.service.ProductService" />
+    
+    <!-- Database configuration would go here -->
+    <!-- 
+    <bean id="dataSource" class="...">
+        ...
+    </bean>
+    -->
+
+    <!-- Property placeholder -->
+    <context:property-placeholder location="classpath:application.properties" />
+
+</beans>

@@ -104,24 +104,31 @@ Spring IoC Interview Questions
 What is the use of IoC containers?
 1>IoC containers are frameworks that manage object creation, configuration, 
 and lifecycle in applications. Their primary uses include:
+
 2>Dependency Management: IoC containers automatically create and inject 
 dependencies into objects, eliminating the need for manual object 
 instantiation. Instead of objects creating their own dependencies, 
 the container provides them.
+
 3>Loose Coupling: By managing dependencies externally, IoC containers 
 reduce tight coupling between classes. Objects depend on abstractions 
 (interfaces) rather than concrete implementations, making code more 
 flexible and maintainable.
+
 4>Configuration Centralization: All dependency configurations are 
 managed in one place (XML files, annotations, or configuration classes), 
 making it easier to modify application behavior without changing source 
 code.
+
 5>Lifecycle Management: Containers handle object creation, initialization, 
 and destruction, including managing singleton patterns, prototype instances, 
 and cleanup operations.
+
 6>Testing Enhancement: IoC containers make unit testing easier by allowing 
 easy substitution of mock objects or test implementations for real 
 dependencies.
+
+/////////////////
 
 3>What is autowiring, and name the different modes of it?
 
@@ -178,8 +185,121 @@ fits their application's architecture and requirements.
 
 /////////////////
 
-4>What is DispatcherServlet in Spring MVC? In other words, can you explain the Spring MVC architecture?
+4>What is DispatcherServlet in Spring MVC? In other words, can you 
+explain the Spring MVC architecture?
+
+The DispatcherServlet is the front controller in a Spring MVC web application. 
+It's the central point of entry for all incoming HTTP requests. Its primary 
+role is to manage and orchestrate the entire request-handling process by 
+delegating tasks to other components within the Spring framework.  
+This single-servlet design is a key feature of the Spring MVC framework, 
+as it consolidates the request flow, making the application more manageable 
+and extensible.
+
+The Spring MVC Architecture and Request Flow
+
+The Spring MVC framework follows the Model-View-Controller (MVC) design 
+pattern, separating the application's concerns into three distinct layers:
+
+1>Model: Represents the application's data and business logic. It's 
+responsible for managing and manipulating data.
+
+2>View: Handles the presentation layer, rendering the data from the 
+Model into a format the user can understand, such as HTML.
+
+3>Controller: Acts as the intermediary, receiving user requests, 
+processing them by interacting with the Model, and then selecting 
+the appropriate View to display the result.
+
+-------------------
+
+The request flow in a Spring MVC application is a well-defined 
+sequence of steps orchestrated by the DispatcherServlet:
+
+1>Incoming Request: A user sends an HTTP request to the web application.
+
+2>DispatcherServlet intercepts: The DispatcherServlet, configured as 
+the front controller, receives the request.
+
+	<servlet>
+		<servlet-name>mvc</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+3>Handler Mapping: The DispatcherServlet consults a HandlerMapping to 
+determine which controller is responsible for handling the specific 
+request, based on its URL and other parameters.
+
+	<servlet-mapping>
+		<servlet-name>mvc</servlet-name>
+		<url-pattern>/mvc/*</url-pattern>
+	</servlet-mapping>
+
+4>Controller Execution: The DispatcherServlet sends the request to the 
+identified Controller. The controller processes the request, performs 
+any necessary business logic (often by interacting with a service or 
+data access layer), and prepares data to be displayed.
+
+5>Model and View: The controller returns a ModelAndView object, which 
+contains the data (Model) to be displayed and the logical name of the 
+View to be rendered.
+
+6>View Resolution: The DispatcherServlet uses a ViewResolver to map the 
+logical view name to an actual view component, such as a JSP file or 
+a Thymeleaf template.
+
+7>Rendering the View: The DispatcherServlet passes the model data to 
+the resolved view. The view then renders the final output (e.g., an 
+HTML page) with the provided data.
+
+8>Final Response: The DispatcherServlet sends the rendered response 
+back to the client's browser.
+
+This architecture ensures a clear separation of concerns, making the 
+application easier to develop, maintain, and scale.
+
+/////////////////
+
 5>Which method is used for shutting down IoC containers in Spring?
+
+The close() method is used for shutting down an IoC container in Spring.
+
+Specifically, for an ApplicationContext (which is the more common 
+type of Spring container in modern applications), the close() method 
+is used to destroy all the beans in the container, releasing any 
+resources they might hold. The ConfigurableApplicationContext 
+interface provides this close() method, and most concrete 
+ApplicationContext implementations (like ClassPathXmlApplicationContext 
+or AnnotationConfigApplicationContext) inherit it.
+
+While a web application's container is typically managed automatically 
+when the application is shut down, in standalone applications, it's a 
+good practice to explicitly call the close() method to ensure a clean 
+shutdown.
+
+    public static void main(String[] args) {
+        // Load context
+        ConfigurableApplicationContext context =
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        // Get bean
+        ResourceBean bean = context.getBean("resourceBean", ResourceBean.class);
+        bean.doWork();
+
+        // Explicit shutdown (important for standalone apps)
+        context.close();
+    }
+    
+    <!-- Demo bean with init and destroy methods -->
+    <bean id="resourceBean" class="com.example.ResourceBean"
+          init-method="init"
+          destroy-method="cleanup"/>
+
+/////////////////
+
 6>What is the implementation of List that is used when you use the <list> tag in a bean definition?
 7>How do you use a particular implementation of collection in your bean definition?
 8>Are singleton beans in Spring a regular singleton object?

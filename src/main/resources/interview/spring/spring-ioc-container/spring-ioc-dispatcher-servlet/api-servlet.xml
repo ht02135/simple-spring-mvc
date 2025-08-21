@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- API Dispatcher Servlet Configuration -->
+    
+    <!-- Component scanning for API controllers -->
+    <context:component-scan base-package="com.example.controller.api" />
+
+    <!-- Enable Spring MVC with JSON support -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="prettyPrint" value="true" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- CORS configuration for API -->
+    <mvc:cors>
+        <mvc:mapping path="/**" 
+                     allowed-origins="*" 
+                     allowed-methods="GET,POST,PUT,DELETE,OPTIONS"
+                     allowed-headers="*" 
+                     allow-credentials="true" />
+    </mvc:cors>
+
+    <!-- Exception resolver for API -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="error/api-error" />
+    </bean>
+
+    <!-- Interceptors for API requests -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.example.interceptor.ApiAuthenticationInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

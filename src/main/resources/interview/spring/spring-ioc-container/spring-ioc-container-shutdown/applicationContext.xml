@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+           
+    <!--  
+    shows how the container shutdown (close()) method works, and how beans 
+    clean up resources when destroyed.
+    ////////////////////////
+    Expected Console Output
+    ResourceBean initialized: Opening resource...
+	ResourceBean is working...
+	ResourceBean cleanup: Closing resource...
+	////////////////////////
+	This demonstrates:
+	IoC container startup → bean initialized.
+	Bean usage.
+	Container shutdown via close() → bean cleanup method is called.
+    -->
+
+    <!-- Demo bean with init and destroy methods -->
+    <bean id="resourceBean" class="com.example.ResourceBean"
+          init-method="init"
+          destroy-method="cleanup"/>
+</beans>
