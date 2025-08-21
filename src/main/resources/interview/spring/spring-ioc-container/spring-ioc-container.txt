@@ -301,7 +301,225 @@ shutdown.
 /////////////////
 
 6>What is the implementation of List that is used when you use the <list> tag in a bean definition?
-7>How do you use a particular implementation of collection in your bean definition?
+
+When you use the <list> tag in a Spring bean definition, the implementation of java.util.List that Spring uses by default is java.util.ArrayList.
+
+When the Spring container parses the XML configuration and encounters a <list> element within a <bean> definition, it creates an instance of ArrayList to hold the specified elements. The elements defined within the <list> tag are then added to this ArrayList instance.
+
+For example, a bean definition like this:
+<bean id="myBean" class="com.example.MyClass">
+    <property name="myList">
+        <list>
+            <value>item1</value>
+            <value>item2</value>
+        </list>
+    </property>
+</bean>
+
+When you use the <list> tag in a Spring bean definition, the implementation of java.util.List that Spring uses by default is java.util.ArrayList.
+
+How it Works
+
+When the Spring container parses the XML configuration and encounters a <list> element within a <bean> definition, it creates an instance of ArrayList to hold the specified elements. The elements defined within the <list> tag are then added to this ArrayList instance.
+
+For example, a bean definition like this:
+XML
+
+<bean id="myBean" class="com.example.MyClass">
+    <property name="myList">
+        <list>
+            <value>item1</value>
+            <value>item2</value>
+        </list>
+    </property>
+</bean>
+
+...results in Spring creating an ArrayList containing the string values "item1" and "item2" and injecting it into the myList property of the myBean instance.
+
+This default choice of ArrayList is suitable for most use cases due to its efficient random access and common usage patterns. While you cannot specify a different List implementation directly with the <list> tag, you can achieve this by using a factory method or a custom FactoryBean if a different type, such as LinkedList, is required.
+
+----------------------
+
+	This shows list of Employee objects, set of department names, and map of 
+	project codes to names injected via XML  
+	
+    <!-- Company Bean -->
+    <bean id="company" class="com.example.Company">
+        <!-- Injecting List -->
+        <property name="employees">
+            <list>
+                <bean class="com.example.Employee">
+                    <property name="id" value="101"/>
+                    <property name="name" value="Alice"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <property name="id" value="102"/>
+                    <property name="name" value="Bob"/>
+                </bean>
+            </list>
+        </property>
+
+        <!-- Injecting Set -->
+        <property name="departments">
+            <set>
+                <value>HR</value>
+                <value>Finance</value>
+                <value>IT</value>
+            </set>
+        </property>
+
+        <!-- Injecting Map -->
+        <property name="projects">
+            <map>
+                <entry key="P001" value="Banking System"/>
+                <entry key="P002" value="E-Commerce Platform"/>
+                <entry key="P003" value="AI Chatbot"/>
+            </map>
+        </property>
+    </bean>
+    
+/////////////////
+
+7>How do you use a particular implementation of collection in your 
+bean definition?
+
+You can use a particular implementation of a collection in a Spring 
+bean definition by either using a specific collection-type XML tag 
+or by leveraging constructor injection with the fully qualified class name.
+
+Using XML Configuration
+
+For XML-based configuration, you can declare a specific implementation 
+of a collection by using a <property> or <constructor-arg> tag and then 
+nesting the specific implementation tag within it.
+
+Example with <list>
+
+The <list> tag, by default, creates an ArrayList. You can specify a 
+different implementation, like a LinkedList, by using the ref 
+attribute and the fully qualified class name.
+
+    <!-- ====== PROPERTY INJECTION ====== -->
+    <bean id="companyProperty" class="com.example.Company">
+        <property name="employees">
+            <list>
+                <bean class="com.example.Employee">
+                    <property name="id" value="101"/>
+                    <property name="name" value="Alice"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <property name="id" value="102"/>
+                    <property name="name" value="Bob"/>
+                </bean>
+            </list>
+        </property>
+
+        <property name="departments">
+            <set>
+                <value>HR</value>
+                <value>Finance</value>
+                <value>IT</value>
+            </set>
+        </property>
+
+        <property name="projects">
+            <map>
+                <entry key="P001" value="Banking System"/>
+                <entry key="P002" value="E-Commerce Platform"/>
+                <entry key="P003" value="AI Chatbot"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- ====== CONSTRUCTOR INJECTION ====== -->
+    <bean id="companyConstructor" class="com.example.Company">
+        <constructor-arg>
+            <list>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="201"/>
+                    <constructor-arg value="Charlie"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="202"/>
+                    <constructor-arg value="Diana"/>
+                </bean>
+            </list>
+        </constructor-arg>
+
+        <constructor-arg>
+            <set>
+                <value>Marketing</value>
+                <value>Sales</value>
+            </set>
+        </constructor-arg>
+
+        <constructor-arg>
+            <map>
+                <entry key="P101" value="Cloud Migration"/>
+                <entry key="P102" value="Mobile App"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+-------------------
+
+To use a different implementation, like a LinkedList, you would need 
+to define it as a separate bean and then inject it.
+
+Example with a Specific Bean
+
+A more flexible and explicit way is to define the collection as a 
+separate bean and then inject it by reference. This approach is 
+useful when you need to use a specific, non-default implementation.
+
+    <!-- ====== SEPARATE COLLECTION BEANS ====== -->
+
+    <!-- Employees list -->
+    <bean id="employeeList" class="java.util.LinkedList">
+        <constructor-arg>
+            <list>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="301"/>
+                    <constructor-arg value="Eve"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="302"/>
+                    <constructor-arg value="Frank"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- Departments set -->
+    <bean id="departmentSet" class="java.util.HashSet">
+        <constructor-arg>
+            <set>
+                <value>Operations</value>
+                <value>Support</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <!-- Projects map -->
+    <bean id="projectMap" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="P201" value="Data Warehouse"/>
+                <entry key="P202" value="Cybersecurity"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- Company using collection refs -->
+    <bean id="companyRefCollections" class="com.example.Company">
+        <property name="employees" ref="employeeList"/>
+        <property name="departments" ref="departmentSet"/>
+        <property name="projects" ref="projectMap"/>
+    </bean>
+
+/////////////////
+
 8>Are singleton beans in Spring a regular singleton object?
 9>If an inner bean is defined with an id, can you use this id to fetch the bean from the container?
 10>What are the actuator-provided endpoints used for monitoring the Spring boot application?

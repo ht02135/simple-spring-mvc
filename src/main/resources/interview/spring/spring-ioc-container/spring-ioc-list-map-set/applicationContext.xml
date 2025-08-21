@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--
+	full working Spring IoC example with applicationContext.xml and Java 
+	classes that show how to inject a <list>, <set>, and <map> into a 
+	bean (like a Company object holding employees, departments, and projects).
+
+	This shows list of Employee objects, set of department names, and map of 
+	project codes to names injected via XML  
+	//////////////////
+	=== Company Info ===
+	Employees:
+ 	- 101: Alice
+ 	- 102: Bob
+	Departments:
+ 	- HR
+ 	- Finance
+ 	- IT
+	Projects:
+ 	- P001: Banking System
+ 	- P002: E-Commerce Platform
+ 	- P003: AI Chatbot
+	-->
+	
+    <!-- Company Bean -->
+    <bean id="company" class="com.example.Company">
+        <!-- Injecting List -->
+        <property name="employees">
+            <list>
+                <bean class="com.example.Employee">
+                    <property name="id" value="101"/>
+                    <property name="name" value="Alice"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <property name="id" value="102"/>
+                    <property name="name" value="Bob"/>
+                </bean>
+            </list>
+        </property>
+
+        <!-- Injecting Set -->
+        <property name="departments">
+            <set>
+                <value>HR</value>
+                <value>Finance</value>
+                <value>IT</value>
+            </set>
+        </property>
+
+        <!-- Injecting Map -->
+        <property name="projects">
+            <map>
+                <entry key="P001" value="Banking System"/>
+                <entry key="P002" value="E-Commerce Platform"/>
+                <entry key="P003" value="AI Chatbot"/>
+            </map>
+        </property>
+    </bean>
+</beans>

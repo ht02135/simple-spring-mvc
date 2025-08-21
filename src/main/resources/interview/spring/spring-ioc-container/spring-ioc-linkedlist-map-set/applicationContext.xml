@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--
+	For XML-based configuration, you can declare a specific implementation 
+	of a collection by using a <property> or <constructor-arg> tag and then 
+	nesting the specific implementation tag within it.
+	////////////////////
+	The <list> tag, by default, creates an ArrayList. You can specify a 
+	different implementation, like a LinkedList, by using the ref 
+	attribute and the fully qualified class name.
+	////////////////////
+	Setter injection with <property> (already shown).
+	Constructor injection with <constructor-arg>.
+	Separate collection bean injection (using <ref>).  
+	///////////////////
+	Console Output
+	--- Using Property Injection ---
+	=== Company Info ===
+	Employees:
+ 	- 101: Alice
+ 	- 102: Bob
+	Departments:
+ 	- HR
+ 	- Finance
+ 	- IT
+	Projects:
+ 	- P001: Banking System
+ 	- P002: E-Commerce Platform
+ 	- P003: AI Chatbot
+
+	--- Using Constructor Injection ---
+	=== Company Info ===
+	Employees:
+	- 201: Charlie
+	- 202: Diana
+	Departments:
+ 	- Marketing
+ 	- Sales
+	Projects:
+ 	- P101: Cloud Migration
+ 	- P102: Mobile App
+
+	--- Using Separate Collection Beans ---
+	=== Company Info ===
+	Employees:
+ 	- 301: Eve
+ 	- 302: Frank
+	Departments:
+ 	- Operations
+ 	- Support
+	Projects:
+ 	- P201: Data Warehouse
+ 	- P202: Cybersecurity
+	-->
+
+    <!-- ====== PROPERTY INJECTION ====== -->
+    <bean id="companyProperty" class="com.example.Company">
+        <property name="employees">
+            <list>
+                <bean class="com.example.Employee">
+                    <property name="id" value="101"/>
+                    <property name="name" value="Alice"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <property name="id" value="102"/>
+                    <property name="name" value="Bob"/>
+                </bean>
+            </list>
+        </property>
+
+        <property name="departments">
+            <set>
+                <value>HR</value>
+                <value>Finance</value>
+                <value>IT</value>
+            </set>
+        </property>
+
+        <property name="projects">
+            <map>
+                <entry key="P001" value="Banking System"/>
+                <entry key="P002" value="E-Commerce Platform"/>
+                <entry key="P003" value="AI Chatbot"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- ====== CONSTRUCTOR INJECTION ====== -->
+    <bean id="companyConstructor" class="com.example.Company">
+        <constructor-arg>
+            <list>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="201"/>
+                    <constructor-arg value="Charlie"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="202"/>
+                    <constructor-arg value="Diana"/>
+                </bean>
+            </list>
+        </constructor-arg>
+
+        <constructor-arg>
+            <set>
+                <value>Marketing</value>
+                <value>Sales</value>
+            </set>
+        </constructor-arg>
+
+        <constructor-arg>
+            <map>
+                <entry key="P101" value="Cloud Migration"/>
+                <entry key="P102" value="Mobile App"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- 
+    The <list> tag, by default, creates an ArrayList. You can specify a 
+	different implementation, like a LinkedList, by using the ref 
+	attribute and the fully qualified class name.
+    -->
+    
+    <!-- ====== SEPARATE COLLECTION BEANS ====== -->
+
+    <!-- Employees list -->
+    <bean id="employeeList" class="java.util.LinkedList">
+        <constructor-arg>
+            <list>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="301"/>
+                    <constructor-arg value="Eve"/>
+                </bean>
+                <bean class="com.example.Employee">
+                    <constructor-arg value="302"/>
+                    <constructor-arg value="Frank"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- Departments set -->
+    <bean id="departmentSet" class="java.util.HashSet">
+        <constructor-arg>
+            <set>
+                <value>Operations</value>
+                <value>Support</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <!-- Projects map -->
+    <bean id="projectMap" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="P201" value="Data Warehouse"/>
+                <entry key="P202" value="Cybersecurity"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- Company using collection refs -->
+    <bean id="companyRefCollections" class="com.example.Company">
+        <property name="employees" ref="employeeList"/>
+        <property name="departments" ref="departmentSet"/>
+        <property name="projects" ref="projectMap"/>
+    </bean>
+
+</beans>
