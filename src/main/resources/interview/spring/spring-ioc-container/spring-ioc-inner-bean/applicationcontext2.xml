@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       
+    <!-- 
+    If an inner bean is defined with an id, can you use this id to fetch 
+	the bean from the container?
+ 	///////////////////////////////
+    Yes, you can use the id of an inner bean to fetch it from the 
+    Spring container, but with some important caveats.
+    
+    Key Points About Inner Bean IDs
+	Inner beans are typically anonymous and not registered in the 
+	container by default. However, if you explicitly provide an id 
+	attribute to an inner bean, Spring will register it in the container 
+	and you can retrieve it using that id.
+
+	Important Considerations
+	1>Shared Instance: When you give an inner bean an ID, it becomes a 
+	shared singleton in the container. The same instance will be returned 
+	whether you access it through the outer bean or retrieve it directly by ID.
+	2>Best Practice: Generally, it's not recommended to give IDs to inner 
+	beans unless you specifically need to reference them elsewhere. Inner 
+	beans are meant to be encapsulated within their parent bean.
+	3>Anonymous Inner Beans: Inner beans without IDs cannot be retrieved 
+	from the container and exist only within their parent bean's scope.
+	4>Scope: Inner beans with IDs follow the same scoping rules as regular 
+	beans (singleton by default).
+
+	The ability to retrieve inner beans by ID can be useful in certain 
+	scenarios, but it somewhat defeats the purpose of using inner beans, 
+	which are typically meant to be private to their containing bean.
+	///////////////////////
+	interesting, chatgpt say no, but claude say yes
+	hung : i gonna side with yes, if inner bean has id, then i dont see why you
+	cant reference it by id. but is it stupid to do so probably YES
+    -->
+
+    <!-- Outer bean that contains an inner bean -->
+    <bean id="person" class="com.example.Person">
+        <property name="name" value="John Doe"/>
+        <property name="address">
+            <!-- Inner bean with explicit ID -->
+            <bean id="homeAddress" class="com.example.Address">
+                <property name="street" value="123 Main St"/>
+                <property name="city" value="Springfield"/>
+                <property name="zipCode" value="12345"/>
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- Another example with constructor injection -->
+    <bean id="employee" class="com.example.Employee">
+        <constructor-arg name="name" value="Jane Smith"/>
+        <constructor-arg name="department">
+            <!-- Inner bean with ID -->
+            <bean id="engineeringDept" class="com.example.Department">
+                <property name="name" value="Engineering"/>
+                <property name="budget" value="1000000"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    
+    <!-- Example of inner bean without ID (anonymous) -->
+    <bean id="customer" class="com.example.Customer">
+        <property name="name" value="Bob Wilson"/>
+        <property name="account">
+            <!-- This inner bean has no ID and cannot be retrieved separately -->
+            <bean class="com.example.Account">
+                <property name="accountNumber" value="ACC-001"/>
+                <property name="balance" value="5000"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>

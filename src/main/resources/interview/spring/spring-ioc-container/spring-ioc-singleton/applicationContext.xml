@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--  
+	Now you have side-by-side examples:
+	Regular Singleton → lifecycle controlled by the class (getInstance()).
+	Spring Singleton (applicationContext.xml) → lifecycle controlled by 
+	the container (ApplicationContext).
+	///////////////////
+	Spring Singleton (applicationContext.xml) → lifecycle controlled by 
+	the container (ApplicationContext).
+	Lifecycle managed entirely by the Spring container.
+	One instance per Spring context (not per JVM).
+	Works seamlessly with dependency injection.
+	///////////////////
+	in Spring the difference comes down to the scope attribute in your 
+	bean definition.
+	By default, beans in Spring are scope="singleton". But you can 
+	change the scope, most commonly to prototype, to make them non-singleton.
+	1. Spring Singleton (scope="singleton")
+	One instance per Spring IoC container.
+	All requests for that bean ID return the same instance.
+	Container creates the instance at startup (eager by default, unless 
+	lazy-init="true").
+	///////////////////
+	In Spring:
+	Default scope = singleton
+	So if you don’t specify scope, the bean is already a singleton.
+	Writing scope="singleton" is optional — it’s just being explicit.
+	scope="singleton"
+	-->
+    <!-- Spring singleton bean -->
+    <bean id="springSingleton" 
+          class="com.example.SpringSingleton" 
+          scope="singleton"/>
+</beans>

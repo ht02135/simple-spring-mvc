@@ -521,7 +521,141 @@ useful when you need to use a specific, non-default implementation.
 /////////////////
 
 8>Are singleton beans in Spring a regular singleton object?
-9>If an inner bean is defined with an id, can you use this id to fetch the bean from the container?
+
+No, Spring singleton beans are not regular singleton objects. 
+
+A regular singleton object is a design pattern where a class 
+is responsible for ensuring that only one instance of itself 
+is created and providing a global access point to that instance. 
+
+Spring singletons, on the other hand, are a specific bean scope 
+managed by the Spring container.
+
+Key Differences
+
+1>Instance Management: A regular singleton class manages its own 
+lifecycle, often through a private constructor and a static 
+factory method.  
+
+A Spring singleton bean has its lifecycle managed entirely by 
+the Spring container. The container creates a single instance 
+of the bean and then provides it to other beans that depend on it.
+
+2>Scope: In the classic singleton pattern, the single instance 
+is globally available within the entire JVM. 
+
+For Spring, the singleton scope means there is only one instance 
+per Spring container. If you have multiple Spring containers in 
+your application (e.g., in a microservices architecture or with 
+parent/child contexts), each container will have its own single 
+instance of the bean.
+
+3>Dependency Injection: The classic singleton pattern often makes 
+it difficult to inject dependencies because the class is self-managing. 
+In contrast, Spring singleton beans are designed to work seamlessly 
+with dependency injection. The Spring container manages all dependencies 
+and injects them into the singleton bean for you.
+
+4>Thread Safety: The developer is responsible for ensuring the thread 
+safety of a regular singleton object, which can be tricky to implement 
+correctly. While Spring singleton beans are not inherently thread-safe, 
+the container ensures that the bean instance is created in a 
+thread-safe manner. Developers must still ensure the bean's state 
+and methods are thread-safe if it holds mutable data.
+
+--------------
+
+    <!-- Spring singleton bean -->
+    <bean id="springSingleton" 
+          class="com.example.SpringSingleton" 
+          scope="singleton"/>
+          
+	Spring Singleton (applicationContext.xml) → lifecycle controlled by 
+	the container (ApplicationContext).
+	Lifecycle managed entirely by the Spring container.
+	One instance per Spring context (not per JVM).
+	Works seamlessly with dependency injection.
+
+	in Spring the difference comes down to the scope attribute in your 
+	bean definition.
+	By default, beans in Spring are scope="singleton". But you can 
+	change the scope, most commonly to prototype, to make them non-singleton.
+	1. Spring Singleton (scope="singleton")
+	One instance per Spring IoC container.
+	All requests for that bean ID return the same instance.
+	Container creates the instance at startup (eager by default, unless 
+	lazy-init="true").
+
+	In Spring:
+	Default scope = singleton
+	So if you don’t specify scope, the bean is already a singleton.
+	Writing scope="singleton" is optional — it’s just being explicit.
+	scope="singleton"
+
+/////////////////
+
+9>If an inner bean is defined with an id, can you use this id to fetch 
+the bean from the container? and applicationcontext.xml example
+
+    No, you can't use the id of an inner bean to fetch it from the 
+    Spring container. Inner beans are a specific type of bean definition 
+    used solely within the scope of another bean's property or constructor 
+    argument. They don't have a standalone identity in the container, 
+    even if you assign them an id. 
+    
+    The key concept is that an inner bean's lifecycle is completely 
+    dependent on the bean that contains it. They're not a top-level 
+    bean in the Spring container's registry. The id you assign to an 
+    inner bean is primarily for documentation purposes or for potential 
+    use within the XML file itself (like for referencing within a list 
+    of inner beans), but it doesn't make it a "first-class" bean that 
+    can be retrieved directly using methods like ApplicationContext.getBean().
+    
+    In this example:
+    1>The customer bean is a regular, top-level bean. You can fetch 
+    it from the container using context.getBean("customer").
+    2>The innerPerson bean is an inner bean. Although it has the id 
+    innerPerson, a call like context.getBean("innerPerson") will 
+    result in a NoSuchBeanDefinitionException because the container 
+    doesn't recognize it as a top-level bean.
+
+    <bean id="customer" class="com.example.Customer">
+        <property name="person">
+            <bean id="innerPerson" class="com.example.Person">
+                <property name="name" value="John Doe"/>
+            </bean>
+        </property>
+    </bean>
+    
+------------------------------
+
+    <!-- Outer bean that contains an inner bean -->
+    <bean id="person" class="com.example.Person">
+        <property name="name" value="John Doe"/>
+        <property name="address">
+            <!-- Inner bean with explicit ID -->
+            <bean id="homeAddress" class="com.example.Address">
+                <property name="street" value="123 Main St"/>
+                <property name="city" value="Springfield"/>
+                <property name="zipCode" value="12345"/>
+            </bean>
+        </property>
+    </bean>
+    
+        // Retrieve the outer bean
+        Person person = (Person) context.getBean("person");
+        
+        // Retrieve the inner bean by its ID
+        Address homeAddress = (Address) context.getBean("homeAddress");
+        
+------------------------------
+
+	interesting, chatgpt say no, but claude say yes
+	hung : i gonna side with yes, if inner bean has id, then i dont see why you
+	cant reference it by id. but is it stupid to do so probably YES
+	
+/////////////////
+
 10>What are the actuator-provided endpoints used for monitoring the Spring boot application?
     
 /////////////////

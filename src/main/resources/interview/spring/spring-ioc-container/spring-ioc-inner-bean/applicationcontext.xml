@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!-- 
+    If an inner bean is defined with an id, can you use this id to fetch 
+	the bean from the container?
+ 	///////////////////////////////
+    No, you can't use the id of an inner bean to fetch it from the 
+    Spring container. Inner beans are a specific type of bean definition 
+    used solely within the scope of another bean's property or constructor 
+    argument. They don't have a standalone identity in the container, 
+    even if you assign them an id. 
+    
+    The key concept is that an inner bean's lifecycle is completely 
+    dependent on the bean that contains it. They're not a top-level 
+    bean in the Spring container's registry. The id you assign to an 
+    inner bean is primarily for documentation purposes or for potential 
+    use within the XML file itself (like for referencing within a list 
+    of inner beans), but it doesn't make it a "first-class" bean that 
+    can be retrieved directly using methods like ApplicationContext.getBean().
+    
+    In this example:
+    1>The customer bean is a regular, top-level bean. You can fetch 
+    it from the container using context.getBean("customer").
+    2>The innerPerson bean is an inner bean. Although it has the id 
+    innerPerson, a call like context.getBean("innerPerson") will 
+    result in a NoSuchBeanDefinitionException because the container 
+    doesn't recognize it as a top-level bean.
+    -->
+
+    <bean id="customer" class="com.example.Customer">
+        <property name="person">
+            <bean id="innerPerson" class="com.example.Person">
+                <property name="name" value="John Doe"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
