@@ -7,14 +7,133 @@ Spring Annotations Interview Questions
 /////////////////
 
 1>How can annotation wiring be turned on in Spring?
+
+To enable annotation wiring in Spring, you need to configure your Spring application context to scan for components and process annotations.
+
+Annotation-Based Configuration
+There are a few ways to turn on annotation wiring, depending on whether you're using XML, Java-based configuration, or a combination of both.
+
+---------------
+1. Java-based Configuration
+
+This is the modern and preferred approach.
+
+@Configuration and @ComponentScan: The key is to use the @Configuration 
+annotation on a class to declare it as a Spring configuration class and 
+@ComponentScan to tell Spring where to look for components (beans) 
+annotated with @Component, @Service, @Repository, and @Controller.
+    
+@Configuration
+@ComponentScan(basePackages = "com.example.yourpackage")
+public class AppConfig {
+    // You can define other beans here if needed
+}
+
+The basePackages attribute specifies the package(s) to scan. Spring will 
+automatically find classes like this one:
+
+@Service
+public class MyService {
+    // Spring will inject a MyRepository bean here
+    @Autowired
+    private MyRepository myRepository;
+}
+
+@Repository
+public class MyRepository {
+    // ...
+}
+
+-----------------------
+
+2. XML-based Configuration
+
+If you're using XML, you can enable annotation processing with the 
+<context:component-scan> element.
+
+<context:component-scan>: Add this element to your XML application context file, 
+specifying the base package to scan.
+    
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context 
+           https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.example.yourpackage"/>
+
+</beans>
+
+The base-package attribute works just like the basePackages in the Java 
+configuration, telling Spring where to search for annotated components.
+
+💡 Note: In older versions of Spring (prior to 2.5), you might have had 
+to explicitly declare <context:annotation-config/> to enable annotations 
+like @Autowired. The <context:component-scan/> element now implicitly 
+includes the functionality of <context:annotation-config/>, so you generally 
+don't need both.
+
+Common Annotations for Wiring
+
+Once annotation wiring is enabled, Spring processes these key annotations 
+to manage dependencies:
+
+    @Autowired: This is the most common annotation for injecting dependencies. 
+    Spring automatically finds a matching bean and injects it. It can be 
+    used on constructors, setters, or fields.
+
+    @Qualifier: Used with @Autowired to specify a particular bean when there 
+    are multiple beans of the same type.
+
+    @Component: A generic stereotype for any Spring-managed component.
+
+    @Service: A specialization of @Component for the service layer.
+
+    @Repository: A specialization of @Component for the data access layer.
+
+    @Controller: A specialization of @Component for the web layer.
+
+By using one of the configuration methods above, you give Spring the green 
+light to scan, find, and wire these annotated components together, 
+automatically managing the dependencies in your application.
+
+/////////////////
+
 2>Explain @Required annotation?
+
+/////////////////
+
 3>What does @RequestMapping annotation mean?
+
+/////////////////
+
 4>What do you understand from @Autowired annotation?
+
+/////////////////
+
 5>Explain the differences between JSR-250 Annotations and @Qualifier annotations.
+
+/////////////////
+
 6>Explain the Annotation-based container configuration.
+
+/////////////////
+
 7>Highlight the role of @SpringBootApplication.
+
+/////////////////
+
 8>Is it possible to send an Object as the response of the Controller handler method?
+
+/////////////////
+
 9>Explain @ModelAttribute?
+
+///////////////// 
+
 10>Tell us the difference between the Configuration types XML and Annotation?
     
 /////////////////
