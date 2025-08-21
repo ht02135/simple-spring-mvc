@@ -189,7 +189,9 @@ public class MyService {
 	No → it’s included when you use <context:annotation-config/> or @ComponentScan.
 	Only declare explicitly if you don’t want the other processors but still want 
 	@Required checked. 
-	/////////////////////////
+	
+------------------
+
 	hung : translate into what a pain in ass, just do following
 	1>xml
 	<context:annotation-config/>
@@ -203,9 +205,141 @@ public class MyService {
 
 3>What does @RequestMapping annotation mean?
 
+The @RequestMapping annotation in Spring MVC is used to map web requests 
+to specific handler methods in a controller class. It essentially tells 
+Spring which method should handle a particular HTTP request based on 
+its URL, and other parameters like the HTTP method (GET, POST, etc.), 
+headers, and request parameters.
+
+You can apply @RequestMapping at both the class level and the method level.
+
+1>Class-Level Mapping: When you apply @RequestMapping to a class, it specifies 
+a base URL for all the handler methods within that controller. For example, 
+@RequestMapping("/users") means all methods inside this controller will handle 
+requests that start with /users.
+
+2>Method-Level Mapping: When applied to a method, it further refines the 
+mapping. If a controller has @RequestMapping("/users"), a method with 
+@RequestMapping("/profile") will handle requests to /users/profile.
+
+Key Attributes
+
+@RequestMapping has several attributes to define the mapping more precisely:
+
+1>value or path: Specifies the URL or URL pattern to which the method is mapped.
+2>method: Specifies the HTTP request method(s) (e.g., RequestMethod.GET, RequestMethod.POST).
+3>consumes: Specifies the media types the controller can consume (e.g., application/json).
+4>produces: Specifies the media types the controller can produce (e.g., application/xml).
+
+
+Simplified Annotations
+
+While @RequestMapping is versatile, Spring introduced more specific and 
+easier-to-read annotations that are shortcuts for common use cases. 
+These are highly recommended for clarity and are themselves annotated 
+with @RequestMapping.
+
+1>@GetMapping: A shortcut for @RequestMapping(method = RequestMethod.GET).
+2>@PostMapping: A shortcut for @RequestMapping(method = RequestMethod.POST).
+3>@PutMapping: A shortcut for @RequestMapping(method = RequestMethod.PUT).
+4>@DeleteMapping: A shortcut for @RequestMapping(method = RequestMethod.DELETE).
+5>@PatchMapping: A shortcut for @RequestMapping(method = RequestMethod.PATCH).
+
+-----------------
+
+    // GET
+    @GetMapping(value = "/hello", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ApiResponse<User> sayHello(@RequestParam(defaultValue = "Guest") String name) {
+        User user = new User();
+        user.setName(name);
+        user.setAge(0);
+
+        return new ApiResponse<>("SUCCESS", "Hello " + name, user);
+    }
+
+    // POST
+    @PostMapping(value = "/create",
+                 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ApiResponse<User> createUser(@RequestBody ApiRequest<User> request) {
+        User user = request.getData();
+        return new ApiResponse<>("SUCCESS", "User created successfully", user);
+    }
+
+    // PUT
+    @PutMapping(value = "/update",
+                consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ApiResponse<User> updateUser(@RequestBody ApiRequest<User> request) {
+        User user = request.getData();
+        return new ApiResponse<>("SUCCESS", "User updated successfully", user);
+    }
+
+    // DELETE
+    @DeleteMapping(value = "/delete/{name}",
+                   produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ApiResponse<String> deleteUser(@PathVariable("name") String name) {
+        return new ApiResponse<>("SUCCESS", "User deleted successfully", name);
+    }
+
+    // PATCH
+    @PatchMapping(value = "/patch",
+                  consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ApiResponse<User> patchUser(@RequestBody ApiRequest<User> request) {
+        User user = request.getData();
+        return new ApiResponse<>("SUCCESS", "User partially updated", user);
+    }
+
 /////////////////
 
 4>What do you understand from @Autowired annotation?
+
+The @Autowired annotation in Spring is a mechanism for dependency injection. 
+It tells the Spring framework to automatically inject an object into a bean, 
+which is a key part of what's known as Inversion of Control (IoC).
+
+How It Works
+
+Instead of you manually creating and managing an object's dependencies, 
+@Autowired lets Spring do it for you. When Spring encounters @Autowired 
+on a field, constructor, or setter method, it searches its application 
+context for a bean that matches the type of the dependency and 
+automatically provides it.
+
+The @Autowired annotation in Spring is a mechanism for dependency 
+injection. It tells the Spring framework to automatically inject an 
+object into a bean, which is a key part of what's known as Inversion 
+of Control (IoC).
+
+How It Works
+
+Instead of you manually creating and managing an object's dependencies, 
+@Autowired lets Spring do it for you. When Spring encounters @Autowired 
+on a field, constructor, or setter method, it searches its application 
+context for a bean that matches the type of the dependency and 
+automatically provides it.
+
+Example
+
+Imagine a UserService that needs a UserRepository to function. Instead 
+of you creating the UserRepository yourself within the UserService class, 
+you can let Spring inject it.
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // ... methods that use userRepository ...
+}
+
+In this example, @Autowired on the userRepository field tells Spring: 
+"When you create a UserService bean, please find an existing UserRepository 
+bean in your context and assign it to this field." This practice 
+decouples your classes, making the code more modular and easier 
+to test.
 
 /////////////////
 
