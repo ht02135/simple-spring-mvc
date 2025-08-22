@@ -1,0 +1,28 @@
+
+Spring JDBC Interview Questions
+
+1>What are classes for spring JDBC API?
+
+/////////////////////////////
+
+2>Explain the advantages of NamedParameterJdbcTemplate.
+
+/////////////////////////////
+
+3>What is JDBC exception handling?
+
+/////////////////////////////
+
+4>Can you fetch records by spring JdbcTemplate?
+
+/////////////////////////////
+
+5>Tell us how JDBC can be used more efficiently in the Spring framework.
+6>What is the difference between JDBC and Spring JDBC?
+7>What is native NativeJdbcExtractor in Spring?
+8?What annotation is used to configure DAO in Spring?
+9>Explain the advantages of Spring JDBC Template over standard JDBC.
+10>What are JDBC abstraction and DAO modules?
+
+/////////////////////////////
+

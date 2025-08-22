@@ -154,39 +154,6 @@ Spring AOP Interview Questions
 
 ////////////////////////////
 
-Spring JDBC Interview Questions
-
-    What are classes for spring JDBC API?
-    Explain the advantages of NamedParameterJdbcTemplate.
-    What is JDBC exception handling?
-    Can you fetch records by spring JdbcTemplate?
-    Tell us how JDBC can be used more efficiently in the Spring framework.
-    What is the difference between JDBC and Spring JDBC?
-    What is native NativeJdbcExtractor in Spring?
-    What annotation is used to configure DAO in Spring?
-    Explain the advantages of Spring JDBC Template over standard JDBC.
-    What are JDBC abstraction and DAO modules?
-
-
-/////////////////////////////
-
-Spring MVC Interview Questions
-
-    What is Spring MVC?
-    What is the front controller of Spring MVC?
-    What is an InternalResourceViewResolver in Spring MVC?
-    How to map a controller class and its methods with URL?
-    What is the purpose of @PathVariable annotation in Spring MVC?
-    What is the role of the Model interface in Spring MVC?
-    Discuss the different ways of reading data from the form in Spring MVC?
-    What is the purpose of BindingResult in Spring MVC validations?
-    Can you validate the user input in a particular sequence in Spring MVC? Explain the process.
-    Explain Spring MVC Tiles.
-
-https://interviewkickstart.com/blogs/interview-questions/spring-mvc-interview-questions
-
-////////////////////
-
 Spring Core Interview Questions
 
     What is the default scope of bean in the Spring framework?
@@ -201,22 +168,6 @@ Spring Core Interview Questions
     What beans scopes Spring supports?
 
 //////////////////////////
-
-Spring Hibernate Interview Questions
-
-    What are the ways to access Hibernate by using Spring?
-    What is the hibernate configuration file?
-    What is hibernate mapping file?
-    What is the difference between the Hibernate Session get() and load() method?
-    What is hibernate caching? Explain Hibernate first-level cache?
-    What will happen if we don’t have a no-args constructor in Entity bean?
-    Explain the difference between sorted collection and ordered collection. Which one is better, in your opinion?
-    Are there any collection types in Hibernate?
-    Is it possible to execute a native SQL query in hibernate?
-
-10.  What is the benefit of native SQL query support in hibernate?
-
-/////////////////////////
 
 Spring Data Access Interview Questions
 

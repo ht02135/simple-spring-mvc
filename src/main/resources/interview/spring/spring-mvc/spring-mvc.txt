@@ -1,0 +1,32 @@
+
+Spring MVC Interview Questions
+
+1>What is Spring MVC?
+
+////////////////////
+
+2>What is the front controller of Spring MVC?
+
+////////////////////
+
+3>What is an InternalResourceViewResolver in Spring MVC?
+
+////////////////////
+
+4>How to map a controller class and its methods with URL?
+
+////////////////////
+
+5>What is the purpose of @PathVariable annotation in Spring MVC?
+
+////////////////////
+
+6>What is the role of the Model interface in Spring MVC?
+7>Discuss the different ways of reading data from the form in Spring MVC?
+8>What is the purpose of BindingResult in Spring MVC validations?
+9>Can you validate the user input in a particular sequence in Spring MVC? Explain the process.
+10>Explain Spring MVC Tiles.
+
+https://interviewkickstart.com/blogs/interview-questions/spring-mvc-interview-questions
+
+////////////////////

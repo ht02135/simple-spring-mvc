@@ -1,0 +1,16 @@
+
+Spring Hibernate Interview Questions
+
+1>What are the ways to access Hibernate by using Spring?
+2>What is the hibernate configuration file?
+3>What is hibernate mapping file?
+4>What is the difference between the Hibernate Session get() and load() method?
+5>What is hibernate caching? Explain Hibernate first-level cache?
+6>What will happen if we don’t have a no-args constructor in Entity bean?
+7>Explain the difference between sorted collection and ordered collection. Which one is better, in your opinion?
+8>Are there any collection types in Hibernate?
+9>Is it possible to execute a native SQL query in hibernate?
+
+10.  What is the benefit of native SQL query support in hibernate?
+
+/////////////////////////
