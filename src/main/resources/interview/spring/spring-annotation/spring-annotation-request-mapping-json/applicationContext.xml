@@ -7,6 +7,24 @@
           http://www.springframework.org/schema/mvc
           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+	<!--
+	1>@RestController + @ResponseBody (built into @RestController) tell 
+	Spring “the return value of the method should be written directly 
+	to the HTTP response body.”
+	2>Spring MVC delegates this job to a HttpMessageConverter.
+	3>By default, Spring registers many converters (for JSON, XML, 
+	String, byte[], etc).
+	4>Here you override defaults (register-defaults="false") and 
+	explicitly register only one converter:
+		4a>MappingJackson2HttpMessageConverter → powered by Jackson 
+		(jackson-databind dependency).
+		4b>This converter serializes Java objects → JSON, and 
+		deserializes JSON → Java objects.
+	So when you return ResponseEntity<ApiResponse<User>>, Spring hands 
+	the ApiResponse<User> object to the converter → Jackson writes JSON 
+	into the HTTP response body. 
+	-->
+
     <!-- Enable annotation-driven controllers -->
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="false">
