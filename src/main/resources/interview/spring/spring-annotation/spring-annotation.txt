@@ -568,6 +568,68 @@ In Spring MVC:
 
 9>Explain @ModelAttribute?
 
+@ModelAttribute is a Spring MVC annotation used to bind a method 
+parameter to a model attribute. It's often used to prepare data for a view 
+or to bind form data to an object.
+
+The @ModelAttribute annotation can be used in two main ways:
+
+1>As a Method Parameter: When placed on a method parameter, it tells Spring 
+to look for an attribute in the model with the same name. If the attribute 
+isn't found, Spring will automatically create a new instance of the object 
+and add it to the model. This is commonly used for binding form submissions. 
+For example, in a controller method like public String 
+saveStudent(@ModelAttribute Student student), Spring will try to bind 
+the request parameters to the fields of a new Student object.
+
+2>As a Method-level Annotation: When placed on a method itself, it indicates 
+that the return value of the method should be added to the model. This is 
+useful for populating the model with common data that is needed by multiple 
+views or controller methods. For instance, a method annotated with 
+@ModelAttribute that returns a list of categories could make that list 
+available to all other methods within that controller.
+
+Key Use Cases
+
+1>Data Binding: It's the primary way to handle form submissions in Spring 
+MVC. It automatically binds the form fields to a Java object, simplifying 
+the process of retrieving user input.
+
+2>Populating the Model: It's an efficient way to make data available to 
+views. By using @ModelAttribute on a method, you can ensure that certain 
+data (like a list of dropdown options) is always present in the model for 
+a set of related views.
+
+3>Shared Data: It allows for the sharing of data between different handler 
+methods within the same controller, promoting code reuse and a cleaner 
+architecture.
+
+Exx
+
+    @ModelAttribute("user")
+    public User populateUser() {
+        User u = new User();
+        u.setName("Default Name");
+        u.setEmail("default@example.com");
+        return u;
+    }
+    
+    // API endpoint called by jQuery (returns JSON)
+    @PostMapping(value = "/save", produces = "application/json")
+    @ResponseBody
+    public User saveUser(@ModelAttribute("user") User user) {
+        // Pretend saving to DB here...
+        // Returning the updated user object as JSON
+        return user;
+    }
+
+    // Another API for details (sharing the same @ModelAttribute "user")
+    @GetMapping(value = "/details", produces = "application/json")
+    @ResponseBody
+    public User userDetails(@ModelAttribute("user") User user) {
+        return user;
+    }
+    
 ///////////////// 
 
 10>Tell us the difference between the Configuration types XML and Annotation?
