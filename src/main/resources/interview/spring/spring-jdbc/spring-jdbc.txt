@@ -3,25 +3,465 @@ Spring JDBC Interview Questions
 
 1>What are classes for spring JDBC API?
 
+Classes for the Spring JDBC API include JdbcTemplate, SimpleJdbcInsert, 
+SimpleJdbcCall, SimpleJdbcTemplate, and NamedParameterJdbcTemplate.
+
+Core Classes of the Spring JDBC API
+
+The Spring JDBC API simplifies database interaction by handling common 
+tasks like connection management, statement creation, and resource cleanup, 
+so you can focus on writing SQL. Here are the main classes you'll use:
+
+1>JdbcTemplate: This is the central class in the Spring JDBC API. It handles 
+the low-level details of JDBC, such as opening and closing connections, and 
+executing SQL statements. You provide it with the SQL and a DataSource to 
+perform operations.
+
+2>NamedParameterJdbcTemplate: An alternative to JdbcTemplate that lets you 
+use named parameters (e.g., :firstName, :lastName) in your SQL statements 
+instead of positional placeholders (e.g., ?). This makes your SQL more 
+readable and maintainable, especially when you have many parameters.
+
+3>SimpleJdbcInsert: This class makes it easier to perform insert operations. 
+It automates the process of creating and executing an INSERT statement, often 
+without requiring you to write the SQL query yourself. It’s useful for simple 
+insert statements where column names match JavaBean property names.
+
+4>SimpleJdbcCall: A class designed to simplify calling stored procedures and 
+functions in a database. It handles the complex setup of registering parameters 
+and executing the call.
+
+5>SimpleJdbcTemplate: While still available, this class is now deprecated in 
+favor of JdbcTemplate and NamedParameterJdbcTemplate since Spring 3.1. It was 
+originally introduced to provide a simpler interface for common JdbcTemplate 
+operations.
+
+Class	Primary Use
+JdbcTemplate	Executing general SQL queries and updates.
+NamedParameterJdbcTemplate	Executing SQL queries with named parameters.
+SimpleJdbcInsert	Simplifying INSERT statements.
+SimpleJdbcCall	Calling stored procedures and functions.
+SimpleJdbcTemplate	Deprecated; use JdbcTemplate instead.
+
+
+    public EmployeeRepositoryImpl(DataSource dataSource,
+                                  JdbcTemplate jdbcTemplate,
+                                  NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        
+        // Configure SimpleJdbcInsert
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
+            .withTableName("employees")
+            .usingGeneratedKeyColumns("id");
+        
+        // Configure SimpleJdbcCall (example for stored procedure)
+        this.simpleJdbcCall = new SimpleJdbcCall(dataSource)
+            .withProcedureName("get_employee_info");
+    }
+    
+    // Using SimpleJdbcInsert for INSERT operations
+    @Override
+    public Employee save(Employee employee) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("name", employee.getName());
+        parameters.put("email", employee.getEmail());
+        parameters.put("department", employee.getDepartment());
+        parameters.put("salary", employee.getSalary());
+        
+        Number id = simpleJdbcInsert.executeAndReturnKey(parameters);
+        employee.setId(id.longValue());
+        return employee;
+    }
+    
+    // Using JdbcTemplate for simple SELECT with parameters
+    @Override
+    public Optional<Employee> findById(Long id) {
+        String sql = "SELECT * FROM employees WHERE id = ?";
+        try {
+            Employee employee = jdbcTemplate.queryForObject(sql, 
+                new EmployeeRowMapper(), id);
+            return Optional.ofNullable(employee);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    // Using NamedParameterJdbcTemplate for queries with named parameters
+    @Override
+    public List<Employee> findByDepartment(String department) {
+        String sql = "SELECT * FROM employees WHERE department = :dept ORDER BY name";
+        
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("dept", department);
+        
+        return namedParameterJdbcTemplate.query(sql, params, new EmployeeRowMapper());
+    }
+    
+    // Using SimpleJdbcCall for stored procedures
+    @Override
+    public String callStoredProcedure(Long employeeId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("emp_id", employeeId);
+        
+        Map<String, Object> result = simpleJdbcCall.execute(params);
+        return result.get("employee_info").toString();
+    }
+    
 /////////////////////////////
 
 2>Explain the advantages of NamedParameterJdbcTemplate.
 
+The NamedParameterJdbcTemplate is a class in the Spring Framework that 
+offers several advantages over the standard JdbcTemplate, primarily 
+by allowing you to use named parameters instead of question marks (?) 
+in your SQL queries.
+
+Advantages of Named Parameters
+1>Readability: Using named parameters (e.g., :id, :name) makes your SQL 
+queries much easier to read and understand. When you have multiple 
+parameters, it's difficult to tell what each ? represents. Named 
+parameters clearly label each value.
+
+EX
+1a>Named Parameter Example: SELECT * FROM users WHERE id = :id AND status = :status
+
+1b>Positional Parameter Example: SELECT * FROM users WHERE id = ? AND status = ?
+
+2>Maintainability: Named parameters make your code more robust and less 
+prone to errors. If you need to add or remove a parameter in the middle 
+of a long query, you can do so without changing the order of every subsequent 
+parameter. With positional parameters, you would need to reorder all of 
+the question marks and their corresponding values, which is a common source 
+of bugs.
+
+3>Flexibility: You can use the same parameter name multiple times in a query. 
+For example, SELECT * FROM users WHERE first_name = :name OR last_name = :name. 
+This isn't possible with positional parameters without providing the value twice.
+
+4>No PreparedStatementCreator needed for simple queries: For basic queries, 
+you don't need to create a separate PreparedStatementCreator class. You can 
+just pass a MapSqlParameterSource or a Map of key-value pairs directly to the 
+execute method, which simplifies the code.
+
+In essence, NamedParameterJdbcTemplate improves the clarity and stability of 
+your data access code, especially when dealing with complex or evolving SQL 
+queries.
+
+-------------------------
+
+PreparedStatementCreator is a functional interface in Spring's JDBC 
+framework used to create a java.sql.PreparedStatement. It's typically 
+used with JdbcTemplate for more complex queries, particularly when you 
+need to handle parameters or auto-generated keys.
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class UserDAO {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public UserDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public int addUserAndReturnId(String name, String email) {
+        // The SQL statement with positional parameters
+        final String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+
+        // A KeyHolder to retrieve the auto-generated ID
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        // Use a PreparedStatementCreator to prepare the statement
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                // Prepare the statement with the SQL and a flag to return generated keys
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                // Set the parameters
+                ps.setString(1, name);
+                ps.setString(2, email);
+                return ps;
+            }
+        }, keyHolder);
+
+        // Retrieve and return the auto-generated ID
+        return keyHolder.getKey().intValue();
+    }
+}
+
+-------------------------
+
+The MapSqlParameterSource and Map classes are used with NamedParameterJdbcTemplate 
+to simplify the process of binding parameters to your SQL queries. This removes 
+the need for a separate PreparedStatementCreator.
+
+MapSqlParameterSource vs. Map
+
+Both MapSqlParameterSource and a standard Map can be used to pass named parameters 
+to a NamedParameterJdbcTemplate. However, there are some key differences to 
+consider:
+
+1>MapSqlParameterSource: This is a dedicated class in the Spring framework for 
+handling named parameters. It provides a fluent API, meaning you can chain 
+multiple addValue() calls together, making your code more readable. It's often 
+considered the preferred choice for its type safety and clarity.
+
+2>Map<String, Object>: You can also use a standard Java Map to store your 
+parameter names and values. This is a common and flexible approach, especially 
+if you already have your data in a map format.
+
+The primary advantage of both these approaches is that they let you avoid the 
+more verbose PreparedStatementCreator interface, which is required when using 
+the traditional JdbcTemplate with positional parameters (?).
+
+Using NamedParameterJdbcTemplate with MapSqlParameterSource
+public void updateStatus(int id, String status) {
+    String sql = "UPDATE users SET status = :status WHERE id = :id";
+    SqlParameterSource namedParameters = new MapSqlParameterSource()
+        .addValue("id", id)
+        .addValue("status", status);
+    namedParameterJdbcTemplate.update(sql, namedParameters);
+}
+
+Using NamedParameterJdbcTemplate with Map
+public void updateStatus(int id, String status) {
+    String sql = "UPDATE users SET status = :status WHERE id = :id";
+    Map<String, Object> namedParameters = new HashMap<>();
+    namedParameters.put("id", id);
+    namedParameters.put("status", status);
+    namedParameterJdbcTemplate.update(sql, namedParameters);
+}
+
+//////////////////////////////
+
+The primary advantage of both these approaches is that they let you avoid the 
+more verbose PreparedStatementCreator interface, which is required when using 
+the traditional JdbcTemplate with positional parameters (?).
+
+	// ===== APPROACH 1: Using PreparedStatementCreator with positional parameters (?) =====
+    public int addUserWithPreparedStatementCreator(String name, String email) {
+        final String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, name);  // Parameter order matters!
+                ps.setString(2, email); // Parameter order matters!
+                return ps;
+            }
+        }, keyHolder);
+        
+        return keyHolder.getKey().intValue();
+    }
+
+    // ===== APPROACH 2: Using NamedParameterJdbcTemplate with MapSqlParameterSource ===== 
+    public int addUserWithMapSqlParameterSource(String name, String email) {
+        final String sql = "INSERT INTO users (name, email) VALUES (:name, :email)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("name", name);      // Self-documenting!
+        params.addValue("email", email);   // Order doesn't matter!
+        
+        namedParameterJdbcTemplate.update(sql, params, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+	// ===== APPROACH 3: Using NamedParameterJdbcTemplate with Map =====
+    public int addUserWithMap(String name, String email) {
+        final String sql = "INSERT INTO users (name, email) VALUES (:name, :email)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);       // Simple and clear
+        params.put("email", email);     // Easy to understand
+        
+        namedParameterJdbcTemplate.update(sql, params, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+	
 /////////////////////////////
 
 3>What is JDBC exception handling?
 
+JDBC exception handling refers to how you manage and respond to errors 
+that occur during database operations using Java's JDBC API. The core 
+of this is the java.sql.SQLException class.
+
+1>Standard JDBC Exception Handling
+
+When working with plain JDBC, any database error, such as a syntax error 
+in your SQL, a lost connection, or a data integrity violation, will result 
+in an SQLException being thrown. This is a checked exception, so you are 
+forced to handle it explicitly in a try-catch block.
+
+A major problem with standard JDBC exception handling is that SQLException 
+is a generic class. The specific cause of the error is usually hidden 
+inside error codes or messages that vary from one database vendor 
+(e.g., MySQL, Oracle, PostgreSQL) to another. This means your exception-
+handling code becomes tightly coupled to a specific database.
+
+2>Spring's Solution: Exception Translation
+
+To solve the issues of standard JDBC exception handling, the Spring 
+Framework provides a feature called exception translation. Instead of 
+dealing with vendor-specific SQLExceptions, Spring translates them into 
+its own hierarchy of unchecked, or runtime, exceptions.
+
+This is done by the SQLExceptionTranslator interface, with 
+SQLErrorCodeSQLExceptionTranslator being the default implementation. 
+It reads a configuration file (sql-error-codes.xml) to map the 
+vendor-specific error codes to a a consistent, meaningful exception 
+from Spring's DataAccessException hierarchy.
+
+Key Advantages of Spring's Approach:
+
+1>Portability: Your code is no longer tied to a specific database. 
+An "integrity constraint violation" will always be translated to a 
+DataIntegrityViolationException, regardless of whether you are using 
+MySQL or Oracle.
+
+2>Clarity: The exceptions are more descriptive and easier to understand, 
+such as DuplicateKeyException or DataAccessResourceFailureException.
+
+3>Simplified Code: Since Spring's exceptions are unchecked, you are not 
+forced to write try-catch blocks everywhere, leading to cleaner, more 
+concise code. You can choose to handle only the exceptions you care 
+about at a higher level in your application.
+
+// ===== 7. EXCEPTION HANDLING PATTERNS =====
+    public User saveUserWithProperExceptionHandling(User user) {
+        try {
+            String sql = "INSERT INTO users (name, email, department) VALUES (:name, :email, :department)";
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("name", user.getName());
+            params.addValue("email", user.getEmail());
+            params.addValue("department", user.getDepartment());
+            
+            namedParameterJdbcTemplate.update(sql, params);
+            return user;
+            
+        } catch (DuplicateKeyException e) {
+            // Handle duplicate email specifically
+            System.out.println("User with email already exists: " + user.getEmail());
+            throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists", e);
+            
+        } catch (DataIntegrityViolationException e) {
+            // Handle other constraint violations
+            System.out.println("Data integrity violation: " + e.getMessage());
+            throw new InvalidUserDataException("Invalid user data provided", e);
+            
+        } catch (BadSqlGrammarException e) {
+            // This indicates a programming error
+            System.err.println("SQL syntax error - this should not happen in production!");
+            System.err.println("SQL: " + e.getSql());
+            throw new SystemException("Database query error", e);
+            
+        } catch (DataAccessResourceFailureException e) {
+            // Database connection issues
+            System.err.println("Database connection failed: " + e.getMessage());
+            throw new DatabaseUnavailableException("Database is currently unavailable", e);
+            
+        } catch (DataAccessException e) {
+            // Catch-all for other database exceptions
+            System.err.println("Unexpected database error: " + e.getClass().getSimpleName());
+            System.err.println("Message: " + e.getMessage());
+            throw new SystemException("Unexpected database error", e);
+        }
+    }
+    
 /////////////////////////////
 
 4>Can you fetch records by spring JdbcTemplate?
 
+Yes, you can fetch records using JdbcTemplate in Spring. You typically use methods like query(), queryForObject(), and queryForList() for this purpose.
+
+Core Methods for Fetching Data
+
+The JdbcTemplate provides several methods to retrieve data from a database, each suited for a different use case:
+
+1>queryForObject(): This method is used when you expect to retrieve a single object or a single value (e.g., a count, a string). It's handy for fetching a single row from a database. If the query returns more than one row, it will throw an exception.
+
+2>query(): This is the most versatile method for fetching multiple records. It takes a RowMapper as an argument, which maps each row of the ResultSet to a Java object.
+
+3>queryForList(): Use this method when you want to retrieve a list of rows, with each row represented as a Map. It's less common for production code but can be useful for quick, ad-hoc queries where you don't need a dedicated object to represent the data.
+
+-----------------
+
+	// ===== 1. queryForObject() - Single Object Results =====
+    public User findUserById(Long id) {
+        String sql = "SELECT id, name, email, department, salary FROM users WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+    }
+    
+	// ===== 2. query() - Multiple Object Results ===== 
+    public List<User> findAllUsers() {
+        String sql = "SELECT id, name, email, department, salary FROM users ORDER BY name";
+        return jdbcTemplate.query(sql, new UserRowMapper());
+    }
+    
+    /**
+     * queryForList() returning List<Map<String, Object>>
+     * Useful when you don't want to create a specific class
+     */
+    public List<Map<String, Object>> findAllUsersAsMapList() {
+        String sql = "SELECT id, name, email, department, salary FROM users";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    /**
+     * queryForList() with parameters returning List<Map<String, Object>>
+     */
+    public List<Map<String, Object>> findUsersByDepartmentAsMapList(String department) {
+        String sql = "SELECT id, name, email, department, salary FROM users WHERE department = ?";
+        return jdbcTemplate.queryForList(sql, department);
+    }
+
+    public Map<String, Object> findUserAsMapById(Long id) {
+        String sql = "SELECT id, name, email, department, salary FROM users WHERE id = ?";
+        return jdbcTemplate.queryForMap(sql, id);
+    }
+
+    public Map<String, Object> getUserStatsByDepartment(String department) {
+        String sql = "SELECT department, COUNT(*) as user_count, AVG(salary) as avg_salary, " +
+                    "MIN(salary) as min_salary, MAX(salary) as max_salary " +
+                    "FROM users WHERE department = ? GROUP BY department";
+        return jdbcTemplate.queryForMap(sql, department);
+    }
+
 /////////////////////////////
 
 5>Tell us how JDBC can be used more efficiently in the Spring framework.
+
+/////////////////////////////
+
 6>What is the difference between JDBC and Spring JDBC?
+
+/////////////////////////////
+
 7>What is native NativeJdbcExtractor in Spring?
+
+/////////////////////////////
+
 8?What annotation is used to configure DAO in Spring?
+
+/////////////////////////////
+
 9>Explain the advantages of Spring JDBC Template over standard JDBC.
+
+/////////////////////////////
+
 10>What are JDBC abstraction and DAO modules?
 
 /////////////////////////////
