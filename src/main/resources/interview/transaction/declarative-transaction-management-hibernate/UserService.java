@@ -1,11 +1,3 @@
-package x.y.service;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import x.y.dao.UserDao;
-import x.y.model.User;
-
 @Service
 public class UserService {
     @Autowired
@@ -27,8 +19,33 @@ public class UserService {
 
     @Transactional
     public void invoice(Long userId) {
-        // Example: generate invoice for user
         invoiceService.createPdf(userId);
-        // could send email, etc.
+    }
+
+    // ================= NEW DAO METHODS =================
+
+    @Transactional
+    public User insertUser(String name, String email, String gender) {
+        return userDao.insertUser(name, email, gender);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        return userDao.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getUsersByGenderAndName(String gender, String firstName, String lastName) {
+        return userDao.findByGenderAndName(gender, firstName, lastName);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Object[]> countUsersByGender() {
+        return userDao.countUsersByGender();
     }
 }
