@@ -385,17 +385,31 @@ about at a higher level in your application.
 
 4>Can you fetch records by spring JdbcTemplate?
 
-Yes, you can fetch records using JdbcTemplate in Spring. You typically use methods like query(), queryForObject(), and queryForList() for this purpose.
+Yes, you can fetch records using JdbcTemplate in Spring. You 
+typically use methods like 
+
+query(), 
+queryForObject(), 
+and queryForList() for this purpose.
 
 Core Methods for Fetching Data
 
-The JdbcTemplate provides several methods to retrieve data from a database, each suited for a different use case:
+The JdbcTemplate provides several methods to retrieve data from a 
+database, each suited for a different use case:
 
-1>queryForObject(): This method is used when you expect to retrieve a single object or a single value (e.g., a count, a string). It's handy for fetching a single row from a database. If the query returns more than one row, it will throw an exception.
+1>queryForObject(): This method is used when you expect to retrieve 
+a single object or a single value (e.g., a count, a string). It's 
+handy for fetching a single row from a database. If the query returns 
+more than one row, it will throw an exception.
 
-2>query(): This is the most versatile method for fetching multiple records. It takes a RowMapper as an argument, which maps each row of the ResultSet to a Java object.
+2>query(): This is the most versatile method for fetching multiple 
+records. It takes a RowMapper as an argument, which maps each row of 
+the ResultSet to a Java object.
 
-3>queryForList(): Use this method when you want to retrieve a list of rows, with each row represented as a Map. It's less common for production code but can be useful for quick, ad-hoc queries where you don't need a dedicated object to represent the data.
+3>queryForList(): Use this method when you want to retrieve a list of 
+rows, with each row represented as a Map. It's less common for production 
+code but can be useful for quick, ad-hoc queries where you don't need a 
+dedicated object to represent the data.
 
 -----------------
 
@@ -453,11 +467,43 @@ managing exception handling. This significantly reduces the amount of code a
 developer needs to write, leading to more efficient development and less 
 error-prone code.
 
+just use named param jdbc template
+    // ---------- RowMapper ----------
+    private final RowMapper<Customer> rowMapper = (ResultSet rs, int rowNum) -> {
+        Customer c = new Customer();
+        c.setId(rs.getLong("id"));
+        c.setName(rs.getString("name"));
+        c.setEmail(rs.getString("email"));
+        c.setGender(rs.getString("gender"));
+        return c;
+    };
+    // ---------- query() ----------
+    public List<Customer> findAllCustomers() {
+    	// rowMapper returns RowMapper<Customer>
+        return namedJdbcTemplate.query("SELECT * FROM customers", rowMapper);
+    }
+
 2>Connection Pooling:
 Spring integrates seamlessly with JDBC connection pools (e.g., HikariCP, 
 Apache Commons DBCP). Connection pooling reuses database connections, avoiding 
 the overhead of establishing a new connection for every request. This improves 
 performance and reduces the load on the database server.
+
+	<!-- HikariCP -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="jdbcUrl" value="jdbc:h2:mem:testdb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+        <property name="maximumPoolSize" value="10"/>
+    </bean>
+    
+    <!-- Apache Commons DBCP -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="url" value="jdbc:h2:mem:testdb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+        <property name="maxTotal" value="10"/>
+    </bean>
 
 Transaction Management:
 Spring's robust transaction management capabilities can be applied to JDBC 
@@ -466,6 +512,29 @@ database operations to be treated as a single, atomic unit of work. Spring
 handles transaction demarcation, commit, and rollback automatically, making 
 transaction management more efficient and less prone to errors.
 
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- ================== AOP Transaction Advice ================== -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- Apply transaction rules to methods -->
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="list*" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- AOP Config -->
+    <aop:config>
+        <!-- Apply txAdvice to all methods in service layer -->
+        <aop:pointcut id="serviceMethods" expression="execution(* com.example.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+    </aop:config>
+    
 Spring Data JDBC:
 For applications that require a higher level of abstraction than JdbcTemplate 
 but still want direct control over SQL, Spring Data JDBC offers repository 
@@ -477,6 +546,173 @@ queries and mapping.
 
 6>What is the difference between JDBC and Spring JDBC?
 
+show example difference between
+1>JDBC
+
+JDBC (Java Database Connectivity) is a low-level Java API for connecting 
+to and interacting with relational databases. It provides the fundamental 
+interfaces and classes for establishing connections, executing SQL 
+statements, and processing results. When using plain JDBC, developers 
+are responsible for managing connections, handling SQLExceptions, 
+preparing statements, and mapping result sets to Java objects manually. 
+This often leads to significant boilerplate code, especially for common 
+database operations.
+
+2>Spring JDBC 
+
+Spring JDBC, specifically the JdbcTemplate provided by the Spring 
+Framework, is a higher-level abstraction built on top of JDBC. It 
+simplifies database access by handling many of the repetitive and 
+error-prone tasks that are manual in plain JDBC.
+
+3>Spring Data JDBC
+
+3a>This is part of the broader Spring Data project, which aims to 
+provide a consistent programming model for data access.
+
+3b>Spring Data JDBC builds upon Spring JDBC and introduces a 
+repository-style programming model.
+
+3c>It offers a higher level of abstraction, enabling developers 
+to define repository interfaces (e.g., CrudRepository) for common 
+CRUD (Create, Read, Update, Delete) operations without writing 
+explicit SQL queries for simple cases.
+
+3d>Spring Data JDBC automatically generates queries for basic 
+operations based on method names in the repository interfaces 
+and maps domain objects to database tables using conventions 
+and annotations.
+
+hung: in my perspective, only 3c> 3d> stand out
+
+/////////////////////////////
+
+Spring Data
+
+Advantages:
+1. Abstraction and Simplicity: Spring Data provides a higher level of 
+abstraction over data access layers, making it easier to implement 
+CRUD operations without writing boilerplate code.
+2. Repository Pattern: It encourages the repository pattern, which 
+can lead to cleaner and more maintainable code.
+3. Query Methods: You can define custom queries using method names 
+or the @Query annotation, simplifying data retrieval.
+4. Support for Multiple Databases: Spring Data supports various data 
+sources, including JPA, MongoDB, Redis, etc., allowing for flexibility 
+in your choice of database.
+5. Pagination and Sorting: Built-in support for pagination and sorting 
+out of the box.
+
+Disadvantages:
+1. Learning Curve: While it simplifies many aspects of data access, it 
+may have a steeper learning curve for those unfamiliar with the 
+repository pattern or JPA.
+2. Performance Overhead: The abstraction may introduce some performance 
+overhead compared to raw JDBC.
+
+-----------------------
+
+JDBC Template
+
+Advantages:
+1. Fine-Grained Control: JDBC Template offers more control over SQL 
+execution and can be more efficient for complex queries.
+2. Simplicity for Simple Use Cases: For small applications or simple 
+queries, JDBC Template can be straightforward and easy to implement.
+3. No ORM Overhead: It doesn’t impose any ORM framework, which can be 
+beneficial for performance-critical applications.
+
+Disadvantages:
+1. Boilerplate Code: You may end up writing more boilerplate code for 
+CRUD operations compared to Spring Data.
+2. Manual Mapping: You need to manually map SQL results to Java objects, 
+which can increase complexity in larger applications.
+
+////////////////////////////
+
+Spring Data JDBC is better
+public interface CustomerRepository2 extends CrudRepository<Customer, Long> {
+
+    // ================= Derived Queries overridden with @Query =================
+
+    @Query("SELECT * FROM customer WHERE last_name = :lastName")
+    List<Customer> findByLastName(@Param("lastName") String lastName);
+
+    @Query("SELECT * FROM customer WHERE gender = :gender")
+    List<Customer> findByGender(@Param("gender") String gender);
+
+    @Query("SELECT * FROM customer WHERE gender = :gender AND first_name = :firstName AND last_name = :lastName")
+    List<Customer> findByGenderAndFirstNameAndLastName(@Param("gender") String gender,
+                                                       @Param("firstName") String firstName,
+                                                       @Param("lastName") String lastName);
+
+    @Query("SELECT * FROM customer WHERE street = :street AND city = :city AND state = :state")
+    List<Customer> findByStreetAndCityAndState(@Param("street") String street,
+                                               @Param("city") String city,
+                                               @Param("state") String state);
+
+    // ================= Custom Queries =================
+
+    @Query("SELECT * FROM customer")
+    List<Customer> findAll();
+
+    @Query("SELECT * FROM customer")
+    List<Customer> findAllBy();
+
+    @Query("SELECT * FROM customer WHERE created_date > :date")
+    List<Customer> findRecentCustomers(@Param("date") LocalDateTime date);
+
+    @Query("SELECT * FROM customer WHERE salary BETWEEN :minSalary AND :maxSalary AND active = true")
+    List<Customer> findActiveBySalaryRange(@Param("minSalary") BigDecimal minSalary,
+                                           @Param("maxSalary") BigDecimal maxSalary);
+
+    @Query("""
+        SELECT c.* FROM customer c
+        JOIN department d ON c.dept_id = d.id
+        WHERE d.name = :deptName AND c.active = :active
+        ORDER BY c.salary DESC
+        """)
+    List<Customer> findByDepartmentNameAndActive(@Param("deptName") String departmentName,
+                                                 @Param("active") Boolean active);
+
+    @Query("UPDATE customer SET active = :status WHERE dept_id = :deptId")
+    void updateActiveStatusByDepartment(@Param("deptId") Long departmentId,
+                                        @Param("status") Boolean status);
+
+    @Query("SELECT COUNT(*) FROM customer WHERE dept_id = :deptId AND salary > :salary")
+    int countByDepartmentAndSalaryThreshold(@Param("deptId") Long departmentId,
+                                            @Param("salary") BigDecimal salary);
+
+    // ================= Complex SQL Examples =================
+
+    // Count customers per gender
+    @Query("SELECT gender, COUNT(*) AS cnt FROM customer GROUP BY gender ORDER BY cnt DESC")
+    List<Map<String, Object>> countCustomersByGender();
+
+    // Sum of salary per department
+    @Query("SELECT dept_id, SUM(salary) AS totalSalary FROM customer GROUP BY dept_id ORDER BY totalSalary DESC")
+    List<Map<String, Object>> sumSalaryByDepartment();
+
+    // Partition by department: rank employees by salary
+    @Query("""
+        SELECT id, first_name, last_name, dept_id, salary,
+               ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rank
+        FROM customer
+        """)
+    List<Map<String, Object>> rankCustomersByDepartment();
+
+    // Top 3 salaries per department
+    @Query("""
+        SELECT id, first_name, last_name, dept_id, salary
+        FROM (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn
+            FROM customer
+        ) t
+        WHERE t.rn <= 3
+        """)
+    List<Map<String, Object>> top3SalariesPerDepartment();
+}
+    
 /////////////////////////////
 
 7>What is native NativeJdbcExtractor in Spring?

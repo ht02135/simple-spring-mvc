@@ -1,0 +1,125 @@
+<!-- ============================================================================ -->
+<!-- 2. SPRING DATA JDBC XML CONFIGURATION -->
+<!-- File: spring-data-jdbc-context.xml -->
+<!-- ============================================================================ -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/data/jdbc"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/data/jdbc
+           http://www.springframework.org/schema/data/jdbc/spring-data-jdbc.xsd">
+
+	<!--  
+    for comparison purpose
+    this is spring data jdbc  
+    /////////////////////////
+	SPRING DATA JDBC XML Configuration:
+	- Requires: <jdbc:repositories> configuration
+	- Requires: AbstractJdbcConfiguration
+	- Scan: Repository interfaces
+	- Automatic: CRUD operations
+	///////////////////
+┌─────────────────┬─────────────────────┬─────────────────────────┐
+│ Aspect          │ Spring JDBC         │ Spring Data JDBC        │
+├─────────────────┼─────────────────────┼─────────────────────────┤
+│ Code Amount     │ More (DAO classes)  │ Less (Interfaces)       │
+│ SQL Control     │ Full control        │ Generated + Custom      │
+│ Learning Curve  │ Moderate            │ Steep (query rules)     │
+│ Performance     │ Optimized SQL       │ May generate suboptimal │
+│ Flexibility     │ High                │ Medium                  │
+│ Boilerplate     │ High                │ Very Low                │
+│ Type Safety     │ Manual              │ Compile-time checked    │
+│ Entity Mapping  │ Manual RowMapper    │ Automatic               │
+│ Query Methods   │ Write SQL           │ Method names            │
+│ Testing         │ Standard            │ @DataJdbcTest slice     │
+└─────────────────┴─────────────────────┴─────────────────────────┘
+	-->
+	
+    <!-- Enable annotation-driven configuration -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.example.service"/>
+    
+    <!-- DataSource Configuration (Same as Spring JDBC) -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mydb"/>
+        <property name="username" value="user"/>
+        <property name="password" value="password"/>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="maximumPoolSize" value="10"/>
+        <property name="minimumIdle" value="2"/>
+    </bean>
+    
+<!-- XML with Properties -->
+<!--
+<context:property-placeholder location="classpath:database.properties"/>
+
+<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <property name="jdbcUrl" value="${db.url}"/>
+    <property name="username" value="${db.username}"/>
+    <property name="password" value="${db.password}"/>
+    <property name="driverClassName" value="${db.driver}"/>
+    <property name="maximumPoolSize" value="${db.maxPoolSize}"/>
+    <property name="minimumIdle" value="${db.minIdle}"/>
+</bean>
+-->
+
+    <!-- Spring Data JDBC Repository Configuration -->
+    <jdbc:repositories base-package="com.example.repository"/>
+
+    <!-- JDBC Configuration Bean - Required for Spring Data JDBC -->
+    <bean class="org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration">
+        <!-- Custom naming strategy (optional) -->
+        <property name="namingStrategy">
+            <bean class="org.springframework.data.relational.core.mapping.NamingStrategy.CamelCaseToUnderscoresNamingStrategy"/>
+        </property>
+    </bean>
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" 
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Enable transaction annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- JdbcTemplate (Still available if needed) -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <!--  
+    QUESTION: Why doesn't Spring Data JDBC XML have advice and cutpoints?
+	ANSWER: Because Spring Data JDBC has BUILT-IN AOP integration that 
+	works automatically!
+
+	Spring Data JDBC internally uses:
+	1. Method interceptors for repository proxies
+	2. Transaction advice (when @Transactional is used)  
+	3. Exception translation advice
+	4. Query execution advice
+
+	You DON'T need to manually configure AOP for basic Spring Data 
+	JDBC functionality.
+    -->
+
+    <!-- 
+    ✅ BUILT-IN AOP FEATURES (Automatically provided):
+    - Repository method interception
+    - Transaction management  
+    - Exception translation
+    - Query execution monitoring
+    - Method-level security (if enabled)
+    -->
+    
+</beans>

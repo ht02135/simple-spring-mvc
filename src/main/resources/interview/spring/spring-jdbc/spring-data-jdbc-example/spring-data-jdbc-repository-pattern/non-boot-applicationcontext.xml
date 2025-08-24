@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          https://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context 
+          https://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/jdbc 
+          https://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+          http://www.springframework.org/schema/tx 
+          https://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--  
+    What is the Repository Pattern?
+	The Repository Pattern is a design pattern that abstracts the data 
+	access layer from the business layer. The idea:
+    1>Your business code talks to a repository interface (e.g., 
+    CustomerRepository) instead of raw JDBC or SQL.
+	2>The repository hides how data is stored or retrieved.
+	3>This makes the code cleaner, easier to maintain, and easier to test.
+	/////////////////////
+	2️⃣ Why a learning curve exists
+	Even though Spring Data does most of the heavy lifting:
+	1>You need to understand what a repository is and how it’s used.
+	2>You need to know how method name query derivation works 
+	(findByLastName), or how @Query works.
+	3>Transaction handling may require understanding Spring’s transaction 
+	management, especially if your methods involve multiple steps.
+	4>People unfamiliar with the repository pattern may be confused about 
+	why they don’t write DAO implementations anymore.
+	/////////////////////
+	3️⃣ Transaction management
+	Spring Data JDBC supports transactions automatically if you annotate 
+	your service layer methods with @Transactional.
+	You don’t need explicit AOP advice or pointcuts unless you have very 
+	custom needs.
+	////////////////////
+	<jdbc:repositories> is required to scan repository interfaces.
+	1>AbstractJdbcConfiguration is optional unless you want a custom 
+	naming strategy.
+	2>Transaction management is manual using <tx:annotation-driven> and 
+	DataSourceTransactionManager.
+	////////////////////
+	<jdbc:repositories> is required in non-Boot XML.
+	DataSource and TransactionManager must be defined manually.
+    -->
+    
+    <!-- Scan components -->
+    <context:component-scan base-package="com.example"/>
+
+    <!-- Embedded H2 DB -->
+    <jdbc:embedded-database id="dataSource" type="H2"/>
+
+    <!-- Enable transaction management -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Spring Data JDBC repositories -->
+    <jdbc:repositories base-package="com.example.repository"/>
+
+    <!-- Optional custom configuration -->
+    <bean class="org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration">
+        <property name="namingStrategy">
+            <bean class="org.springframework.data.relational.core.mapping.NamingStrategy$CamelCaseToUnderscoresNamingStrategy"/>
+        </property>
+    </bean>
+
+</beans>

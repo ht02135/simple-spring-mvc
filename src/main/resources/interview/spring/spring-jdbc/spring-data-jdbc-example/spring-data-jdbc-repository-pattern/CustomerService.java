@@ -1,0 +1,93 @@
+/*
+Notes on the Service:
+1>All write operations (addCustomer, updateCustomer, 
+updateActiveStatusByDepartment) are annotated with @Transactional.
+2>All read operations don’t need @Transactional unless 
+you require a transactional read.
+Includes both derived methods and custom SQL queries.
+*/
+package com.example.service;
+
+import com.example.model.Customer;
+import com.example.repository.CustomerRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class CustomerService {
+
+    private final CustomerRepository repository;
+
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
+    }
+
+    // ===== Basic CRUD =====
+
+    @Transactional
+    public Customer addCustomer(Customer customer) {
+        return repository.save(customer);
+    }
+
+    @Transactional
+    public Customer updateCustomer(Customer customer) {
+        return repository.save(customer); // save() updates if id exists
+    }
+
+    public List<Customer> getAllCustomers() {
+        return (List<Customer>) repository.findAll();
+    }
+
+    public List<String> getAllCustomerNames() {
+        return ((List<Customer>) repository.findAll())
+                .stream()
+                .map(c -> c.getFirstName() + " " + c.getLastName())
+                .collect(Collectors.toList());
+    }
+
+    // ===== Derived Query Methods =====
+
+    public List<Customer> findByLastName(String lastName) {
+        return repository.findByLastName(lastName);
+    }
+
+    public List<Customer> findByGender(String gender) {
+        return repository.findByGender(gender);
+    }
+
+    public List<Customer> findByGenderFirstLastName(String gender, String firstName, String lastName) {
+        return repository.findByGenderAndFirstNameAndLastName(gender, firstName, lastName);
+    }
+
+    public List<Customer> findByAddress(String street, String city, String state) {
+        return repository.findByStreetAndCityAndState(street, city, state);
+    }
+
+    // ===== Custom Queries =====
+
+    public List<Customer> findRecentCustomers(LocalDateTime date) {
+        return repository.findRecentCustomers(date);
+    }
+
+    public List<Customer> findActiveBySalaryRange(BigDecimal minSalary, BigDecimal maxSalary) {
+        return repository.findActiveBySalaryRange(minSalary, maxSalary);
+    }
+
+    public List<Customer> findByDepartmentNameAndActive(String deptName, Boolean active) {
+        return repository.findByDepartmentNameAndActive(deptName, active);
+    }
+
+    @Transactional
+    public void updateActiveStatusByDepartment(Long deptId, Boolean status) {
+        repository.updateActiveStatusByDepartment(deptId, status);
+    }
+
+    public int countByDepartmentAndSalaryThreshold(Long deptId, BigDecimal salary) {
+        return repository.countByDepartmentAndSalaryThreshold(deptId, salary);
+    }
+}

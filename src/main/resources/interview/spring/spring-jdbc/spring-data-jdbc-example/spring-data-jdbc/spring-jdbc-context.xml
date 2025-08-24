@@ -1,0 +1,83 @@
+<!-- ============================================================================ -->
+<!-- 1. SPRING JDBC XML CONFIGURATION -->
+<!-- File: spring-jdbc-context.xml -->
+<!-- ============================================================================ -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+           
+    <!--
+    for comparison purpose
+    this is spring jdbc  
+    /////////////////////////
+    SPRING JDBC XML Configuration:
+	- Requires: JdbcTemplate bean
+	- Scan: @Repository classes (DAOs)
+	- Manual: All database operations
+	/////////////////////////
+┌─────────────────┬─────────────────────┬─────────────────────────┐
+│ Aspect          │ Spring JDBC         │ Spring Data JDBC        │
+├─────────────────┼─────────────────────┼─────────────────────────┤
+│ Code Amount     │ More (DAO classes)  │ Less (Interfaces)       │
+│ SQL Control     │ Full control        │ Generated + Custom      │
+│ Learning Curve  │ Moderate            │ Steep (query rules)     │
+│ Performance     │ Optimized SQL       │ May generate suboptimal │
+│ Flexibility     │ High                │ Medium                  │
+│ Boilerplate     │ High                │ Very Low                │
+│ Type Safety     │ Manual              │ Compile-time checked    │
+│ Entity Mapping  │ Manual RowMapper    │ Automatic               │
+│ Query Methods   │ Write SQL           │ Method names            │
+│ Testing         │ Standard            │ @DataJdbcTest slice     │
+└─────────────────┴─────────────────────┴─────────────────────────┘
+    -->
+
+    <!-- Enable annotation-driven configuration -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.example.dao"/>
+    
+    <!-- DataSource Configuration -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mydb"/>
+        <property name="username" value="user"/>
+        <property name="password" value="password"/>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="maximumPoolSize" value="10"/>
+        <property name="minimumIdle" value="2"/>
+    </bean>
+
+    <!-- JdbcTemplate Bean - Core of Spring JDBC -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- NamedParameterJdbcTemplate (Optional) -->
+    <bean id="namedParameterJdbcTemplate" 
+          class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" 
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Enable transaction annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Manual DAO Bean Registration (if not using component-scan) -->
+    <bean id="userDao" class="com.example.dao.SpringJdbcUserDao">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+</beans>
