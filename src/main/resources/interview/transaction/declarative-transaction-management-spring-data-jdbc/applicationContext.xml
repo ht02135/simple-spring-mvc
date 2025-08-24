@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:repository="http://www.springframework.org/schema/data/jdbc"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          https://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+          https://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/tx
+          https://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/jdbc
+          https://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+          http://www.springframework.org/schema/data/jdbc
+          https://www.springframework.org/schema/data/jdbc/spring-jdbc.xsd">
+
+	<!-- 
+	A DataSource definition
+	A TransactionManager (DataSourceTransactionManager)
+	The JdbcMappingContext / repositories scanning
+	Your service beans 
+	-->
+	
+    <!-- Enable annotation config -->
+    <context:annotation-config/>
+
+    <!-- Scan for @Service, @Repository, etc. -->
+    <context:component-scan base-package="x.y"/>
+
+    <!-- DataSource -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/yourdb"/>
+        <property name="username" value="youruser"/>
+        <property name="password" value="yourpassword"/>
+        <property name="initialSize" value="5"/>
+        <property name="maxTotal" value="20"/>
+    </bean>
+
+    <!-- Transaction Manager for Spring Data JDBC -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Enable @Transactional -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Spring Data JDBC Repository Support -->
+    <repository:jdbc-repositories base-package="x.y.repository"/>
+
+</beans>
