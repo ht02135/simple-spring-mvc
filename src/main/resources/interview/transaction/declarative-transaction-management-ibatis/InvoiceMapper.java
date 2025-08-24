@@ -1,13 +1,6 @@
 /*
 MyBatis Mapper Interfaces
 */
-package x.y.mapper;
-
-import x.y.model.Invoice;
-import org.apache.ibatis.annotations.*;
-
-import java.time.LocalDateTime;
-
 public interface InvoiceMapper {
 
     @Insert("INSERT INTO invoices(pdf_path, created_at) VALUES(#{pdfPath}, #{createdAt})")
@@ -16,4 +9,15 @@ public interface InvoiceMapper {
 
     @Select("SELECT * FROM invoices WHERE id = #{id}")
     Invoice findById(Long id);
+
+    // ================= NEW METHODS =================
+
+    @Select("SELECT * FROM invoices")
+    List<Invoice> findAll();
+
+    @Select("SELECT * FROM invoices WHERE user_id = #{userId}")
+    List<Invoice> findByUserId(Long userId);
+
+    @Select("SELECT COUNT(*) FROM invoices")
+    Long countInvoices();
 }
