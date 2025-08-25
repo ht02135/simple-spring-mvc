@@ -28,12 +28,28 @@ Read-only methods: get*, find*, search*, count*, is*
 Write methods: create*, update*, delete*, give*
 Proper propagation and rollback rules
 /////////////////
-6. Key AOP Elements:
+6. Key AOP Elements Added:
 <aop:aspectj-autoproxy /> - Enables AspectJ-style AOP
-<aop:config> - AOP configuration block
-<aop:pointcut> - Pointcut expressions
-<aop:aspect> - Aspect definitions
-<aop:before>, <aop:after-returning>, <aop:after-throwing>, `<aop
+<aop:config> - AOP configuration blocks
+<aop:pointcut> - Pointcut expressions with various patterns
+<aop:aspect> - Aspect definitions linking aspects to pointcuts
+<aop:before>, <aop:after-returning>, <aop:after-throwing>, <aop:around> - Different advice types
+<aop:advisor> - For declarative transaction management
+/////////////////
+8. Transaction Management:
+Declarative via <tx:advice> with method name patterns
+Read-only methods: get*, find*, search*, count*, is*
+Write methods: create*, update*, delete*, give*
+Propagation and rollback rules configured
+/////////////////
+9. Additional Components Created:
+LoggingAspect.java - Comprehensive method logging
+PerformanceAspect.java - Execution time monitoring with statistics
+SecurityAspect.java - Role-based access control with audit logging
+AOPDemoApplication.java - Demonstration of all AOP features
+application.properties - Externalized configuration
+Updated pom.xml - Added AspectJ dependencies
+/////////////////
 */
 package com.example;
 
