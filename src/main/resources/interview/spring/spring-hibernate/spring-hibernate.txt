@@ -5,6 +5,30 @@ Spring Hibernate Interview Questions
 
 1>What are the ways to access Hibernate by using Spring?
 
+1>Spring Data JPA (Recommended for modern applications):
+
+1a>This is the preferred approach for new projects. Spring Data JPA 
+significantly simplifies data access by providing powerful repository 
+abstractions.
+1b>You define interfaces that extend Spring Data JPA's JpaRepository 
+(or other repository interfaces like CrudRepository).
+1c>Spring automatically generates the implementation for these interfaces 
+at runtime, handling common CRUD operations and allowing for custom 
+queries based on method names or @Query annotations.
+1d>Hibernate acts as the underlying JPA provider, managing the 
+object-relational mapping and database interactions.
+
+2>ative Hibernate SessionFactory Integration:
+
+2a>This method directly exposes Hibernate's SessionFactory within 
+the Spring container.
+2b>You configure LocalSessionFactoryBean in your Spring configuration 
+(either Java-based or XML-based) to set up the SessionFactory.
+2c>You then inject the SessionFactory into your DAOs (Data Access Objects) 
+and use it to obtain Session instances for performing database operations.
+2d>While still supported, this approach is less common in new development 
+compared to Spring Data JPA, as it requires more boilerplate code for basic operations.
+    
 /////////////////////////
 
 2>What is the hibernate configuration file?

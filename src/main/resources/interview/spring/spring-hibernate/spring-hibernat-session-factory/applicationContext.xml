@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- Component Scanning -->
+    <context:component-scan base-package="com.example" />
+
+    <!-- DataSource Configuration -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/testdb"/>
+        <property name="username" value="root"/>
+        <property name="password" value="password"/>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="maximumPoolSize" value="10"/>
+        <property name="minimumIdle" value="5"/>
+        <property name="connectionTimeout" value="30000"/>
+        <property name="idleTimeout" value="600000"/>
+        <property name="maxLifetime" value="1800000"/>
+    </bean>
+
+    <!-- Hibernate SessionFactory -->
+    <bean id="sessionFactory" 
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.example.entity"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.jdbc.batch_size">20</prop>
+                <prop key="hibernate.order_inserts">true</prop>
+                <prop key="hibernate.order_updates">true</prop>
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Hibernate Transaction Manager -->
+    <bean id="transactionManager" 
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- Enable Annotation-driven Transaction Management -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- AOP Configuration for Transaction Advice -->
+    <aop:config>
+        <aop:pointcut id="daoLayerPointcut" 
+                      expression="execution(* com.example.dao.*.*(..))"/>
+        <aop:pointcut id="serviceLayerPointcut" 
+                      expression="execution(* com.example.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="daoLayerPointcut"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceLayerPointcut"/>
+    </aop:config>
+
+    <!-- Transaction Advice -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="get*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="search*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="count*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+</beans>
