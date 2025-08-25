@@ -752,13 +752,97 @@ hung : they are essentially adaptor that wrap native jdbc object.
 
 8?What annotation is used to configure DAO in Spring?
 
+The annotation primarily used to configure Data Access Objects (DAOs) or repository classes in Spring is @Repository.
+
+https://docs.spring.io/spring-framework/reference/data-access/dao.html
+The best way to guarantee that your Data Access Objects (DAOs) or repositories provide exception translation is to use the @Repository annotation. This annotation also lets the component scanning support find and configure your DAOs and repositories without having to provide XML configuration entries for them. The following example shows how to use the @Repository annotation:
+
+1>hibernate
+@Repository
+public class UserDao {
+    @PersistenceContext
+    private EntityManager em;
+
+    public User save(User user) {
+        em.persist(user);
+        return user;
+    }
+    
+2>ibatis 2.x
+@Repository
+public class EmployeeMapperImpl implements EmployeeMapper {
+    
+    private SqlMapClientTemplate sqlMapClientTemplate;
+    
+    // Setter injection for SqlMapClientTemplate
+    public void setSqlMapClientTemplate(SqlMapClientTemplate sqlMapClientTemplate) {
+        this.sqlMapClientTemplate = sqlMapClientTemplate;
+    }
+
 /////////////////////////////
 
 9>Explain the advantages of Spring JDBC Template over standard JDBC.
 
+Spring JDBC Template offers several advantages over standard JDBC for 
+database interactions in Java applications. These advantages primarily 
+stem from its ability to reduce boilerplate code, simplify resource 
+management, and enhance error handling.
+
+1>Reduced Boilerplate Code:
+1a>Standard JDBC requires repetitive code for tasks such as opening 
+and closing connections, statements, and result sets, as well as handling exceptions.
+1b>Spring JDBC Template automates these common tasks, allowing developers 
+to focus solely on writing the SQL queries and mapping results. This 
+significantly reduces the amount of code required and improves readability.
+    
+2>Simplified Resource Management:
+2a>Spring JDBC Template automatically handles the proper closing of 
+JDBC resources (connections, statements, result sets) in a finally 
+block, even in the event of exceptions.
+2b>This prevents resource leaks and ensures efficient use of database 
+connections, which is crucial for application performance and stability.
+    
+3>Enhanced Exception Handling:
+3a>Standard JDBC throws SQLException, which is a checked exception, 
+forcing developers to handle it explicitly in every database interaction.
+3b>Spring JDBC Template converts SQLException into Spring's data access 
+RuntimeException hierarchy. This allows for more flexible error handling, 
+as unchecked exceptions do not need to be caught explicitly in every method, 
+simplifying the code and promoting a consistent error-handling strategy.
+3c>It also provides more informative and consistent exception messages, 
+often translating vendor-specific error codes into more understandable exceptions.
+
 /////////////////////////////
 
 10>What are JDBC abstraction and DAO modules?
+
+
+1>JDBC Abstraction refers to a layer that simplifies and streamlines 
+the use of the Java Database Connectivity (JDBC) API. JDBC, while 
+powerful, involves boilerplate code for managing connections, 
+statements, result sets, and exception handling. 
+
+Frameworks like Spring's JdbcTemplate provide this abstraction by 
+encapsulating these low-level details, allowing developers to focus 
+on writing SQL queries and processing data, rather than managing 
+the underlying JDBC resources. This abstraction also often translates 
+database-specific exceptions into a more generic, consistent exception 
+hierarchy, making error handling more manageable.
+
+2>DAO Modules (Data Access Object modules) 
+implement the Data Access Object design pattern. 
+
+This pattern aims to separate the application's business logic 
+from the data persistence logic. 
+
+A DAO module provides an abstract interface for interacting with a 
+specific data source (e.g., a database, a file system, or a web service) 
+for a particular entity or set of entities. It encapsulates all the 
+CRUD (Create, Read, Update, Delete) operations for that data, hiding 
+the underlying data access technology (like JDBC, Hibernate, or JPA) 
+from the rest of the application. This separation promotes modularity, 
+testability, and easier maintenance, as changes to the data access 
+mechanism do not directly impact the business logic.
 
 /////////////////////////////
 
