@@ -18,6 +18,19 @@ queries based on method names or @Query annotations.
 1d>Hibernate acts as the underlying JPA provider, managing the 
 object-relational mapping and database interactions.
 
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+
+    // ================= Derived Queries overridden with @Query =================
+
+    @Query("SELECT c FROM Customer c WHERE c.lastName = :lastName")
+    List<Customer> findByLastName(@Param("lastName") String lastName);
+
+    @Query("SELECT c FROM Customer c WHERE c.gender = :gender")
+    List<Customer> findByGender(@Param("gender") String gender);
+    
+------------------
+
 2>ative Hibernate SessionFactory Integration:
 
 2a>This method directly exposes Hibernate's SessionFactory within 
@@ -28,7 +41,46 @@ the Spring container.
 and use it to obtain Session instances for performing database operations.
 2d>While still supported, this approach is less common in new development 
 compared to Spring Data JPA, as it requires more boilerplate code for basic operations.
+
+@Repository
+public class CustomerDaoImpl implements CustomerDao {
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    @Override
+    public Customer save(Customer customer) {
+        getCurrentSession().saveOrUpdate(customer);
+        return customer;
+    }
     
+    @Override
+    public List<Customer> findByDepartmentNameAndActive(String departmentName, Boolean active) {
+        Query<Customer> query = getCurrentSession().createQuery(
+                "SELECT c FROM Customer c " +
+                "JOIN Department d ON c.deptId = d.id " +
+                "WHERE d.name = :deptName AND c.active = :active " +
+                "ORDER BY c.salary DESC",
+                Customer.class);
+        query.setParameter("deptName", departmentName);
+        query.setParameter("active", active);
+        return query.getResultList();
+    }
+
+    @Override
+    public int countByDepartmentAndSalaryThreshold(Long departmentId, BigDecimal salary) {
+        Query<Long> query = getCurrentSession().createQuery(
+                "SELECT COUNT(c) FROM Customer c WHERE c.deptId = :deptId AND c.salary > :salary",
+                Long.class);
+        query.setParameter("deptId", departmentId);
+        query.setParameter("salary", salary);
+        return query.getSingleResult().intValue();
+    }
+       
 /////////////////////////
 
 2>What is the hibernate configuration file?
