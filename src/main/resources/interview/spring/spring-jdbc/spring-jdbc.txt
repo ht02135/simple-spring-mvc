@@ -717,6 +717,37 @@ public interface CustomerRepository2 extends CrudRepository<Customer, Long> {
 
 7>What is native NativeJdbcExtractor in Spring?
 
+In Spring, a NativeJdbcExtractor is an interface and its implementations 
+that historically provided a mechanism to retrieve the underlying "native" 
+JDBC objects (like Connection, Statement, and ResultSet) from objects 
+potentially wrapped by connection pools or application servers.
+
+Modern Context:
+With the introduction of JDBC 4.0 and the Wrapper.unwrap() method, the 
+need for NativeJdbcExtractor has largely diminished. Modern connection 
+pools and drivers typically implement the Wrapper interface, allowing 
+direct unwrapping of JDBC objects using standard JDBC API calls. 
+Spring's Jdbc4NativeJdbcExtractor leverages this unwrap() method, 
+making it the preferred approach when working with JDBC 4.0 compliant 
+environments.
+
+---------------
+
+use case for NativeJdbcExtractor and Jdbc4NativeJdbcExtractor
+
+1>NativeJdbcExtractor
+is a Spring Framework interface that allows you to unwrap proxied JDBC 
+objects (like Connections or Statements) provided by a connection pool 
+to get access to the underlying, vendor-specific objects. This is essential 
+for accessing database-specific features not available through the 
+standard JDBC API. 
+
+2>Jdbc4NativeJdbcExtractor is a specific implementation of NativeJdbcExtractor 
+that uses the java.sql.Wrapper.unwrap() method, introduced in JDBC 4.0, to 
+perform the unwrapping
+
+hung : they are essentially adaptor that wrap native jdbc object.
+
 /////////////////////////////
 
 8?What annotation is used to configure DAO in Spring?
