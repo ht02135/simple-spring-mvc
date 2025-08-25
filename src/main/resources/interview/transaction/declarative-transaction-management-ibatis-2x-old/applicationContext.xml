@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- Enable component scanning -->
+    <context:component-scan base-package="com.example" />
+    
+    <!-- Enable transaction annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    
+    <!-- Enable AOP annotations -->
+    <aop:aspectj-autoproxy />
+
+    <!-- Data Source Configuration -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/testdb?useSSL=false&amp;serverTimezone=UTC" />
+        <property name="username" value="root" />
+        <property name="password" value="password" />
+        <property name="initialSize" value="5" />
+        <property name="maxTotal" value="20" />
+        <property name="maxIdle" value="10" />
+        <property name="minIdle" value="5" />
+        <property name="testOnBorrow" value="true" />
+        <property name="validationQuery" value="SELECT 1" />
+    </bean>
+
+    <!-- iBATIS SqlMapClient Configuration -->
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation" value="classpath:SqlMapConfig.xml" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- iBATIS Template -->
+    <bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+
+    <!-- Employee Mapper Implementation (iBATIS style DAO) -->
+    <bean id="employeeMapper" class="com.example.dao.EmployeeMapperImpl">
+        <property name="sqlMapClientTemplate" ref="sqlMapClientTemplate" />
+    </bean>
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- AOP Aspects and Advice -->
+    
+    <!-- Logging Aspect -->
+    <bean id="loggingAspect" class="com.example.aspect.LoggingAspect" />
+    
+    <!-- Performance Monitoring Aspect -->
+    <bean id="performanceAspect" class="com.example.aspect.PerformanceAspect" />
+    
+    <!-- Security Aspect -->
+    <bean id="securityAspect" class="com.example.aspect.SecurityAspect" />
+    
+    <!-- AOP Configuration -->
+    <aop:config>
+        
+        <!-- Pointcut definitions -->
+        <aop:pointcut id="serviceLayer" 
+                      expression="execution(* com.example.service..*(..))" />
+        
+        <aop:pointcut id="daoLayer" 
+                      expression="execution(* com.example.dao..*(..))" />
+        
+        <aop:pointcut id="allLayers" 
+                      expression="execution(* com.example.service..*(..)) || execution(* com.example.dao..*(..))" />
+        
+        <aop:pointcut id="employeeServiceMethods" 
+                      expression="execution(* com.example.service.EmployeeService.*(..))" />
+        
+        <aop:pointcut id="createMethods" 
+                      expression="execution(* com.example.service..create*(..))" />
+        
+        <aop:pointcut id="updateMethods" 
+                      expression="execution(* com.example.service..update*(..))" />
+        
+        <aop:pointcut id="deleteMethods" 
+                      expression="execution(* com.example.service..delete*(..))" />
+        
+        <!-- Logging Aspect Configuration -->
+        <aop:aspect id="loggingAspectConfig" ref="loggingAspect">
+            <!-- Before advice for all service methods -->
+            <aop:before pointcut-ref="serviceLayer" method="logBefore" />
+            
+            <!-- After returning advice for all service methods -->
+            <aop:after-returning pointcut-ref="serviceLayer" method="logAfterReturning" returning="result" />
+            
+            <!-- After throwing advice for all service methods -->
+            <aop:after-throwing pointcut-ref="serviceLayer" method="logAfterThrowing" throwing="error" />
+            
+            <!-- Around advice for DAO methods -->
+            <aop:around pointcut-ref="daoLayer" method="logAround" />
+        </aop:aspect>
+        
+        <!-- Performance Monitoring Aspect Configuration -->
+        <aop:aspect id="performanceAspectConfig" ref="performanceAspect">
+            <!-- Around advice for performance monitoring -->
+            <aop:around pointcut-ref="allLayers" method="monitorPerformance" />
+        </aop:aspect>
+        
+        <!-- Security Aspect Configuration -->
+        <aop:aspect id="securityAspectConfig" ref="securityAspect">
+            <!-- Before advice for sensitive operations -->
+            <aop:before pointcut-ref="createMethods" method="checkCreatePermission" />
+            <aop:before pointcut-ref="updateMethods" method="checkUpdatePermission" />
+            <aop:before pointcut-ref="deleteMethods" method="checkDeletePermission" />
+        </aop:aspect>
+        
+    </aop:config>
+    
+    <!-- Declarative Transaction Management (XML-based) -->
+    <aop:config>
+        <aop:pointcut id="serviceTransactionMethods" 
+                      expression="execution(* com.example.service..*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceTransactionMethods" />
+    </aop:config>
+    
+    <!-- Transaction Advice Configuration -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- Read-only methods -->
+            <tx:method name="get*" read-only="true" propagation="SUPPORTS" />
+            <tx:method name="find*" read-only="true" propagation="SUPPORTS" />
+            <tx:method name="search*" read-only="true" propagation="SUPPORTS" />
+            <tx:method name="count*" read-only="true" propagation="SUPPORTS" />
+            <tx:method name="is*" read-only="true" propagation="SUPPORTS" />
+            
+            <!-- Write methods -->
+            <tx:method name="create*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="give*" propagation="REQUIRED" rollback-for="Exception" />
+            
+            <!-- Default for all other methods -->
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- Property placeholder for external configuration -->
+    <context:property-placeholder location="classpath:application.properties" />
+
+</beans>
