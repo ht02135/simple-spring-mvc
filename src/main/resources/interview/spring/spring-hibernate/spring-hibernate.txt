@@ -144,6 +144,40 @@ code for complex scenarios.
 
 2>What is the hibernate configuration file?
 
+The Hibernate configuration file is a file that contains the configuration settings for the Hibernate framework. This file is a central component for an application using Hibernate as it provides the database connection details, dialect information, and mapping file locations, which are essential for Hibernate to function.
+
+The Hibernate configuration file is a file that contains the configuration settings for the Hibernate framework. This file is a central component for an application using Hibernate as it provides the database connection details, dialect information, and mapping file locations, which are essential for Hibernate to function.
+
+Types of Configuration Files
+There are two main types of Hibernate configuration files:
+
+1>hibernate.cfg.xml: This is the traditional and most common type of configuration file. It's an XML file that contains all the necessary configuration properties.
+
+2>hibernate.properties: This is a simple Java properties file that can be used as an alternative to the XML file. It contains key-value pairs for the configuration settings.
+
+Here is an example of what a hibernate.cfg.xml
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mydatabase</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">mypassword</property>
+        <property name="hibernate.connection.pool_size">1</property>
+
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <property name="hibernate.show_sql">true</property>
+
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <mapping class="com.example.entity.User"/>
+    </session-factory>
+</hibernate-configuration>
+
 /////////////////////////
 
 3>What is hibernate mapping file?

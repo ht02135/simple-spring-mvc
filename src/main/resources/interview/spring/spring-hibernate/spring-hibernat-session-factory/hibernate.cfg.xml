@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<!--  
+For a non-Spring Boot application, a configuration file is necessary for 
+both Hibernate Data JPA and Hibernate Session Factory. 
+1>For hibernate-data-jpa, the configuration is defined in applicationContext.xml, 
+not hibernate.cfg.xml. 
+2>For hibernate-session-factory, the configuration can be defined in 
+either hibernate.cfg.xml or applicationContext.xml.
+////////////////
+applicationContext.xml Referencing hibernate.cfg.xml
+This approach is used for Hibernate Session Factory in a traditional 
+Spring Framework application. It allows you to separate the Hibernate-specific 
+configuration from the Spring configuration, which can be useful for 
+managing complexity.
+First, you'll need the hibernate.cfg.xml file, which contains all the 
+core Hibernate properties and mapping information for your entities.
+-->
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection properties -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/testdb</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">password</property>
+        
+        <!-- Connection pool settings -->
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
+        <property name="hibernate.hikari.minimumIdle">5</property>
+        <property name="hibernate.hikari.connectionTimeout">30000</property>
+        <property name="hibernate.hikari.idleTimeout">600000</property>
+        <property name="hibernate.hikari.maxLifetime">1800000</property>
+        
+        <!-- Hibernate properties -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.use_sql_comments">true</property>
+        <property name="hibernate.jdbc.batch_size">20</property>
+        <property name="hibernate.order_inserts">true</property>
+        <property name="hibernate.order_updates">true</property>
+        <property name="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</property>
+        
+        <!-- Entity mappings -->
+        <mapping class="com.example.entity.Customer"/>
+        <!-- Add other entity classes here as needed -->
+        
+    </session-factory>
+</hibernate-configuration>

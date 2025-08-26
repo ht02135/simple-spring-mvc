@@ -14,6 +14,23 @@
            http://www.springframework.org/schema/aop
            http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+<!--  
+3. Hibernate Session Factory Configuration (Updated applicationContext.xml)
+Added configLocation property pointing to classpath:hibernate.cfg.xml
+Much cleaner configuration with most properties moved to hibernate.cfg.xml
+Still allows overriding specific properties (like SpringSessionContext) in hibernateProperties
+////////////////////////
+////////////////////////
+Benefits of this approach:
+Centralized Configuration: All Hibernate settings are in one place (hibernate.cfg.xml)
+Consistency: Both JPA and SessionFactory use the same base configuration
+Flexibility: You can still override specific properties in applicationContext.xml when needed
+Maintainability: Easier to manage Hibernate properties in a single location
+File Placement:
+Make sure to place the hibernate.cfg.xml file in your src/main/resources directory 
+so it's available on the classpath.
+-->
+
     <!-- Component Scanning -->
     <context:component-scan base-package="com.example" />
 
@@ -30,21 +47,17 @@
         <property name="maxLifetime" value="1800000"/>
     </bean>
 
-    <!-- Hibernate SessionFactory -->
+    <!-- Hibernate SessionFactory with hibernate.cfg.xml reference -->
     <bean id="sessionFactory" 
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="com.example.entity"/>
+        <!-- Reference hibernate.cfg.xml file -->
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <!-- You can still override specific properties if needed -->
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.use_sql_comments">true</prop>
-                <prop key="hibernate.jdbc.batch_size">20</prop>
-                <prop key="hibernate.order_inserts">true</prop>
-                <prop key="hibernate.order_updates">true</prop>
+                <!-- These will override any conflicting properties from hibernate.cfg.xml -->
                 <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
             </props>
         </property>

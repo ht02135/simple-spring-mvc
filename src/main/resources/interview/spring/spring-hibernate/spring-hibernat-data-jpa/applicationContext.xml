@@ -17,6 +17,23 @@
            http://www.springframework.org/schema/data/jpa
            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
+<!--  
+2. Hibernate Data JPA Configuration (Updated applicationContext.xml)
+Added hibernate.ejb.cfgfile property to reference hibernate.cfg.xml
+Uses jpaPropertyMap to specify the configuration file
+Still allows overriding specific properties in jpaProperties if needed
+DataSource is still configured in Spring context for connection pooling
+////////////////////////
+Benefits of this approach:
+Centralized Configuration: All Hibernate settings are in one place (hibernate.cfg.xml)
+Consistency: Both JPA and SessionFactory use the same base configuration
+Flexibility: You can still override specific properties in applicationContext.xml when needed
+Maintainability: Easier to manage Hibernate properties in a single location
+File Placement:
+Make sure to place the hibernate.cfg.xml file in your src/main/resources directory 
+so it's available on the classpath.
+-->
+
     <!-- Component Scanning -->
     <context:component-scan base-package="com.example" />
     
@@ -38,7 +55,7 @@
         <property name="maxLifetime" value="1800000"/>
     </bean>
 
-    <!-- JPA Entity Manager Factory -->
+    <!-- JPA Entity Manager Factory with hibernate.cfg.xml reference -->
     <bean id="entityManagerFactory" 
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
@@ -46,8 +63,16 @@
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
+        <!-- Reference hibernate.cfg.xml for JPA properties -->
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.ejb.cfgfile" value="hibernate.cfg.xml"/>
+            </map>
+        </property>
+        <!-- Override specific properties if needed -->
         <property name="jpaProperties">
             <props>
+                <!-- These will override any conflicting properties from hibernate.cfg.xml -->
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">true</prop>
