@@ -365,14 +365,75 @@ cache only when you access other properties of the object.
 
 5>What is hibernate caching? Explain Hibernate first-level cache?
 
+Hibernate caching is a mechanism used to improve the performance of applications 
+by reducing the number of database interactions. It stores frequently accessed 
+data in memory, allowing Hibernate to retrieve it from the cache instead of 
+repeatedly querying the database. This significantly reduces latency and 
+improves overall application responsiveness.
+
+1>Hibernate First-Level Cache (Session Cache)
+The Hibernate first-level cache, also known as the Session cache, is a 
+mandatory, built-in caching mechanism that operates at the session level. 
+This means:
+
+2>Session-Specific Scope:
+    Each Hibernate Session object maintains its own independent first-level 
+    cache. Data stored in this cache is accessible only within that specific 
+    session.
+
+3>Automatic Management:
+Hibernate automatically manages the first-level cache; it is enabled by default 
+and cannot be disabled.
+
+4>Entity Storage:
+When an entity is loaded from the database using a Session, it is automatically 
+stored in the first-level cache.
+
+https://medium.com/swlh/what-is-hibernate-caching-introduction-of-level-1-level-2-cache-8ea7339a5052
+so when you query an entity or object, for the very first time it is retrieved 
+from the database and stored into the first-level cache (associated with the 
+hibernate session). If we query for the same entity or object again with the 
+same session object, it will be loaded from cache and no SQL query will be 
+executed.
+
+/////////////////////////
+
+In Hibernate (an ORM framework for Java), caching improves performance 
+by reducing the number of database queries. Instead of fetching the 
+same data multiple times from the database, Hibernate stores it in 
+memory and reuses it.
+-----------------------------
+1️⃣ First-Level Cache (Session Cache)
+1a>Scope: Exists per Hibernate Session (org.hibernate.Session).
+1b>Enabled by default (cannot be disabled).
+1c>Stores objects associated with the current session.
+1d>If you fetch the same entity multiple times in the same session, 
+Hibernate returns the cached object instead of hitting the database again.
+-----------------------------
+2️⃣ Second-Level Cache (SessionFactory Cache)
+2a>Scope: Shared across all sessions from a SessionFactory.
+2b>Not enabled by default — you must configure it.
+2c>Requires a cache provider (e.g., Ehcache, Infinispan, OSCache).
+2d>Stores entities, collections, or queries at the SessionFactory level, 
+so that multiple sessions can reuse cached data.
+------------------------------
+Example behavior:
+Session session = sessionFactory.openSession();
+// First time: SQL query executed, data loaded from DB
+Employee emp1 = session.get(Employee.class, 1);
+// Second time: No SQL query, returned from session cache
+Employee emp2 = session.get(Employee.class, 1);
+System.out.println(emp1 == emp2); // true (same object from cache)
+
 /////////////////////////
 
 6>What will happen if we don’t have a no-args constructor in Entity bean?
+in Hibernate?
 
 /////////////////////////
 
 7>Explain the difference between sorted collection and ordered collection. 
-Which one is better, in your opinion?
+Which one is better, in your opinion? in Hibernate?
 
 /////////////////////////
 
