@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.example.entity">
+    
+    <class name="Customer" table="customer">
+        
+        <!-- Primary Key -->
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="identity"/>
+        </id>
+        
+        <!-- Basic Properties -->
+        <property name="firstName" column="first_name" type="string" not-null="true"/>
+        <property name="lastName" column="last_name" type="string" not-null="true"/>
+        <property name="gender" column="gender" type="string"/>
+        <property name="street" column="street" type="string"/>
+        <property name="city" column="city" type="string"/>
+        <property name="state" column="state" type="string"/>
+        
+        <!-- BigDecimal with precision and scale -->
+        <property name="salary" column="salary" type="big_decimal" precision="10" scale="2"/>
+        
+        <!-- Boolean property -->
+        <property name="active" column="active" type="boolean"/>
+        
+        <!-- Foreign Key reference -->
+        <property name="deptId" column="dept_id" type="java.lang.Long"/>
+        
+        <!-- LocalDateTime property -->
+        <property name="createdDate" column="created_date" type="java.time.LocalDateTime"/>
+        
+    </class>
+    
+</hibernate-mapping>
+
+<!--  
+You don't strictly need Hibernate mapping files (.hbm.xml) since 
+you're using JPA annotations (@Entity, @Table, @Column, etc.) on 
+your Customer class
+-->

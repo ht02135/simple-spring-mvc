@@ -155,32 +155,135 @@ There are two main types of Hibernate configuration files:
 
 2>hibernate.properties: This is a simple Java properties file that can be used as an alternative to the XML file. It contains key-value pairs for the configuration settings.
 
+----------------
+
 Here is an example of what a hibernate.cfg.xml
-<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE hibernate-configuration PUBLIC
-"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+        <!-- Database connection properties -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mydatabase</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/testdb</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">mypassword</property>
-        <property name="hibernate.connection.pool_size">1</property>
-
+        <property name="hibernate.connection.password">password</property>
+        
+        <!-- Connection pool settings -->
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
+        <property name="hibernate.hikari.minimumIdle">5</property>
+        <property name="hibernate.hikari.connectionTimeout">30000</property>
+        <property name="hibernate.hikari.idleTimeout">600000</property>
+        <property name="hibernate.hikari.maxLifetime">1800000</property>
+        
+        <!-- Hibernate properties -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
-
-        <property name="hibernate.show_sql">true</property>
-
         <property name="hibernate.hbm2ddl.auto">update</property>
-
-        <mapping class="com.example.entity.User"/>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.use_sql_comments">true</property>
+        <property name="hibernate.jdbc.batch_size">20</property>
+        <property name="hibernate.order_inserts">true</property>
+        <property name="hibernate.order_updates">true</property>
+        <property name="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</property>
+        
+        <!-- Entity mappings -->
+        <mapping class="com.example.entity.Customer"/>
+        <!-- Add other entity classes here as needed -->
+        
     </session-factory>
 </hibernate-configuration>
+
+----------------
+
+referenced in spring-data-jpa applicationContext.xml
+    <!-- JPA Entity Manager Factory with hibernate.cfg.xml reference -->
+    <bean id="entityManagerFactory" 
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.example.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <!-- Reference hibernate.cfg.xml for JPA properties -->
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.ejb.cfgfile" value="hibernate.cfg.xml"/>
+            </map>
+        </property>
+        <!-- Override specific properties if needed -->
+        <property name="jpaProperties">
+            <props>
+                <!-- These will override any conflicting properties from hibernate.cfg.xml -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.jdbc.batch_size">20</prop>
+                <prop key="hibernate.order_inserts">true</prop>
+                <prop key="hibernate.order_updates">true</prop>
+            </props>
+        </property>
+    </bean>
+
+----------------
+
+referenced in spring session factory applicationContext.xml
+    <!-- Hibernate SessionFactory with hibernate.cfg.xml reference -->
+    <bean id="sessionFactory" 
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.example.entity"/>
+        <!-- Reference hibernate.cfg.xml file -->
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <!-- You can still override specific properties if needed -->
+        <property name="hibernateProperties">
+            <props>
+                <!-- These will override any conflicting properties from hibernate.cfg.xml -->
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
+            </props>
+        </property>
+    </bean> 
 
 /////////////////////////
 
 3>What is hibernate mapping file?
+
+update hibernate.cfg.xml to include
+<mapping resource="com/example/entity/Customer.hbm.xml"/>
+
+--------------
+
+<hibernate-mapping package="com.example.entity">
+    
+    <class name="Customer" table="customer">
+        
+        <!-- Primary Key -->
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="identity"/>
+        </id>
+        
+        <!-- Basic Properties -->
+        <property name="firstName" column="first_name" type="string" not-null="true"/>
+        <property name="lastName" column="last_name" type="string" not-null="true"/>
+        <property name="gender" column="gender" type="string"/>
+        <property name="street" column="street" type="string"/>
+        <property name="city" column="city" type="string"/>
+        <property name="state" column="state" type="string"/>
+        
+        <!-- BigDecimal with precision and scale -->
+        <property name="salary" column="salary" type="big_decimal" precision="10" scale="2"/>
+        
+        <!-- Boolean property -->
+        <property name="active" column="active" type="boolean"/>
+        
+        <!-- Foreign Key reference -->
+        <property name="deptId" column="dept_id" type="java.lang.Long"/>
+        
+        <!-- LocalDateTime property -->
+        <property name="createdDate" column="created_date" type="java.time.LocalDateTime"/>
+        
+    </class>
+    
+</hibernate-mapping>
 
 /////////////////////////
 

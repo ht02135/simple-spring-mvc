@@ -1,3 +1,8 @@
+/*
+You don't strictly need Hibernate mapping files (.hbm.xml) 
+since you're using JPA annotations (@Entity, @Table, @Column, etc.) 
+on your Customer class
+*/
 package com.example.entity;
 
 import jakarta.persistence.*;

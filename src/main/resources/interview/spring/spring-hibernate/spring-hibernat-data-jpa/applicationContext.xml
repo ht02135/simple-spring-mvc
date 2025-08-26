@@ -17,23 +17,6 @@
            http://www.springframework.org/schema/data/jpa
            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-<!--  
-2. Hibernate Data JPA Configuration (Updated applicationContext.xml)
-Added hibernate.ejb.cfgfile property to reference hibernate.cfg.xml
-Uses jpaPropertyMap to specify the configuration file
-Still allows overriding specific properties in jpaProperties if needed
-DataSource is still configured in Spring context for connection pooling
-////////////////////////
-Benefits of this approach:
-Centralized Configuration: All Hibernate settings are in one place (hibernate.cfg.xml)
-Consistency: Both JPA and SessionFactory use the same base configuration
-Flexibility: You can still override specific properties in applicationContext.xml when needed
-Maintainability: Easier to manage Hibernate properties in a single location
-File Placement:
-Make sure to place the hibernate.cfg.xml file in your src/main/resources directory 
-so it's available on the classpath.
--->
-
     <!-- Component Scanning -->
     <context:component-scan base-package="com.example" />
     
@@ -59,7 +42,18 @@ so it's available on the classpath.
     <bean id="entityManagerFactory" 
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+        
+        <!-- OPTION 1: Use packagesToScan for annotation-based entities (recommended) -->
         <property name="packagesToScan" value="com.example.entity"/>
+        
+        <!-- OPTION 2: Use mappingResources for .hbm.xml mapping files (uncomment if needed) -->
+        <!-- NOTE: JPA doesn't directly support .hbm.xml files, but Hibernate as JPA provider can use them -->
+        <!-- <property name="mappingResources">
+            <list>
+                <value>com/example/entity/Customer.hbm.xml</value>
+            </list>
+        </property> -->
+        
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
@@ -116,3 +110,20 @@ so it's available on the classpath.
     </tx:advice>
 
 </beans>
+
+<!--  
+2. Hibernate Data JPA Configuration (Updated applicationContext.xml)
+Added hibernate.ejb.cfgfile property to reference hibernate.cfg.xml
+Uses jpaPropertyMap to specify the configuration file
+Still allows overriding specific properties in jpaProperties if needed
+DataSource is still configured in Spring context for connection pooling
+////////////////////////
+Benefits of this approach:
+Centralized Configuration: All Hibernate settings are in one place (hibernate.cfg.xml)
+Consistency: Both JPA and SessionFactory use the same base configuration
+Flexibility: You can still override specific properties in applicationContext.xml when needed
+Maintainability: Easier to manage Hibernate properties in a single location
+File Placement:
+Make sure to place the hibernate.cfg.xml file in your src/main/resources directory 
+so it's available on the classpath.
+-->
