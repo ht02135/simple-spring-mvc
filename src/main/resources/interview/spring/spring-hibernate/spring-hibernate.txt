@@ -430,10 +430,71 @@ System.out.println(emp1 == emp2); // true (same object from cache)
 6>What will happen if we don’t have a no-args constructor in Entity bean?
 in Hibernate?
 
+f a Hibernate entity bean does not have a no-argument constructor (also 
+known as a default constructor), Hibernate will fail to instantiate the 
+entity and will throw a HibernateException or similar runtime error.
+
+Reflection-based instantiation:
+
+1>Hibernate, like other JPA providers, relies on the Java Reflection API, 
+specifically Class.newInstance(), to create instances of entity beans when 
+retrieving data from the database (e.g., using session.get() or 
+session.load()).
+Class.newInstance() requirement:
+
+2>The Class.newInstance() method requires the class to have an accessible 
+no-argument constructor to successfully create a new instance.
+
+hung: same reasoning for java bean, needing default constructor and setter 
+methods right?
+
+-----------------
+
+@Entity
+@Table(name = "customer")
+public class Customer {
+
+    // Constructors
+    public Customer() {}
+    
+    public Customer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.createdDate = LocalDateTime.now();
+        this.active = true;
+    }
+    
 /////////////////////////
 
 7>Explain the difference between sorted collection and ordered collection. 
-Which one is better, in your opinion? in Hibernate?
+Which one is better, in your opinion? in Hibernate context?
+
+1>Ordered Collection
+An ordered collection is one in which the elements are maintained in a 
+specific sequence, determined by the order in which they were added. 
+This sequence does not necessarily have to be based on the elements' 
+values. 
+
+For example, a List is an ordered collection because the elements are 
+stored and retrieved based on their index. The first element added will 
+be at index 0, the second at index 1, and so on. The order is preserved, 
+but the elements themselves might not be in alphabetical or numerical 
+order. A real-world analogy is a queue at a grocery store. The people 
+are in a specific order (first come, first served), but their heights 
+or names aren't necessarily in a specific order.
+
+2>Sorted Collection
+A sorted collection is one in which the elements are arranged according 
+to a specific sorting criterion. This criterion is typically based on 
+the values of the elements themselves, either using their natural order 
+(e.g., numerical or alphabetical) or a custom comparator. 
+
+The order of elements is not based on insertion time but on a defined rule. 
+For example, a SortedSet in Java automatically arranges its elements in 
+ascending order. If you add the numbers 5, 2, and 8, the set will store 
+them as 2, 5, 8. A real-world analogy is a library catalog. The books 
+are arranged by their call number, which is a specific rule, regardless 
+of when they were added to the library.
 
 /////////////////////////
 

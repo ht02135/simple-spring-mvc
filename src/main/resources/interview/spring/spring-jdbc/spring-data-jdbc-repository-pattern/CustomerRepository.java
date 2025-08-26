@@ -1,3 +1,22 @@
+/*
+for some reason i like this better
+/////////////////////////////
+1>i could more or less care about spring data jdbc creating derived query
+2>but ability to add @Query with simple/complex sql with named param with 
+couple lines is huge plus
+///////////////////////////////
+Notes
+1>Aggregation (COUNT, SUM) returns Map<String,Object> for flexible mapping.
+2>Window functions / partitioning (ROW_NUMBER() OVER (PARTITION BY ...)) 
+require mapping to Map<String,Object> or a DTO.
+3>ORDER BY works as usual inside queries.
+4>Can mix derived methods, custom SQL, and complex SQL in one repository.
+////////////////////////////////
+You now have a full repository + service pair that supports:
+1>Simple derived queries
+2>Custom SQL queries
+3>Aggregations, grouping, ordering, window functions
+*/
 package com.example.repository;
 
 import com.example.model.Customer;
@@ -22,15 +41,29 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
     // ================= Derived Query Methods =================
 
-    List<Customer> findByLastName(String lastName);
+    @Query("SELECT * FROM customer WHERE last_name = :lastName")
+    List<Customer> findByLastName(@Param("lastName") String lastName);
 
-    List<Customer> findByGender(String gender);
+    @Query("SELECT * FROM customer WHERE gender = :gender")
+    List<Customer> findByGender(@Param("gender") String gender);
 
-    List<Customer> findByGenderAndFirstNameAndLastName(String gender, String firstName, String lastName);
+    @Query("SELECT * FROM customer WHERE gender = :gender AND first_name = :firstName AND last_name = :lastName")
+    List<Customer> findByGenderAndFirstNameAndLastName(@Param("gender") String gender,
+                                                       @Param("firstName") String firstName,
+                                                       @Param("lastName") String lastName);
 
-    List<Customer> findByStreetAndCityAndState(String street, String city, String state);
+    @Query("SELECT * FROM customer WHERE street = :street AND city = :city AND state = :state")
+    List<Customer> findByStreetAndCityAndState(@Param("street") String street,
+                                               @Param("city") String city,
+                                               @Param("state") String state);
 
     // ================= Custom SQL Queries =================
+
+    @Query("SELECT * FROM customer")
+    List<Customer> findAll();
+
+    @Query("SELECT * FROM customer")
+    List<Customer> findAllBy();
 
     // Find recent customers created after a certain date
     @Query("SELECT * FROM customer WHERE created_date > :date")
@@ -60,4 +93,33 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
     @Query("SELECT COUNT(*) FROM customer WHERE dept_id = :deptId AND salary > :salary")
     int countByDepartmentAndSalaryThreshold(@Param("deptId") Long departmentId,
                                             @Param("salary") BigDecimal salary);
+
+    // ================= Complex SQL Examples =================
+
+    // Count customers per gender
+    @Query("SELECT gender, COUNT(*) AS cnt FROM customer GROUP BY gender ORDER BY cnt DESC")
+    List<Map<String, Object>> countCustomersByGender();
+
+    // Sum of salary per department
+    @Query("SELECT dept_id, SUM(salary) AS totalSalary FROM customer GROUP BY dept_id ORDER BY totalSalary DESC")
+    List<Map<String, Object>> sumSalaryByDepartment();
+
+    // Partition by department: rank employees by salary
+    @Query("""
+        SELECT id, first_name, last_name, dept_id, salary,
+               ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rank
+        FROM customer
+        """)
+    List<Map<String, Object>> rankCustomersByDepartment();
+
+    // Top 3 salaries per department
+    @Query("""
+        SELECT id, first_name, last_name, dept_id, salary
+        FROM (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn
+            FROM customer
+        ) t
+        WHERE t.rn <= 3
+        """)
+    List<Map<String, Object>> top3SalariesPerDepartment();
 }

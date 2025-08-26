@@ -93,6 +93,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
@@ -117,6 +118,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     // ================= Custom Queries =================
 
+    // The following two methods were already present in JpaRepository.
+    // They are added here for clarity, although not strictly necessary since
+    // JpaRepository provides them by default.
+    Optional<Customer> findById(Long id);
+    
     @Query("SELECT c FROM Customer c")
     List<Customer> findAll();
 
@@ -147,6 +153,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT COUNT(c) FROM Customer c WHERE c.deptId = :deptId AND c.salary > :salary")
     int countByDepartmentAndSalaryThreshold(@Param("deptId") Long departmentId,
                                             @Param("salary") BigDecimal salary);
+
+    void deleteById(Long id);
+
 
     // ================= Complex Native SQL Examples =================
 

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,5 +90,37 @@ public class CustomerService {
 
     public int countByDepartmentAndSalaryThreshold(Long deptId, BigDecimal salary) {
         return repository.countByDepartmentAndSalaryThreshold(deptId, salary);
+    }
+
+    // ===== Complex SQL Queries =====
+
+    // Count customers per gender
+    public List<Map<String, Object>> countCustomersByGender() {
+        return repository.countCustomersByGender();
+    }
+
+    // Sum of salary per department
+    public List<Map<String, Object>> sumSalaryByDepartment() {
+        return repository.sumSalaryByDepartment();
+    }
+
+    // Rank customers by salary per department
+    public List<Map<String, Object>> rankCustomersByDepartment() {
+        return repository.rankCustomersByDepartment();
+    }
+
+    // Top 3 salaries per department
+    public List<Map<String, Object>> top3SalariesPerDepartment() {
+        return repository.top3SalariesPerDepartment();
+    }
+
+    // ===== Helper method to print Map results nicely =====
+    public void printMapResults(List<Map<String, Object>> results) {
+        for (Map<String, Object> row : results) {
+            System.out.println(row.entrySet()
+                                  .stream()
+                                  .map(e -> e.getKey() + "=" + e.getValue())
+                                  .collect(Collectors.joining(", ")));
+        }
     }
 }
